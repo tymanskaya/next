@@ -1,0 +1,16 @@
+.navigation {
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+}
+
+.navigation ul {
+    margin: 0 auto;
+    display: flex;
+    gap: 50px;
+    list-style: none;
+}
+
+.link {
+    color: #4de34f;
+}
