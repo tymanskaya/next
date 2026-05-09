@@ -12,5 +12,25 @@
 }
 
 .link {
-    color: #4de34f;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #a0b4c8;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    letter-spacing: 0.3px;
+}
+
+.link:hover {
+    background-color: rgba(1, 180, 228, 0.15);
+    color: #01b4e4;
+}
+
+.link:active {
+    background-color: rgba(1, 180, 228, 0.25);
+    color: #01b4e4;
+    transform: scale(0.97);
 }

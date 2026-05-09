@@ -2,27 +2,63 @@
 
 import Link from "next/link"
 import styles from "./header.module.css"
+import {useRouter} from "next/navigation";
 
 export const Header = () => {
+    const router= useRouter()
+    //router.push() - перебрасывает на новый адрес, можно вернуться назад
+    //import {useRouter} from "next/navigation" - именно отсюда импорт
     return (
+        ////навигация с помощью кнопок
         <nav className={styles.navigation}>
             <ul>
                 <li>
-                    <Link href="/" className={styles.link}>
+                    <button onClick={()=>router.back()} className={styles.link}>
+                        Back
+                    </button>
+                </li>
+
+                <li>
+                    <button onClick={()=>router.push("/")} className={styles.link}>
                         Main
-                    </Link>
+                    </button>
                 </li>
                 <li>
-                    <Link href="/profile" className={styles.link}>
+                    <button onClick={()=>router.push("/profile")} className={styles.link}>
                         Profile
-                    </Link>
+                    </button>
                 </li>
                 <li>
-                    <Link href="/profile/123" className={styles.link}>
+                    <button onClick={()=>router.push("/profile/123")} className={styles.link}>
                         Profile 123
-                    </Link>
+                    </button>
+                </li>
+                <li>
+                    <button onClick={()=>router.refresh()} className={styles.link}>
+                       Refresh
+                    </button>
                 </li>
             </ul>
         </nav>
     )
 }
+//навигация с помощью тега Link
+//<nav className={styles.navigation}>
+//             <ul>
+//                 <li>
+//                     <Link href="/" className={styles.link}>
+//                         Main
+//                     </Link>
+//                 </li>
+//                 <li>
+//                     <Link href="/profile" className={styles.link}>
+//                         Profile
+//                     </Link>
+//                 </li>
+//                 <li>
+//                     <Link href="/profile/123" className={styles.link}>
+//                         Profile 123
+//                     </Link>
+//                 </li>
+//             </ul>
+//         </nav>
