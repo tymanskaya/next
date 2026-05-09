@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import styles from "./header.module.css"
 import {useRouter} from "next/navigation";
 
@@ -9,6 +8,10 @@ export const Header = () => {
     //import {useRouter} from "next/navigation" - именно отсюда импорт
 
     //router.push() - перебрасывает на новый адрес, можно вернуться назад
+    //router.push("/profile/123", { scroll: false })
+    //{ scroll: false } - Методы навигации, такие как push, принимают второй,
+    // необязательный аргумент — объект с опциями,
+    // который позволяет управлять поведением скролла.
     //router.replace() - перезаписывает старый адрес на нойвый, нельзя вернуться назад
     //router.forward() - перейти вперед
     //router.back() - перейти назад
