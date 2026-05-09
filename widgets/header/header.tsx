@@ -10,6 +10,9 @@ export const Header = () => {
 
     //router.push() - перебрасывает на новый адрес, можно вернуться назад
     //router.replace() - перезаписывает старый адрес на нойвый, нельзя вернуться назад
+    //router.forward() - перейти вперед
+    //router.back() - перейти назад
+
     return (
         ////навигация с помощью кнопок
         <nav className={styles.navigation}>
@@ -36,8 +39,8 @@ export const Header = () => {
                     </button>
                 </li>
                 <li>
-                    <button onClick={()=>router.refresh()} className={styles.link}>
-                       Refresh
+                    <button onClick={()=>router.forward()} className={styles.link}>
+                        Forward
                     </button>
                 </li>
             </ul>
