@@ -6,8 +6,10 @@ import {useRouter} from "next/navigation";
 
 export const Header = () => {
     const router= useRouter()
-    //router.push() - перебрасывает на новый адрес, можно вернуться назад
     //import {useRouter} from "next/navigation" - именно отсюда импорт
+
+    //router.push() - перебрасывает на новый адрес, можно вернуться назад
+    //router.replace() - перезаписывает старый адрес на нойвый, нельзя вернуться назад
     return (
         ////навигация с помощью кнопок
         <nav className={styles.navigation}>
