@@ -48,6 +48,31 @@ export default function Page() {
                 <p style={{color: 'orange'}}>⚠️ Если коммит уже на сервере, понадобится <code>git push --force</code></p>
                 </div>
             </section>
+            <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+                <p><b>Отправка на сервер:</b></p>
+                <ul>
+                    <li><code>git push origin main</code> — Она отправляет ваши локальные коммиты из ветки main в удаленный репозиторий (например, на GitHub), который по умолчанию называется origin</li>
+                    <li><code>git push -u origin main</code> — флаг -u связывает локальную ветку с удаленной. После этого вам достаточно будет писать просто <code>git push</code>)</li>
+                    <li><code>git push --force</code> — принудительная отправка (перезаписывает историю на сервере!)</li>
+                </ul>
+            </div>
+            <div style={{ marginTop: '20px', padding: '15px', border: '1px solid #ffcccb', borderRadius: '8px' }}>
+                <p><b>Удаление из удаленного репозитория (GitHub):</b></p>
+                <ul>
+                    <li>
+                        <code>git rm --cached [file]</code> — убрать файл из Git, но <b>оставить</b> его на компьютере.
+                    </li>
+                    <li>
+                        <code>git rm -r --cached [folder]</code> — убрать папку из Git, оставив её локально.
+                    </li>
+                    <li>
+                        <code>git rm [file]</code> — удалить файл и из Git, и с компьютера.
+                    </li>
+                </ul>
+                <p style={{ fontSize: '0.9em', color: '#666' }}>
+                    * После этих команд обязательно нужно сделать <b>commit</b> и <b>push</b>.
+                </p>
+            </div>
         </div>
     );
 }
