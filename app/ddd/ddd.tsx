@@ -2,15 +2,9 @@
 export const Ddd = () => {
     return (
         <div>
-<p>aa</p>
-<p>aa</p>
-<p>aa</p>
-<p>aa</p>
-<p>2</p>
-<p>2</p>
-<p>2</p>
-<p>2</p>
-<p>2</p>
+<h1>Git - основные команды: </h1>
+            <h2> локальные commit</h2>
+            <span></span>
         </div>
     );
 };
