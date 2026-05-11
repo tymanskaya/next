@@ -1,10 +1,14 @@
 "use client"
 
 import styles from "./header.module.css"
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 
 export const Header = () => {
     const router= useRouter()
+    const pathname = usePathname();
+    //usePathname(): Этот хук из next/navigation говорит нам текущий URL (например, /git).
+    const isActive = (path: string) => pathname === path;
+    //isActive(path): Мы сравниваем путь кнопки с текущим URL. Если они совпадают, добавляется класс active.
     //import {useRouter} from "next/navigation" - именно отсюда импорт
 
     //router.push() - перебрасывает на новый адрес, можно вернуться назад
@@ -21,28 +25,45 @@ export const Header = () => {
         <nav className={styles.navigation}>
             <ul>
                 <li>
-                    <button onClick={()=>router.back()} className={styles.link}>
+                    <button onClick={() => router.back()} className={styles.link}>
                         Back
                     </button>
                 </li>
 
                 <li>
-                    <button onClick={()=>router.push("/")} className={styles.link}>
+                    <button
+                        onClick={() => router.push("/")}
+                        className={`${styles.link} ${isActive("/") ? styles.active : ""}`}
+                    >
                         Main
                     </button>
                 </li>
                 <li>
-                    <button onClick={()=>router.push("/profile")} className={styles.link}>
+                    <button
+                        onClick={() => router.push("/git")}
+                        className={`${styles.link} ${isActive("/git") ? styles.active : ""}`}
+                    >
+                        GIT
+                    </button>
+                </li>
+                <li>
+                    <button
+                        onClick={() => router.push("/profile")}
+                        className={`${styles.link} ${isActive("/profile") ? styles.active : ""}`}
+                    >
                         Profile
                     </button>
                 </li>
                 <li>
-                    <button onClick={()=>router.push("/profile/123")} className={styles.link}>
+                    <button
+                        onClick={() => router.push("/profile/123")}
+                        className={`${styles.link} ${isActive("/profile/123") ? styles.active : ""}`}
+                    >
                         Profile 123
                     </button>
                 </li>
                 <li>
-                    <button onClick={()=>router.forward()} className={styles.link}>
+                    <button onClick={() => router.forward()} className={styles.link}>
                         Forward
                     </button>
                 </li>
