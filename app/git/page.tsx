@@ -317,6 +317,28 @@ export default function Page() {
                                 <li><code style={{ backgroundColor: '#fff', padding: '2px 4px' }}>git branch -D [name]</code> &mdash; удалить принудительно</li>
                             </ul>
                         </div>
+                        {/* Новый блок про визуализацию */}
+                        <div style={{
+                            backgroundColor: '#f6ffed',
+                            padding: '15px',
+                            borderRadius: '8px',
+                            borderLeft: '4px solid #52c41a',
+                            marginTop: '5px'
+                        }}>
+                            <p style={{ margin: 0 }}><b>🧪 Визуализация в GitHub:</b></p>
+                            <p style={{ fontSize: '0.95em', margin: '5px 0 0 0' }}>
+                                Во вкладке <b>Insights &gt; Network</b> можно наглядно посмотреть «дерево» проекта:
+                                все переключения между ветками, слияния и то, как развивалась история коммитов.
+                            </p>
+                        </div>
+
+                        <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14' }}>
+                            <p style={{ margin: 0 }}><b>Как удалять:</b></p>
+                            <ul style={{ margin: '5px 0 0 0', paddingLeft: '20px' }}>
+                                <li><code style={{ backgroundColor: '#fff', padding: '2px 4px' }}>git branch -d [name]</code> &mdash; удалить ветку (безопасно)</li>
+                                <li><code style={{ backgroundColor: '#fff', padding: '2px 4px' }}>git branch -D [name]</code> &mdash; удалить принудительно</li>
+                            </ul>
+                        </div>
                     </div>
                 </section>
 
