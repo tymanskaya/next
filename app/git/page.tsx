@@ -341,6 +341,43 @@ export default function Page() {
                                 💡 Лайфхак: В GitHub чаще всего слияние делают через кнопку <b>Merge Pull Request</b> — это удобнее и нагляднее.
                             </div>
                         </div>
+                        <div style={{
+                            marginTop: '15px',
+                            padding: '10px',
+                            backgroundColor: '#fffbe6',
+                            border: '1px dashed #faad14',
+                            borderRadius: '8px',
+                            fontSize: '0.9em'
+                        }}>
+                            <p style={{ margin: 0 }}><b>🆘 Если запутался в конфликтах:</b></p>
+                            <code style={{ display: 'block', marginTop: '5px', color: '#856404' }}>
+                                git merge --abort
+                            </code>
+                            <p style={{ margin: '5px 0 0 0' }}>Эта команда полностью отменит слияние и вернёт всё как было.</p>
+                        </div>
+                        <h2 style={{ marginTop: 0, color: '#cf1322' }}>Конфликты слияния (Merge Conflicts)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p><b>Конфликт</b> возникает, когда Git не может автоматически решить, какую версию кода оставить.</p>
+
+                            <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #f5222d' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 10px 0' }}>Что делать:</p>
+                                <ol style={{ margin: 0, paddingLeft: '20px' }}>
+                                    <li style={{ marginBottom: '8px' }}>Открой файл с пометкой <b>CONFLICT</b>.</li>
+                                    <li style={{ marginBottom: '8px' }}>Выбери нужный вариант кода (или оставь оба). В IDE это удобно делать через кнопку <b>Resolve</b>.</li>
+                                    <li>После того как файл «очищен», сделай финальный <b>Commit</b>, чтобы завершить слияние.</li>
+                                </ol>
+                            </div>
+
+                            <div style={{ marginTop: '5px', fontSize: '0.9em', color: '#666' }}>
+                                <p>💡 <i>В коде конфликт выглядит так:</i></p>
+                                <code style={{ display: 'block', backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px', color: '#333' }}>
+                                    /////// main (Ваш код) <br/>
+                                    ======= <br/>
+                                    /////// dev (Код из другой ветки)
+                                </code>
+                            </div>
+                        </div>
                         <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14', marginTop: '5px' }}>
                             <p style={{ margin: 0 }}><b>Как удалять:</b></p>
                             <ul style={{ margin: '5px 0 0 0', paddingLeft: '20px' }}>
