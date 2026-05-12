@@ -245,6 +245,43 @@ export default function Page() {
                     </ul>
                     <p style={{ fontSize: '0.9em', color: '#2196F3', marginTop: '15px' }}><i>💡 Совет: всегда делайте <b>pull</b> перед началом рабочего дня, чтобы работать с самой свежей версией проекта.</i></p>
                 </div>
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #FFC107',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#856404' }}>Работа с чужими репозиториями</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <div>
+                            <p><b>«Форкнуть» (от англ. Fork — вилка)</b> — создать полную копию чужого репозитория в своем аккаунте на GitHub (или GitLab/Bitbucket).</p>
+                            <p style={{ color: '#666', fontSize: '0.95em', fontStyle: 'italic' }}>
+                                Это позволяет свободно менять код, не портя оригинал. Используется для Open Source(Ты хочешь предложить изменения в чужой проект. Ты делаешь форк, правишь код у себя и отправляешь оригиналу запрос на слияние (Pull Request).) или как база для своего проекта.
+                            </p>
+                        </div>
+
+                        <div style={{ backgroundColor: '#fff9db', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #FBC02D' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0' }}>Pull Request (PR) — процесс предложения правок:</p>
+                            <ol style={{ margin: 0, paddingLeft: '20px' }}>
+                                <li>Делаешь <b>Fork</b> проекта. (На странице любого проекта на GitHub в правом верхнем углу нажми кнопку Fork. Через пару секунд этот проект появится в списке твоих репозиториев.
+                                    )</li>
+                                <li>Вносишь изменения в свою копию и делаешь <b>push</b>.</li>
+                                <li>Нажимаешь <b>New Pull Request</b>, чтобы автор оригинала проверил и принял твой код.</li>
+                            </ol>
+                        </div>
+
+                        <div style={{ marginTop: '5px' }}>
+                            <p><b>Разница понятий:</b></p>
+                            <ul style={{ margin: '5px 0', paddingLeft: '20px' }}>
+                                <li><span style={{ color: '#FBC02D', fontWeight: 'bold' }}>•</span> <b>Clone</b> — скачиваешь код на компьютер.</li>
+                                <li><span style={{ color: '#FBC02D', fontWeight: 'bold' }}>•</span> <b>Fork</b> — копируешь проект внутри GitHub себе в профиль.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
 
             </div>
 
