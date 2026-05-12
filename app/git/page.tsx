@@ -282,7 +282,93 @@ export default function Page() {
                         </div>
                     </div>
                 </section>
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #1890ff',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#003a8c' }}>Ветки (Branches)</h2>
 
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p><b>Ветки</b> позволяют работать над разными задачами одновременно, не смешивая код.</p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <code style={{ backgroundColor: '#f0f0f0', padding: '6px 12px', borderRadius: '6px', color: '#c41d7f' }}>
+                                git branch &mdash; посмотреть список всех веток
+                            </code>
+                            <code style={{ backgroundColor: '#f0f0f0', padding: '6px 12px', borderRadius: '6px', color: '#c41d7f' }}>
+                                git branch [name] &mdash; создать новую ветку
+                            </code>
+                            <code style={{ backgroundColor: '#f0f0f0', padding: '6px 12px', borderRadius: '6px', color: '#c41d7f' }}>
+                                git checkout [name] &mdash; перейти на другую ветку
+                            </code>
+                            <code style={{ backgroundColor: '#e6f7ff', padding: '6px 12px', borderRadius: '6px', color: '#0050b3', fontWeight: 'bold' }}>
+                                git checkout -b [name] &mdash; создать и сразу перейти (2 в 1)
+                            </code>
+                        </div>
+                        <h2 style={{ marginTop: 0, color: '#9e1068' }}>Слияние веток (Merge)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p><b>Merge</b> объединяет историю двух веток в одну.</p>
+
+                            <div style={{ backgroundColor: '#fff0f6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #eb2f96' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 10px 0' }}>Алгоритм слияния (например, ветки feature в main):</p>
+                                <ol style={{ margin: 0, paddingLeft: '20px' }}>
+                                    <li style={{ marginBottom: '8px' }}>Переходим в ту ветку, <b>В которую</b> хотим влить изменения: <br/>
+                                        <code style={{ backgroundColor: '#fff', padding: '2px 6px', borderRadius: '4px', color: '#c41d7f' }}>git checkout main</code>
+                                    </li>
+                                    <li>Запускаем слияние: <br/>
+                                        <code style={{ backgroundColor: '#fff', padding: '2px 6px', borderRadius: '4px', color: '#c41d7f' }}>git merge feature-name</code>
+                                    </li>
+                                </ol>
+                            </div>
+
+                            <div style={{ marginTop: '5px' }}>
+                                <p><b>Что может пойти не так?</b></p>
+                                <p style={{ fontSize: '0.95em', color: '#666' }}>
+                                    Если в обеих ветках менялись одни и те же строки в одних и тех же файлах, возникнет <b>Конфликт</b>.
+                                    Git попросит вас вручную выбрать, какой код оставить, после чего нужно сделать финальный коммит.
+                                </p>
+                            </div>
+
+                            <div style={{ backgroundColor: '#f6ffed', padding: '10px', borderRadius: '8px', fontSize: '0.9em', color: '#52c41a', fontWeight: '500' }}>
+                                💡 Лайфхак: В GitHub чаще всего слияние делают через кнопку <b>Merge Pull Request</b> — это удобнее и нагляднее.
+                            </div>
+                        </div>
+                        <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14', marginTop: '5px' }}>
+                            <p style={{ margin: 0 }}><b>Как удалять:</b></p>
+                            <ul style={{ margin: '5px 0 0 0', paddingLeft: '20px' }}>
+                                <li><code style={{ backgroundColor: '#fff', padding: '2px 4px' }}>git branch -d [name]</code> &mdash; удалить ветку (безопасно)</li>
+                                <li><code style={{ backgroundColor: '#fff', padding: '2px 4px' }}>git branch -D [name]</code> &mdash; удалить принудительно</li>
+                            </ul>
+                        </div>
+                        {/* Новый блок про визуализацию */}
+                        <div style={{
+                            backgroundColor: '#f6ffed',
+                            padding: '15px',
+                            borderRadius: '8px',
+                            borderLeft: '4px solid #52c41a',
+                            marginTop: '5px'
+                        }}>
+                            <p style={{ margin: 0 }}><b>🧪 Визуализация в GitHub:</b></p>
+                            <p style={{ fontSize: '0.95em', margin: '5px 0 0 0' }}>
+                                Во вкладке <b>Insights &gt; Network</b> можно наглядно посмотреть «дерево» проекта:
+                                все переключения между ветками, слияния и то, как развивалась история коммитов.
+                            </p>
+                        </div>
+
+                        <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14' }}>
+                            <p style={{ margin: 0 }}><b>Как удалять:</b></p>
+                            <ul style={{ margin: '5px 0 0 0', paddingLeft: '20px' }}>
+                                <li><code style={{ backgroundColor: '#fff', padding: '2px 4px' }}>git branch -d [name]</code> &mdash; удалить ветку (безопасно)</li>
+                                <li><code style={{ backgroundColor: '#fff', padding: '2px 4px' }}>git branch -D [name]</code> &mdash; удалить принудительно</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
             </div>
 
 
