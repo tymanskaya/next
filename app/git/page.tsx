@@ -282,6 +282,44 @@ export default function Page() {
                         </div>
                     </div>
                 </section>
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #1890ff',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#003a8c' }}>Ветки (Branches)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p><b>Ветки</b> позволяют работать над разными задачами одновременно, не смешивая код.</p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <code style={{ backgroundColor: '#f0f0f0', padding: '6px 12px', borderRadius: '6px', color: '#c41d7f' }}>
+                                git branch &mdash; посмотреть список всех веток
+                            </code>
+                            <code style={{ backgroundColor: '#f0f0f0', padding: '6px 12px', borderRadius: '6px', color: '#c41d7f' }}>
+                                git branch [name] &mdash; создать новую ветку
+                            </code>
+                            <code style={{ backgroundColor: '#f0f0f0', padding: '6px 12px', borderRadius: '6px', color: '#c41d7f' }}>
+                                git checkout [name] &mdash; перейти на другую ветку
+                            </code>
+                            <code style={{ backgroundColor: '#e6f7ff', padding: '6px 12px', borderRadius: '6px', color: '#0050b3', fontWeight: 'bold' }}>
+                                git checkout -b [name] &mdash; создать и сразу перейти (2 в 1)
+                            </code>
+                        </div>
+
+                        <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14', marginTop: '5px' }}>
+                            <p style={{ margin: 0 }}><b>Как удалять:</b></p>
+                            <ul style={{ margin: '5px 0 0 0', paddingLeft: '20px' }}>
+                                <li><code style={{ backgroundColor: '#fff', padding: '2px 4px' }}>git branch -d [name]</code> &mdash; удалить ветку (безопасно)</li>
+                                <li><code style={{ backgroundColor: '#fff', padding: '2px 4px' }}>git branch -D [name]</code> &mdash; удалить принудительно</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
 
             </div>
 
