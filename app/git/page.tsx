@@ -399,6 +399,52 @@ export default function Page() {
                                 все переключения между ветками, слияния и то, как развивалась история коммитов.
                             </p>
                         </div>
+                        <h2 style={{ marginTop: 0, color: '#006d75' }}>Создание веток в WebStorm</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p>Чтобы создать ветку от определённой ветки (например, от <b>main</b>) через интерфейс IDE:</p>
+
+                            <div style={{ backgroundColor: '#e6fffb', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #13c2c2' }}>
+                                <ol style={{ margin: 0, paddingLeft: '20px' }}>
+                                    <li style={{ marginBottom: '8px' }}>
+                                        В левой панели <b>Git</b> найди вкладку <b>Local</b>.
+                                    </li>
+                                    <li style={{ marginBottom: '8px' }}>
+                                        Нажми правой кнопкой мыши по исходной ветке (<b>main</b>) и выбери <b>New Branch from &apos;main&apos;...</b>
+                                    </li>
+                                    <li style={{ marginBottom: '8px' }}>
+                                        Введи имя новой ветки в появившемся окне.
+                                    </li>
+                                    <li>
+                                        Убедись, что стоит галочка <b>Checkout branch</b> (чтобы сразу переключиться на неё) и нажми <b>Create</b>.
+                                    </li>
+                                </ol>
+                            </div>
+
+                            <div style={{ backgroundColor: '#fffbe6', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #faad14', fontSize: '0.95em' }}>
+                                📌 <b>Как активировать любую ветку:</b> Кликни по ней правой кнопкой мыши в списке <b>Local</b> и нажми <b>Checkout</b>. Активная ветка всегда выделится жирным шрифтом.
+                            </div>
+                        </div>
+                        <h2 style={{ marginTop: 0, color: '#9e1068' }}>Слияние веток в WebStorm</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p>Чтобы объединить ветки через интерфейс IDE:</p>
+
+                            <div style={{ backgroundColor: '#fff0f6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #eb2f96' }}>
+                                <ol style={{ margin: 0, paddingLeft: '20px' }}>
+                                    <li style={{ marginBottom: '8px' }}>
+                                        Кликни правой кнопкой по <b>main</b> в списке Local &rarr; выбери <b>Checkout</b> (перейди в целевую ветку).
+                                    </li>
+                                    <li>
+                                        Кликни правой кнопкой по рабочей ветке (например, <b>input</b>) &rarr; выбери <b>Merge &apos;input&apos; into &apos;main&apos;</b>.
+                                    </li>
+                                </ol>
+                            </div>
+
+                            <div style={{ backgroundColor: '#e6f7ff', padding: '10px', borderRadius: '8px', fontSize: '0.9em', color: '#0050b3' }}>
+                                💡 <i>Примечание: Если код в одних и тех же строчках отличается, WebStorm сам откроет удобное окно слияния правок (Resolve Conflicts).</i>
+                            </div>
+                        </div>
 
                     </div>
                 </section>
