@@ -345,6 +345,42 @@ export default function Page() {
                         </div>
                     </div>
                 </section>
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #24292f',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#24292f', fontSize: '20px' }}>Публикация сниппетов (GitHub Gist)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p><b>GitHub Gist</b> &mdash; это сервис для быстрого обмена небольшими кусками кода (сниппетами) или заметками без создания полноценного репозитория.</p>
+
+                        <div style={{ backgroundColor: '#f6f8fa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #24292f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#24292f' }}>Для чего используется:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <li>Сохранить полезный скрипт или конфиг (например, <code style={{ backgroundColor: '#fff', padding: '1px 5px', borderRadius: '4px' }}>.gitignore</code>), чтобы не потерять.</li>
+                                <li>Быстро скинуть коллеге кусок кода на ревью в Telegram вместо нечитаемого скриншота.</li>
+                                <li>Встроить красивый блок с кодом в свой блог или статью.</li>
+                            </ul>
+                        </div>
+
+                        <div style={{ marginTop: '5px' }}>
+                            <p><b>Как пользоваться:</b></p>
+                            <ol style={{ margin: '5px 0 0 0', paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <li>Перейди на сайт <a href="github.com" target="_blank" rel="noreferrer" style={{ color: '#0969da', textDecoration: 'none', fontWeight: '500' }}>github.com</a>.</li>
+                                <li>Вставь свой код, задай имя файла с расширением (например, <code style={{ backgroundColor: '#f0f0f0', padding: '1px 5px', borderRadius: '4px' }}>component.tsx</code>), чтобы включилась подсветка синтаксиса.</li>
+                                <li>Нажми <b>Create secret gist</b> (доступ по ссылке) или <b>Create public gist</b> (доступен всем).</li>
+                            </ol>
+                        </div>
+
+                        <div style={{ backgroundColor: '#e6f7ff', padding: '10px', borderRadius: '8px', fontSize: '0.9em', color: '#0050b3' }}>
+                            💡 <i>Каждый гист &mdash; это микро-репозиторий. Вы можете клонировать его к себе на компьютер через <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>git clone</code>, изменять и пушить обратно.</i>
+                        </div>
+                    </div>
+                </section>
 
                 <section style={{
                     backgroundColor: '#fff',
