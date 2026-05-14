@@ -380,6 +380,27 @@ export default function Page() {
                             💡 <i>Каждый гист &mdash; это микро-репозиторий. Вы можете клонировать его к себе на компьютер через <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>git clone</code>, изменять и пушить обратно.</i>
                         </div>
                     </div>
+                    <h2 style={{ marginTop: 0, color: '#24292f', fontSize: '20px' }}>Публикация сниппетов (GitHub Gist в WebStorm)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p><b>GitHub Gist</b> &mdash; это сервис для быстрого обмена небольшими кусками кода (сниппетами) или заметками без создания полноценного репозитория.</p>
+
+                        {/* Инструкция для WebStorm */}
+                        <div style={{ backgroundColor: '#f9f0ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #722ed1' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#531dab' }}>Быстрое создание через WebStorm (без браузера):</p>
+                            <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <li><b>Выдели</b> нужный кусок кода в редакторе (или кликни по файлу в дереве проекта).</li>
+                                <li>Нажми по нему правой кнопкой мыши и выбери <b>Git</b> &rarr; <b>Create Gist...</b></li>
+                                <li>В появившемся окне задай имя файла (например, <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>styles.css</code>) и описание.</li>
+                                <li>Поставь галочку <b>Secret</b> (для приватного доступа по ссылке) и <b>Open in browser</b>, чтобы сразу получить ссылку.</li>
+                                <li>Нажми <b>OK</b> &mdash; код мгновенно опубликуется в твоем профиле GitHub.</li>
+                            </ol>
+                        </div>
+
+                        <div style={{ backgroundColor: '#e6f7ff', padding: '10px', borderRadius: '8px', fontSize: '0.9em', color: '#0050b3' }}>
+                            💡 <i>Примечание: Если WebStorm выдает ошибку, убедись, что твой аккаунт GitHub привязан к IDE в настройках (<b>Settings &gt; Version Control &gt; GitHub</b>).</i>
+                        </div>
+                    </div>
                 </section>
 
                 <section style={{
