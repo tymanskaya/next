@@ -125,6 +125,43 @@ export default function Page() {
                         </div>
                     </div>
                 </section>
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #fa541c',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#d4380d', fontSize: '20px' }}>Сравнение изменений (git diff)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p><b>git diff</b> &mdash; показывает разницу между твоим текущим (незакоммиченным) кодом в файлах и состоянием последнего коммита. Помогает проверить себя перед тем, как делать <code>git add</code>.</p>
+
+                        {/* Разбор разметки */}
+                        <div style={{ backgroundColor: '#fff2e8', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #fa541c' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#d4380d' }}>Как читать цветовую разметку правок:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95em' }}>
+                                <li><span style={{ color: '#388e3c', fontWeight: 'bold' }}>Зеленые строки (с плюсом +)</span> &mdash; новые строки кода, которые ты добавила в файл.</li>
+                                <li><span style={{ color: '#d32f2f', fontWeight: 'bold' }}>Красные строки (с минусом -)</span> &mdash; старый код, который ты удалила или заменила.</li>
+                                <li><b>Обычные строки</b> &mdash; неизмененный код вокруг правок, выводится для общего контекста.</li>
+                            </ul>
+                        </div>
+
+                        {/* Полезные флаги */}
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 6px 0' }}>Полезные модификаторы:</p>
+                            <code style={{ backgroundColor: '#f5f5f5', padding: '6px 12px', borderRadius: '6px', color: '#c41d7f', display: 'block' }}>
+                                git diff --staged &mdash; посмотреть разницу для файлов, которые ты УЖЕ добавила через git add
+                            </code>
+                        </div>
+
+                        {/* Управление */}
+                        <div style={{ backgroundColor: '#fffbe6', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #faad14', fontSize: '0.95em' }}>
+                            💡 <b>Напоминание:</b> Если список изменений слишком длинный, нажми клавишу <b>Q</b>, чтобы выйти из режима просмотра diff обратно в консоль.
+                        </div>
+                    </div>
+                </section>
 
                 <section style={{
                     backgroundColor: '#fff',
