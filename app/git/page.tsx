@@ -84,6 +84,48 @@ export default function Page() {
                 color: '#333',
                 lineHeight: '1.5'
             }}>
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #455a64',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#263238', fontSize: '20px' }}>Проверка состояния (git status)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p><b>git status</b> &mdash; это самая главная команда для проверки текущего состояния твоего репозитория. Она показывает, на какой ты ветке и что происходит с твоими файлами.</p>
+
+                        {/* Что показывает команда */}
+                        <div style={{ backgroundColor: '#eceff1', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #455a64' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#263238' }}>Разбор основных блоков ответа:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95em' }}>
+                                <li><b>On branch [имя]</b> &mdash; показывает твою текущую активную ветку.</li>
+                                <li><span style={{ color: '#d32f2f', fontWeight: 'bold' }}>Changes not staged for commit (Красный цвет)</span> &mdash; файлы, которые Git отслеживает и в которых он видит изменения, но они ещё не подготовлены к коммиту (нужно сделать <code>git add</code>).</li>
+                                <li><span style={{ color: '#d32f2f', fontWeight: 'bold' }}>Untracked files (Красный цвет)</span> &mdash; абсолютно новые файлы или папки, о существовании которых Git ещё вообще не знает.</li>
+                                <li><span style={{ color: '#388e3c', fontWeight: 'bold' }}>Changes to be committed (Зеленый цвет)</span> &mdash; файлы успешно добавлены в индекс и полностью готовы к фиксации.</li>
+                            </ul>
+                        </div>
+
+                        {/* Классический рабочий цикл */}
+                        <div style={{ marginTop: '5px' }}>
+                            <p><b>Классический цикл сохранения изменений после проверки статуса:</b></p>
+                            <ol style={{ margin: '8px 0 0 0', paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <li>Подготавливаем все файлы: <br/>
+                                    <code style={{ backgroundColor: '#f5f5f5', padding: '4px 8px', borderRadius: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>git add .</code>
+                                </li>
+                                <li>Фиксируем изменения локально: <br/>
+                                    <code style={{ backgroundColor: '#f5f5f5', padding: '4px 8px', borderRadius: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>git commit -m "feat: твое сообщение"</code>
+                                </li>
+                                <li>Отправляем код на GitHub: <br/>
+                                    <code style={{ backgroundColor: '#f5f5f5', padding: '4px 8px', borderRadius: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>git push</code>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
 
                 <section style={{
                     backgroundColor: '#fff',
@@ -639,6 +681,7 @@ export default function Page() {
                         </div>
                     </div>
                 </section>
+
 
 
             </div>
