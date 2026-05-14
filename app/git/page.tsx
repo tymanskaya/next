@@ -85,6 +85,69 @@ export default function Page() {
                 lineHeight: '1.5'
             }}>
 
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #000000',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#1f2328' }}>Размещение нового проекта на GitHub (с нуля)</h2>
+                    <p><i>Используй этот способ, если ты создала пустую папку с кодом, в которой еще никогда не настраивался Git.</i></p>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '15px' }}>
+
+                        {/* Через терминал */}
+                        <div style={{ backgroundColor: '#f6f8fa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #24292f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#24292f' }}>Способ 1: Через терминал (CLI)</p>
+                            <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <li>Создай новый репозиторий на GitHub и скопируй ссылку на него.</li>
+                                <li>В терминале внутри папки с проектом инициализируй Git:
+                                    <code style={{ display: 'block', backgroundColor: '#fff', padding: '6px 12px', borderRadius: '4px', marginTop: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>
+                                        git init
+                                    </code>
+                                </li>
+                                <li>Добавь все файлы проекта под контроль Git:
+                                    <code style={{ display: 'block', backgroundColor: '#fff', padding: '6px 12px', borderRadius: '4px', marginTop: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>
+                                        git add .
+                                    </code>
+                                </li>
+                                <li>Сделай самый первый (инициализирующий) коммит:
+                                    <code style={{ display: 'block', backgroundColor: '#fff', padding: '6px 12px', borderRadius: '4px', marginTop: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>
+                                        git commit -m "Initial commit"
+                                    </code>
+                                </li>
+                                <li>Привяжи удаленный репозиторий с GitHub к локальной папке:
+                                    <code style={{ display: 'block', backgroundColor: '#fff', padding: '6px 12px', borderRadius: '4px', marginTop: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>
+                                        git remote add origin [твоя_ссылка_на_github]
+                                    </code>
+                                </li>
+                                <li>Отправь код в ветку main:
+                                    <code style={{ display: 'block', backgroundColor: '#fff', padding: '6px 12px', borderRadius: '4px', marginTop: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>
+                                        git push -u origin main
+                                    </code>
+                                </li>
+                            </ol>
+                        </div>
+
+                        {/* Через WebStorm */}
+                        <div style={{ backgroundColor: '#f9f0ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #722ed1' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#531dab' }}>Способ 2: Через WebStorm</p>
+                            <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <li>В верхнем меню WebStorm выбери пункт: <b>VCS &gt; Enable Version Control Integration</b>.</li>
+                                <li>В выпадающем списке выбери <b>Git</b> и нажми <b>OK</b> (вся верстка в проекте станет красной &mdash; это нормально, файлы еще не добавлены).</li>
+                                <li>Открой вкладку <b>Commit</b> слева, выдели галочками все файлы, напиши сообщение коммита (например, <i>"init"</i>) и нажми стрелочку рядом с кнопкой Commit &rarr; выбери <b>Commit and Push</b>.</li>
+                                <li>В появившемся окне нажмите на синий текст <b>Define remote</b> и вставь туда URL пустого репозитория, созданного на GitHub.</li>
+                                <li>Нажми кнопку <b>Push</b>.</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </section>
+
+
+
                 {/* Секция: Локальные commit / Revert */}
                 <section style={{
                     backgroundColor: '#fff',
@@ -448,6 +511,79 @@ export default function Page() {
 
                     </div>
                 </section>
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #fa8c16',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#d46b08' }}>Временное хранилище (Git Stash / Unstash)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p><b>Stash</b> &mdash; это временный карман. Нужен, чтобы сохранить недописанный код без коммита, когда нужно срочно переключить ветку.</p>
+
+                        {/* Подраздел: Консоль */}
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0' }}>Работа через терминал:</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <code style={{ backgroundColor: '#fff7e6', padding: '6px 12px', borderRadius: '6px', color: '#d46b08' }}>
+                                    git stash &mdash; спрятать текущие изменения и очистить ветку
+                                </code>
+                                <code style={{ backgroundColor: '#fff7e6', padding: '6px 12px', borderRadius: '6px', color: '#d46b08' }}>
+                                    git stash pop &mdash; вернуть изменения обратно в код и удалить их из кармана
+                                </code>
+                                <code style={{ backgroundColor: '#f5f5f5', padding: '6px 12px', borderRadius: '6px', color: '#555' }}>
+                                    git stash list &mdash; посмотреть список всех заначек
+                                </code>
+                            </div>
+                        </div>
+
+                        {/* Подраздел: WebStorm */}
+                        <div style={{ backgroundColor: '#fff7e6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #fa8c16', marginTop: '5px' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0' }}>В интерфейсе WebStorm:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                                <li style={{ marginBottom: '6px' }}><b>Спрятать:</b> Нажми правой кнопкой мыши на проект или файлы (либо выдели часть кода) &rarr; <b>Git</b> &rarr; <b>Stash Changes...</b> (можно ввести название).</li>
+                                <li><b>Вернуть:</b> ПКМ по проекту &rarr; <b>Git</b> &rarr; <b>Unstash Changes...</b> &rarr; выбрать из списка и нажать <b>Pop Stash</b>.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #3a7afe',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#1e3d7d', fontSize: '20px' }}>Встроенная машина времени (WebStorm Local History)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p><b>Local History</b> &mdash; это независимая от Git система спасения кода. WebStorm сам поминутно записывает все изменения, даже если ты не делала коммиты.</p>
+
+                        <div style={{ backgroundColor: '#f0f5ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #3a7afe' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#1e3d7d' }}>Когда это спасет:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <li>Случайно удалила важный файл или целую папку.</li>
+                                <li>Сделала жесткий откат <code style={{ backgroundColor: '#fff', padding: '1px 5px', borderRadius: '4px' }}>git reset --hard</code> и стерла нужные незакоммиченные правки.</li>
+                                <li>Код работал час назад, а сейчас сломался, и ты хочешь построчно посмотреть историю изменений за день.</li>
+                            </ul>
+                        </div>
+
+                        <div style={{ marginTop: '5px' }}>
+                            <p><b>Как запустить:</b></p>
+                            <ol style={{ margin: '5px 0 0 0', paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <li>Нажми <b>ПКМ</b> на файл или папку в дереве проекта.</li>
+                                <li>Выбери пункт <b>Local History</b> &rarr; <b>Show History</b>.</li>
+                                <li>В открывшемся окне выбери нужную точку времени слева, нажми по ней ПКМ и выбери <b>Revert</b> для восстановления.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+
             </div>
 
 
