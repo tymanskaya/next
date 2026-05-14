@@ -126,6 +126,38 @@ export default function Page() {
                     </div>
                 </section>
 
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #37474f',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#263238', fontSize: '20px' }}>История изменений (git log)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p><b>git log</b> &mdash; выводит список всех коммитов в текущей ветке, начиная с самых свежих. Помогает понять, кто, когда и что изменял в проекте.</p>
+
+                        {/* Полезные флаги */}
+                        <div style={{ backgroundColor: '#eceff1', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #37474f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#263238' }}>Удобные модификаторы команды:</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <code style={{ backgroundColor: '#fff', padding: '6px 12px', borderRadius: '6px', color: '#c41d7f' }}>
+                                    git log --oneline &mdash; компактный вывод (каждый коммит в одну строку: короткий ID + текст)
+                                </code>
+                                <code style={{ backgroundColor: '#fff', padding: '6px 12px', borderRadius: '6px', color: '#c41d7f' }}>
+                                    git log -p &mdash; показывает не только коммиты, но и весь измененный код построчно
+                                </code>
+                            </div>
+                        </div>
+
+                        {/* Управление терминалом */}
+                        <div style={{ backgroundColor: '#fffbe6', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #faad14', fontSize: '0.95em' }}>
+                            💡 <b>Как выйти из лога:</b> Если список коммитов длинный, терминал замирает. Нажми клавишу <b>Q</b> на клавиатуре, чтобы выйти обратно в режим ввода команд.
+                        </div>
+                    </div>
+                </section>
 
                 <section style={{
                     backgroundColor: '#fff',
