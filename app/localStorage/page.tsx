@@ -1,4 +1,45 @@
 export default function Page() {
+    const codeInline = {
+        backgroundColor: '#f0f0f0',
+        padding: '2px 5px',
+        borderRadius: '4px',
+        fontFamily: 'monospace',
+        fontSize: '0.9em',
+        color: '#c41d7f'
+    };
+
+    const codeBlock = {
+        display: 'block',
+        backgroundColor: '#f5f5f5',
+        padding: '12px',
+        borderRadius: '6px',
+        fontFamily: 'monospace',
+        fontSize: '0.88em',
+        color: '#333',
+        overflowX: 'auto',
+        margin: '8px 0 0 0',
+        whiteSpace: 'pre-wrap'
+    };
+
+    const methodRowStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px',
+        paddingBottom: '10px',
+        borderBottom: '1px solid #f0f0f0'
+    };
+
+    const methodCodeStyle = {
+        backgroundColor: '#f0f5ff',
+        padding: '3px 8px',
+        borderRadius: '4px',
+        fontFamily: 'monospace',
+        fontSize: '0.92em',
+        color: '#2f54eb',
+        alignSelf: 'flex-start',
+        fontWeight: 'bold'
+    };
+
     return (
         <div style={{
             display: 'flex',
@@ -99,7 +140,110 @@ export default function Page() {
                             При чтении верни обратно в объект через <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>JSON.parse()</code>.
                         </p>
                     </div>
+                    <section style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #2f54eb',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        fontFamily: 'sans-serif',
+                        lineHeight: '1.6'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#1d39c4', fontSize: '22px' }}>Глубокое погружение в localStorage &amp; JSON</h2>
 
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+                            {/* Блок 1: Почему нужны stringify и parse */}
+                            <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#856404' }}>⚠️ Главное ограничение: Хранилище текстовое!</p>
+                                <p style={{ margin: 0, fontSize: '0.95em' }}>
+                                    Если попытаться записать объект напрямую: <code style={codeInline}>localStorage.setItem(&apos;user&apos;, {"{name: &apos;Kris&apos;}"})</code>,
+                                    браузер автоматически приведет его к строке, и внутри сохранится бесполезный текст <b>&quot;[object Object]&quot;</b>.
+                                </p>
+                            </div>
+
+                            {/* Блок 2: Разбор методов преобразования */}
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 10px 0' }}>🔄 Сериализация данных (Превращение в строку и обратно):</p>
+                                <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    <li>
+                                        <b>JSON.stringify(object)</b> &mdash; превращает любой JavaScript-объект или массив в строку формата JSON для безопасной записи.
+                                        <pre style={codeBlock}>
+{`// Пример сохранения объекта
+const user = { name: 'Kris', score: 100 };
+localStorage.setItem('user_session', JSON.stringify(user));
+// В памяти это сохранится как обычная строка: '{"name":"Kris","score":100}'`}
+                    </pre>
+                                    </li>
+                                    <li>
+                                        <b>JSON.parse(string)</b> &mdash; берет строку из хранилища и превращает её обратно в полноценный живой объект JavaScript, у которого можно читать свойства.
+                                        <pre style={codeBlock}>
+{`// Пример извлечения объекта обратно
+const rawData = localStorage.getItem('user_session');
+if (rawData) {
+    const parsedUser = JSON.parse(rawData);
+    console.log(parsedUser.name); // Выведет: Kris
+}`}
+                    </pre>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            {/* Блок 3: Полный разбор API */}
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '10px 0 10px 0' }}>🛠️ Подробный разбор всех методов localStorage:</p>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+
+                                    <div style={methodRowStyle}>
+                                        <code style={methodCodeStyle}>.setItem(key, value)</code>
+                                        <p style={{ margin: 0, fontSize: '0.95em' }}>Принимает два аргумента. Если ключ уже существует, старое значение <b>перезаписывается</b> новым.</p>
+                                    </div>
+
+                                    <div style={methodRowStyle}>
+                                        <code style={methodCodeStyle}>.getItem(key)</code>
+                                        <p style={{ margin: 0, fontSize: '0.95em' }}>Принимает имя ключа. Если такого ключа в браузере нет, метод вернет <code style={codeInline}>null</code>. <i>Всегда делай проверку на null перед JSON.parse!</i></p>
+                                    </div>
+
+                                    <div style={methodRowStyle}>
+                                        <code style={methodCodeStyle}>.removeItem(key)</code>
+                                        <p style={{ margin: 0, fontSize: '0.95em' }}>Удаляет переданный ключ и его значение. Очищает память точечно.</p>
+                                    </div>
+
+                                    <div style={methodRowStyle}>
+                                        <code style={methodCodeStyle}>.clear()</code>
+                                        <p style={{ margin: 0, fontSize: '0.95em' }}>Полностью стирает <b>все</b> данные, которые твой сайт когда-либо записывал в localStorage. Используй осторожно.</p>
+                                    </div>
+
+                                    <div style={methodRowStyle}>
+                                        <code style={methodCodeStyle}>.length</code>
+                                        <p style={{ margin: 0, fontSize: '0.95em' }}>Свойство (не метод), которое возвращает общее количество записей в хранилище для текущего домена.</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {/* Блок 4: Безопасный кастомный хук для React/Next.js */}
+                            <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#237804' }}>🛡️ Безопасный способ использования (Best Practice):</p>
+                                <p style={{ fontSize: '0.95em', margin: '0 0 10px 0' }}>Чтобы избежать падения Next.js на этапе SSR и безопасно парсить данные с отловом ошибок обработки строк, используй такую конструкцию внутри <code style={codeInline}>useEffect</code>:</p>
+                                <pre style={{...codeBlock, backgroundColor: '#fff', border: '1px solid #d9d9d9'}}>
+{`useEffect(() => {
+    try {
+        const item = localStorage.getItem('user_session');
+        const user = item ? JSON.parse(item) : null;
+        if (user) {
+            // Действие с валидным объектом
+        }
+    } catch (error) {
+        console.error("Ошибка парсинга JSON:", error);
+        // Защита на случай, если в строке лежал битый JSON
+    }
+}, []);`}
+            </pre>
+                            </div>
+
+                        </div>
+                    </section>
                     {/* Особенность в Next.js */}
                     <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
                         <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#237804' }}>⚛️ Особенность работы в Next.js (SSR):</p>
@@ -112,6 +256,8 @@ export default function Page() {
                     </div>
                 </div>
             </section>
+
+
 
         </div>
         </div>
