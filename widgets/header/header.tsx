@@ -48,6 +48,14 @@ export const Header = () => {
                 </li>
                 <li>
                     <button
+                        onClick={() => router.push("/localStorage")}
+                        className={`${styles.link} ${isActive("/localStorage") ? styles.active : ""}`}
+                    >
+                        LocalStorage
+                    </button>
+                </li>
+                <li>
+                    <button
                         onClick={() => router.push("/profile")}
                         className={`${styles.link} ${isActive("/profile") ? styles.active : ""}`}
                     >
