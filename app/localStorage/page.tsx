@@ -256,10 +256,50 @@ if (rawData) {
                     </div>
                 </div>
             </section>
+                {/* Блок: Объем памяти и ограничения */}
+                <div style={{
+                    backgroundColor: '#fff1f0',
+                    padding: '15px',
+                    borderRadius: '8px',
+                    borderLeft: '4px solid #ff4d4f',
+                    marginTop: '15px'
+                }}>
+                    <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#cf1322' }}>💾 Лимиты памяти и объем хранилища:</p>
+                    <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.95em' }}>
+                        <li><b>Общий лимит:</b> Большинство современных браузеров (Chrome, Firefox, Safari) выделяют ровно <b>5 МБ</b> памяти на один домен (origin).</li>
+                        <li><b>Сравнение с Cookies:</b> Это в 1250 раз больше, чем у обычных куки-файлов (у них лимит всего 4 КБ).</li>
+                        <li><b>Что будет при переполнении:</b> Если попытаться сохранить объем данных больше 5 МБ, браузер заблокирует запись и выбросит критическую ошибку <b>QuotaExceededError</b>.</li>
+                    </ul>
+
+                    {/* Код перехвата ошибки */}
+                    <p style={{ fontWeight: 'bold', margin: '12px 0 6px 0', fontSize: '0.9em' }}>🛡️ Безопасная запись больших объемов данных:</p>
+                    <pre style={{
+                        display: 'block',
+                        backgroundColor: '#fff',
+                        padding: '10px',
+                        borderRadius: '6px',
+                        fontFamily: 'monospace',
+                        fontSize: '0.88em',
+                        color: '#333',
+                        border: '1px solid #ffa39e',
+                        margin: 0,
+                        whiteSpace: 'pre-wrap'
+                    }}>
+{`try {
+    localStorage.setItem('large_data', JSON.stringify(bigObject));
+} catch (error) {
+    if (error.name === 'QuotaExceededError') {
+        console.error('Недостаточно места в localStorage! Нужно очистить старые данные.');
+        // Тут можно вызвать localStorage.clear() или выборочное удаление данных
+    }
+}`}
+    </pre>
+                </div>
 
 
 
-        </div>
+
+            </div>
         </div>
     );
 }
