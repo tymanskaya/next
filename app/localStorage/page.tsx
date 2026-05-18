@@ -81,6 +81,59 @@ export default function WebStorageCheatSheet() {
                         </div>
                     </div>
                 </section>
+                <section style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #13c2c2',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#006d75', fontSize: '20px' }}>Синхронизация вкладок (Событие storage)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p>Глобальное событие <b>storage</b> срабатывает на всех вкладках твоего сайта (кроме текущей), когда в localStorage вносятся изменения. Это позволяет координировать состояние приложения между окнами.Если пользователь в одной вкладке нажал «Выйти из профиля» или «Сменил тему на темную», остальные вкладки должны узнать об этом автоматически.
+                        </p>
+
+                        {/* Свойства события */}
+                        <div style={{ backgroundColor: '#e6fffb', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #13c2c2' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#006d75' }}>Анатомия объекта StorageEvent:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.95em' }}>
+                                <li><code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>event.key</code> &mdash; имя измененного ключа.</li>
+                                <li><code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>event.newValue</code> &mdash; свежее записанное значение (null, если удалено).</li>
+                                <li><code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>event.oldValue</code> &mdash; то, что лежало в памяти до перезаписи.</li>
+                                <li><code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>event.url</code> &mdash; адрес страницы, которая инициировала изменение.</li>
+                            </ul>
+                        </div>
+
+                        {/* Пример кода */}
+                        <p style={{ fontWeight: 'bold', margin: '5px 0 0 0' }}>Пример подписки на изменения в React:</p>
+                        <pre style={{
+                            display: 'block',
+                            backgroundColor: '#f5f5f5',
+                            padding: '12px',
+                            borderRadius: '6px',
+                            fontFamily: 'monospace',
+                            fontSize: '0.88em',
+                            color: '#333',
+                            overflowX: 'auto',
+                            margin: 0,
+                            whiteSpace: 'pre-wrap'
+                        }}>
+{`useEffect(() => {
+    const syncData = (e) => {
+        if (e.key === 'auth_token' && !e.newValue) {
+            // Если в другой вкладке разлогинились — выкидываем пользователя и тут
+            window.location.reload();
+        }
+    };
+    window.addEventListener('storage', syncData);
+    return () => window.removeEventListener('storage', syncData);
+}, []);`}
+        </pre>
+                    </div>
+                </section>
+
 
                 {/* РАЗДЕЛ 2: SESSIONSTORAGE */}
                 <section style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '12px', borderTop: '6px solid #722ed1', boxShadow: '0 4px 15px rgba(0,0,0,0.06)' }}>
