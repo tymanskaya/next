@@ -113,6 +113,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#useEffect" style={anchorLinkStyle}>
                         🔹 useEffect (Эффекты)
                     </a>
+                    <a href="#useLayoutEffect" style={anchorLinkStyle}>
+                        🔹 useLayoutEffect (Синхронный эффект)
+                    </a>
                     <a href="#useRef" style={anchorLinkStyle}>
                         🔹 useRef (Ссылки)
                     </a>
@@ -128,9 +131,7 @@ export default function ReactHooksCheatSheet() {
                     <a href="#useCallback" style={anchorLinkStyle}>
                         🔹 useCallback (Кэш функций)
                     </a>
-                    <a href="#useLayoutEffect" style={anchorLinkStyle}>
-                        🔹 useLayoutEffect (Синхронный эффект)
-                    </a>
+
                 </div>
             </aside>
 
@@ -376,6 +377,39 @@ const [data, setData] = useState(() => getHeavyData());`}
                             </div>
                         </div>
                     </section>
+                    <section id="useLayoutEffect" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #fa541c', // Красно-оранжевый цвет
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        marginTop: '40px',
+                        scrollMarginTop: '40px',
+                        fontFamily: 'sans-serif'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#ad2102', fontSize: '22px' }}>Синхронный замер DOM (useLayoutEffect)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p><b>useLayoutEffect</b> &mdash; работает идентично <code style={codeInlineStyle}>useEffect</code>, но запускается **синхронно сразу после изменения DOM**, но **ДО того, как браузер отрисует пиксели на экране**.
+                            </p>
+
+                            <div style={{ backgroundColor: '#fff2e8', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #fa541c', fontSize: '0.93em' }}>
+                                ⚡ <b>Когда применять:</b> Только когда вам нужно считать точные размеры элемента (высоту, ширину, отступы) и мгновенно изменить интерфейс (например, спозиционировать всплывающую подсказку Tooltip). Если делать это в обычном `useEffect`, пользователь заметит секундное «мигание» или дергание элемента.
+                            </div>
+
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Шаблон использования:</p>
+                                <pre style={codeBlockStyle}>
+{`useLayoutEffect(() => {
+    const { height } = ref.current.getBoundingClientRect();
+    // Делаем что-то с высотой ДО отрисовки экрана
+    setTooltipPosition(height + 10);
+}, [data]);`}
+            </pre>
+                            </div>
+                        </div>
+                    </section>
+
                     <section id="useRef" style={{
                         backgroundColor: '#fff',
                         padding: '25px',
@@ -826,6 +860,45 @@ export default function Shop() {
             </pre>
                             </div>
                         </div>
+                        <div style={{
+                            backgroundColor: '#fff7e6', // Нежно-оранжевый фоновый цвет приковывает внимание
+                            padding: '20px',
+                            borderRadius: '12px',
+                            border: '2px dashed #ffa940', // Пунктирная рамка, как у классической карточки-памятки
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                            marginTop: '30px',
+                            marginBottom: '20px',
+                            fontFamily: 'sans-serif'
+                        }}>
+                            <h3 style={{ margin: '0 0 12px 0', color: '#d46b08', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                🧠 Шпаргалка: useMemo vs useCallback
+                            </h3>
+
+                            <p style={{ margin: '0 0 15px 0', fontSize: '0.95em', color: '#555', lineHeight: '1.5' }}>
+                                Оба хука служат для одной цели — **оптимизации производительности**, но кэшируют (мемоизируют) они абсолютно разные вещи:
+                            </p>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                                    <span style={{ fontSize: '1.2em', lineHeight: '1' }}>📦</span>
+                                    <div style={{ fontSize: '0.95em', lineHeight: '1.5' }}>
+                                        <code style={codeInlineStyle}>useMemo</code> кэширует <b>результат вычислений</b>. Он возвращает готовые данные: объект, массив, строку или число.
+                                        <br/>
+                                        <span style={{ color: '#8c8c8c', fontSize: '0.9em' }}>Решает проблему: «Не пересчитывать тяжелые циклы при каждом рендере».</span>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginTop: '5px' }}>
+                                    <span style={{ fontSize: '1.2em', lineHeight: '1' }}>⚙️</span>
+                                    <div style={{ fontSize: '0.95em', lineHeight: '1.5' }}>
+                                        <code style={codeInlineStyle}>useCallback</code> кэширует <b>саму функцию</b>. Он возвращает стабильную ссылку на метод, который можно вызвать позже.
+                                        <br/>
+                                        <span style={{ color: '#8c8c8c', fontSize: '0.9em' }}>Решает проблему: «Не создавать функцию заново, чтобы дочерние компоненты не рендерились лишний раз».</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </section>
 
 
