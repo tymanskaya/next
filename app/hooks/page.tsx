@@ -132,6 +132,10 @@ export default function ReactHooksCheatSheet() {
                         🔹 useCallback (Кэш функций)
                     </a>
 
+                    <a href="#useTransition" style={anchorLinkStyle}>
+                        🔹 useTransition (Фоновый рендер)
+                    </a>
+
                 </div>
             </aside>
 
@@ -901,6 +905,81 @@ export default function Shop() {
 
                     </section>
 
+                    <section id="useTransition" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #13c2c2', // Красивый бирюзовый или синий акцент
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        marginTop: '40px',
+                        scrollMarginTop: '40px',
+                        fontFamily: 'sans-serif'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#006d75', fontSize: '22px' }}>⏳ Оптимизация интерфейса (useTransition)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p>
+                                <b>useTransition</b> &mdash; позволяет разделять обновления состояния на <b>срочные</b> (ввод текста в инпут, клики) и <b>фоновые</b> (рендеринг больших списков, графиков). Благодаря этому интерфейс приложения никогда не блокируется и не "зависает".
+                            </p>
+
+                            <div style={{ backgroundColor: '#e6fffb', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #13c2c2' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#006d75' }}>Синтаксис хука:</p>
+                                <code style={{ ...codeInlineStyle, display: 'block', padding: '10px', whiteSpace: 'pre' }}>
+                                    {`const [isPending, startTransition] = useTransition();`}
+                                </code>
+                                <ul style={{ margin: '10px 0 0 0', paddingLeft: '20px', fontSize: '0.9em', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                    <li><b>startTransition:</b> Обертка для "тяжелых" изменений стейта, которые можно отложить.</li>
+                                    <li><b>isPending:</b> Флаг, сообщающий, что тяжелые вычисления прямо сейчас идут в фоновом режиме.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Шаблон использования (Умный поиск):</p>
+                                <pre style={codeBlockStyle}>
+{`const [query, setQuery] = useState('');
+const [list, setList] = useState([]);
+const [isPending, startTransition] = useTransition();
+
+const handleChange = (e) => {
+    // 1. Срочно меняем текст в инпуте
+    setQuery(e.target.value); 
+    
+    // 2. Фильтрацию списка отправляем в фоновый приоритет
+    startTransition(() => {
+        setList(heavyFilterFunction(e.target.value));
+    });
+};`}
+            </pre>
+                            </div>
+                        </div>
+                        <div style={{
+                            backgroundColor: '#fff7e6',
+                            padding: '18px',
+                            borderRadius: '8px',
+                            borderLeft: '4px solid #ffa940',
+                            fontSize: '0.93em',
+                            marginTop: '20px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '12px'
+                        }}>
+                            <p style={{ fontWeight: 'bold', margin: 0, color: '#d46b08', fontSize: '1.05em' }}>
+                                🧱 Важные правила и особенности использования:
+                            </p>
+
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '10px', lineHeight: '1.5' }}>
+                                <li>
+                                    <b>Прерываемость (Interruption):</b> Прерывание рендеринга (Interruption): Это самая крутая фишка. Если пользователь быстро пишет слово «React», при вводе буквы R запускается фоновая фильтрация. Но как только пользователь нажимает e, React бросает старую недоделанную фильтрацию для R и мгновенно переключается на обработку нового ввода. Больше никаких зависаний!
+                                </li>
+                                <li>
+                                    <b>Только синхронные сеттеры:</b> Функция внутри <code style={codeInlineStyle}>startTransition</code> должна выполнять изменения стейта синхронно. Туда нельзя помещать асинхронные операции вроде <code style={codeInlineStyle}>setTimeout</code> или дожидаться ответа от <code style={codeInlineStyle} >fetch</code> напрямую.
+                                </li>
+                                <li>
+                                    <b>Не используйте для инпутов:</b> Переменную состояния, привязанную к полю ввода (<code style={codeInlineStyle}>value={"query"}</code>), <b>нельзя</b> оборачивать в фоновый режим. Текст в инпуте всегда должен обновляться синхронно, иначе буквы будут появляться на экране с рывками и задержкой.
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
 
 
 
