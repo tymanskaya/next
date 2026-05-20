@@ -75,6 +75,10 @@ export default function ReactHooksCheatSheet() {
                     <a href="#useRef" style={anchorLinkStyle}>
                         🔹 useRef (Ссылки)
                     </a>
+                    <a href="#useReducer" style={anchorLinkStyle}>
+                        🔹 useReducer (Диспетчер)
+                    </a>
+
                 </div>
             </aside>
 
@@ -372,6 +376,60 @@ export default function InputFocus() {
                             </div>
                         </div>
                     </section>
+                    <section id="useReducer" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #722ed1',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        scrollMarginTop: '40px'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#531dab', fontSize: '22px' }}>Управление сложным состоянием (useReducer)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p><b>useReducer</b> &mdash; продвинутая альтернатива <code style={codeInlineStyle}>useState</code>. Идеально подходит, когда состояние состоит из множества взаимосвязанных полей, а логика его изменения включает разные типы действий (actions).</p>
+
+                            {/* Схема работы */}
+                            <div style={{ backgroundColor: '#f9f0ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #722ed1' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#531dab' }}>Три кита архитектурыuseReducer:</p>
+                                <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95em' }}>
+                                    <li><b>State:</b> Текущий объект с данными (неизменяемый напрямую).</li>
+                                    <li><b>Action:</b> Объект-сигнал, который передает тип операции. Обычно выглядит так: <code style={codeInlineStyle}>{"{ type: &apos;ADD_ITEM&apos;, payload: data }"}</code>.</li>
+                                    <li><b>Reducer:</b> Чистая функция, которая принимает текущий стейт и экшен, обрабатывает их через оператор <code style={codeInlineStyle}>switch-case</code> и возвращает <b>абсолютно новый объект состояния</b>.</li>
+                                </ul>
+                            </div>
+
+                            {/* Пример кода */}
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Шаблон реализации Редьюсера:</p>
+                                <pre style={codeBlockStyle}>
+{`// 1. Описываем логику переключения состояний
+function todoReducer(state, action) {
+    switch (action.type) {
+        case 'add':
+            return [...state, { id: Date.now(), text: action.payload }];
+        case 'delete':
+            return state.filter(todo => todo.id !== action.payload);
+        default:
+            return state;
+    }
+}
+
+// 2. Вызываем внутри компонента
+const [todos, dispatch] = useReducer(todoReducer, []);
+
+// 3. Отправляем изменения в интерфейсе
+dispatch({ type: 'add', payload: 'Купить молоко' });`}
+            </pre>
+                            </div>
+
+                            {/* Когда выбирать */}
+                            <div style={{ backgroundColor: '#f5f5f5', padding: '12px', borderRadius: '8px', fontSize: '0.93em' }}>
+                                💡 <b>Когда использовать:</b> Если у тебя в <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>useState</code> становится слишком много перекрестных обновлений (например, при обновлении одного поля нужно обязательно пересчитать еще три), смело переписывай этот блок на <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>useReducer</code>. Это сделает код чище и упростит его тестирование.
+                            </div>
+                        </div>
+                    </section>
+
 
 
                 </div>
