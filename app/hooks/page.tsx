@@ -138,8 +138,8 @@ export default function ReactHooksCheatSheet() {
                     <a href="#useDeferredValue" style={anchorLinkStyle}>
                         🔹 useDeferredValue (Отложенное эхо)
                     </a>
-                    <a href="#useTransition" style={anchorLinkStyle}>
-                        🔹 useTransition (Фоновый рендер)
+                    <a href="#useId" style={anchorLinkStyle}>
+                        🔹 useId (Фоновый рендер)
                     </a>
                     <a href="#useImperativeHandle" style={anchorLinkStyle}>
                         🔹 useImperativeHandle (Отложенное эхо)
