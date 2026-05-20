@@ -138,6 +138,12 @@ export default function ReactHooksCheatSheet() {
                     <a href="#useDeferredValue" style={anchorLinkStyle}>
                         🔹 useDeferredValue (Отложенное эхо)
                     </a>
+                    <a href="#useTransition" style={anchorLinkStyle}>
+                        🔹 useTransition (Фоновый рендер)
+                    </a>
+                    <a href="#useImperativeHandle" style={anchorLinkStyle}>
+                        🔹 useImperativeHandle (Отложенное эхо)
+                    </a>
 
                 </div>
             </aside>
@@ -1058,7 +1064,156 @@ export default function SearchPage() {
                         </div>
                     </section>
 
+                    {/* ===== USEID ===== */}
+                    <section id="useId" style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '12px', borderTop: '6px solid #13c2c2', boxShadow: '0 4px 15px rgba(0,0,0,0.06)', scrollMarginTop: '40px' }}>
+                        <h2 style={{ marginTop: 0, color: '#006d75', fontSize: '22px' }}>Уникальные идентификаторы (useId)</h2>
+                        <p style={{ margin: '0 0 15px 0', color: '#555' }}>
+                            <b>useId</b> &mdash; генерирует стабильный уникальный ID, который не меняется между рендерами
+                            и одинаков на сервере и клиенте. Незаменим для связки <code style={codeInlineStyle}>{'<label htmlFor>'}</code>
+                            {' '}и <code style={codeInlineStyle}>{'<input id>'}</code>, а также для <code style={codeInlineStyle}>aria-*</code> атрибутов доступности.
+                        </p>
 
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+                            <div style={{ backgroundColor: '#e6fffb', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #13c2c2' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#006d75' }}>Синтаксис:</p>
+                                <code style={{ display: 'block', backgroundColor: '#fff', padding: '6px 12px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>
+                                    const id = useId();
+                                </code>
+                                <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px', fontSize: '0.92em', color: '#333' }}>
+                                    <li>Возвращает строку вида <code style={codeInlineStyle}>{':r1:'}</code>, <code style={codeInlineStyle}>{':r2:'}</code> — уникальную на всей странице.</li>
+                                    <li>Значение стабильно — не меняется при повторных рендерах.</li>
+                                    <li>Работает корректно при серверном рендеринге (SSR).</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 10px 0' }}>⚠️ Важные правила:</p>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    <div style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '10px' }}>
+                                        <p style={{ margin: '0 0 4px 0', fontWeight: '600', color: '#cf1322' }}>Не использовать для key в списках!</p>
+                                        <p style={{ margin: 0, fontSize: '0.95em', color: '#555' }}>
+                                            <code style={codeInlineStyle}>useId</code> предназначен только для атрибутов доступности. Для <code style={codeInlineStyle}>key</code> используй ID из данных.
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p style={{ margin: '0 0 4px 0', fontWeight: '600' }}>Несколько полей — один вызов useId</p>
+                                        <p style={{ margin: '0 0 8px 0', fontSize: '0.95em', color: '#555' }}>
+                                            Вызывай <code style={codeInlineStyle}>useId()</code> один раз, затем создавай производные через суффиксы:
+                                        </p>
+                                        <pre style={codeBlockStyle}>
+{`function Form() {
+    const id = useId();
+
+    return (
+        <>
+            <label htmlFor={id + '-name'}>Имя</label>
+            <input id={id + '-name'} />
+
+            <label htmlFor={id + '-email'}>Email</label>
+            <input id={id + '-email'} />
+        </>
+    );
+}`}
+                    </pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#237804' }}>🛠️ Классический пример — связка label + input:</p>
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #d9d9d9' }}>
+{`import { useId } from 'react';
+
+export default function EmailField() {
+    const id = useId();
+
+    return (
+        <div>
+            <label htmlFor={id}>Email</label>
+            <input id={id} type="email" />
+        </div>
+    );
+}`}
+            </pre>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    {/* ===== USEIMPERATIVEHANDLE ===== */}
+                    <section id="useImperativeHandle" style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '12px', borderTop: '6px solid #722ed1', boxShadow: '0 4px 15px rgba(0,0,0,0.06)', scrollMarginTop: '40px' }}>
+                        <h2 style={{ marginTop: 0, color: '#391085', fontSize: '22px' }}>Управление ref снаружи (useImperativeHandle)</h2>
+                        <p style={{ margin: '0 0 15px 0', color: '#555' }}>
+                            <b>useImperativeHandle</b> &mdash; позволяет дочернему компоненту самому решать, что именно
+                            увидит родитель через <code style={codeInlineStyle}>ref</code>. Вместо «голого» DOM-элемента
+                            компонент прячет детали реализации и отдаёт только нужные методы. Используется вместе с <code style={codeInlineStyle}>forwardRef</code>.
+                        </p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+                            <div style={{ backgroundColor: '#f9f0ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #722ed1' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#391085' }}>📦 Схема работы:</p>
+                                <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.92em', color: '#333', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <li>Родитель передаёт <code style={codeInlineStyle}>ref</code> дочернему компоненту.</li>
+                                    <li>Дочерний получает его через <code style={codeInlineStyle}>forwardRef</code>.</li>
+                                    <li><code style={codeInlineStyle}>useImperativeHandle</code> подменяет содержимое этого ref на свой объект с методами.</li>
+                                    <li>Родитель видит только то, что дочерний решил «раскрыть» &mdash; принцип инкапсуляции.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 8px 0' }}>Синтаксис:</p>
+                                <pre style={codeBlockStyle}>
+{`useImperativeHandle(ref, () => ({
+    // методы, которые увидит родитель
+    focus: () => inputRef.current?.focus(),
+    clear: () => { if (inputRef.current) inputRef.current.value = ''; },
+}));`}
+            </pre>
+                            </div>
+
+                            <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#237804' }}>🛠️ Полный пример — кастомный инпут с методами:</p>
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #d9d9d9' }}>
+{`import { forwardRef, useRef, useImperativeHandle } from 'react';
+
+// Дочерний: прячет DOM, отдаёт только focus и clear
+const FancyInput = forwardRef(function FancyInput(props, ref) {
+    const inputRef = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+        focus: () => inputRef.current?.focus(),
+        clear: () => { if (inputRef.current) inputRef.current.value = ''; },
+    }));
+
+    return <input ref={inputRef} />;
+});
+
+// Родитель: видит только { focus, clear }
+export default function Form() {
+    const inputRef = useRef(null);
+
+    return (
+        <>
+            <FancyInput ref={inputRef} />
+            <button onClick={() => inputRef.current.focus()}>Фокус</button>
+            <button onClick={() => inputRef.current.clear()}>Очистить</button>
+        </>
+    );
+}`}
+            </pre>
+                            </div>
+
+                            <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#856404' }}>⚡ Когда использовать:</p>
+                                <p style={{ fontSize: '0.95em', margin: 0 }}>
+                                    Когда нужно дать родителю управление фокусом, скроллом или воспроизведением медиа &mdash; но <b>без доступа ко всему DOM-элементу целиком</b>. Снаружи виден только «пульт управления», а не внутренности компонента.
+                                </p>
+                            </div>
+
+                        </div>
+                    </section>
                 </div>
             </main>
         </div>
