@@ -791,6 +791,43 @@ export default function UsersList({ users }) {
                             </div>
                         </div>
                     </section>
+                    <section id="useCallback" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #eb2f96', // Розовый цвет
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        marginTop: '40px',
+                        scrollMarginTop: '40px',
+                        fontFamily: 'sans-serif'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#9e1055', fontSize: '22px' }}>Мемоизация колбэков (useCallback)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p><b>useCallback</b> &mdash; возвращает **мемоизированную версию функции**. Он полезен, когда вы передаете функции в дочерние компоненты, оптимизированные с помощью <code style={codeInlineStyle}>React.memo</code>, чтобы предотвратить их лишние перерисовки.
+                            </p>
+
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Пример сохранения ссылки на обработчик клика:</p>
+                                <pre style={codeBlockStyle}>
+{`import React, { useState, useCallback } from 'react';
+import ProductCard from './ProductCard'; // Допустим, он обернут в React.memo
+
+export default function Shop() {
+    const [cart, setCart] = useState([]);
+
+    // Ссылка на функцию останется неизменной между рендерами
+    const addToCart = useCallback((id) => {
+        setCart((prevCart) => [...prevCart, id]);
+    }, []); // Пустой массив — функция создается 1 раз
+
+    return <ProductCard onAdd={addToCart} />;
+}`}
+            </pre>
+                            </div>
+                        </div>
+                    </section>
+
 
 
 
