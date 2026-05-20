@@ -119,7 +119,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#useReducer" style={anchorLinkStyle}>
                         🔹 useReducer (Диспетчер)
                     </a>
-
+                    <a href="#useContext" style={anchorLinkStyle}>
+                        🔹 useReducer (Диспетчер)
+                    </a>
                 </div>
             </aside>
 
@@ -568,6 +570,126 @@ export default function App() {
                             </div>
                         </section>
 
+                    </section>
+                    <section id="useContext" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #1890ff',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        scrollMarginTop: '40px'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#0050b3', fontSize: '22px' }}>Глобальный контекст (useContext)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p><b>useContext</b> &mdash; позволяет передавать данные глубоко по дереву компонентов в обход ручной передачи пропсов через каждый уровень (решает проблему <i>Props Drilling</i>). Полезен для глобальных данных: тем оформления, языков интерфейса или данных авторизованного пользователя. Он превращает контекст в своеобразную «беспроводную сеть» (Wi-Fi) для данных внутри твоего приложения: любой дочерний компонент может мгновенно «подключиться» и считать нужную информацию.
+                            </p>
+
+                            {/* Схема трех шагов */}
+                            <div style={{ backgroundColor: '#e6f7ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #1890ff' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#0050b3' }}>Три обязательных шага для работы:</p>
+                                <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95em' }}>
+                                    <li><b>createContext:</b> Создаем именованную шину данных за пределами компонентов: <code style={codeInlineStyle}>const MyContext = createContext(null);</code></li>
+                                    <li><b>Provider (Поставщик):</b> Оборачиваем родительский компонент в <code style={codeInlineStyle}>&lt;MyContext.Provider value={"{data}"}&gt;</code>, чтобы спустить данные вниз.</li>
+                                    <li><b>useContext (Потребитель):</b> Внутри любого дочернего тега вызываем хук: <code style={codeInlineStyle}>const data = useContext(MyContext);</code> для чтения.</li>
+                                </ol>
+                            </div>
+                            <section id="useContextSteps" style={{
+                                backgroundColor: '#fff',
+                                padding: '25px',
+                                borderRadius: '12px',
+                                borderTop: '6px solid #52c41a', // Зеленый цвет для секции "Практика"
+                                boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                                marginTop: '25px',
+                                scrollMarginTop: '40px'
+                            }}>
+                                <h2 style={{ marginTop: 0, color: '#237804', fontSize: '22px' }}>Архитектура внедрения (3 шага на практике)</h2>
+                                <p>В реальных проектах код разделяют по разным файлам. Вот эталонная структура:</p>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '15px' }}>
+
+                                    {/* Шаг 1 */}
+                                    <div>
+                                        <h3 style={{ margin: '0 0 5px 0', fontSize: '16px', color: '#1a1a1a' }}>📁 Шаг 1. Создание контекста и провайдера <code style={codeInlineStyle}>context/UserContext.jsx</code></h3>
+                                        <pre style={codeBlockStyle}>
+{`import React, { createContext, useState } from 'react';
+
+export const UserContext = createContext(null);
+
+export function UserProvider({ children }) {
+    const [user, setUser] = useState(null);
+    const login = (name) => setUser({ name });
+    const logout = () => setUser(null);
+
+    return (
+        <UserContext.Provider value={{ user, login, logout }}>
+            {children}
+        </UserContext.Provider>
+    );
+}`}
+            </pre>
+                                    </div>
+
+                                    {/* Шаг 2 */}
+                                    <div>
+                                        <h3 style={{ margin: '0 0 5px 0', fontSize: '16px', color: '#1a1a1a' }}>📁 Шаг 2. Обертка корневого компонента <code style={codeInlineStyle}>App.jsx</code></h3>
+                                        <pre style={codeBlockStyle}>
+{`import { UserProvider } from './context/UserContext';
+import Header from './components/Header';
+
+export default function App() {
+    return (
+        <UserProvider>
+            <Header />
+            {/* Другие компоненты приложения */}
+        </UserProvider>
+    );
+}`}
+            </pre>
+                                    </div>
+
+                                    {/* Шаг 3 */}
+                                    <div>
+                                        <h3 style={{ margin: '0 0 5px 0', fontSize: '16px', color: '#1a1a1a' }}>📁 Шаг 3. Использование в компонентах <code style={codeInlineStyle}>Header.jsx</code></h3>
+                                        <pre style={codeBlockStyle}>
+{`import React, { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
+
+export default function Header() {
+    const { user, logout } = useContext(UserContext);
+    return user ? (
+        <div>Привет, {user.name}! <button onClick={logout}>Выйти</button></div>
+    ) : (
+        <span>Войдите в систему</span>
+    );
+}`}
+            </pre>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Пример кода */}
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Пример извлечения данных из контекста:</p>
+                                <pre style={codeBlockStyle}>
+{`import React, { useContext } from 'react';
+import { UserContext } from './context/UserContext';
+
+export default function UserWidget() {
+    // Хук автоматически заберет актуальный объект пользователя из провайдера сверху
+    const user = useContext(UserContext); 
+
+    if (!user) return <p>Пользователь не авторизован</p>;
+    return <p>Добро пожаловать back, {user.name}!</p>;
+}`}
+            </pre>
+                            </div>
+
+                            {/* Важное предупреждение об оптимизации */}
+                            <div style={{ backgroundColor: '#fff1f0', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f', fontSize: '0.93em' }}>
+                                ⚠️ <b>Минус технологии (Важно знать):</b> Когда значение <code style={codeInlineStyle}>value</code> в провайдере меняется, <b>все</b> компоненты, которые вызывают <code style={codeInlineStyle}>useContext(MyContext)</code>, автоматически перерисовываются. Не используйте контекст для очень часто меняющихся данных (например, для позиций мыши или игровых таймеров), для этого лучше подходят стейт-менеджеры (Zustand, Redux).
+                            </div>
+                        </div>
                     </section>
 
 
