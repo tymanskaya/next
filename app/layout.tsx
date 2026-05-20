@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import {Header} from "@/widgets/header/header";
+import Sidebar from "@/app/components/Sidebar";
 
 
 const geistSans = Geist({
@@ -29,7 +30,19 @@ export default function RootLayout({
         <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Header />
-        {children}
+        {/*{children}*/}
+        <div style={{ display: 'flex', minHeight: '100vh' }}>
+
+            {/* Наше фиксированное меню */}
+
+            <Sidebar />
+
+            {/* Область для контента текущей страницы */}
+            <div style={{ flex: 1, marginLeft: '260px', backgroundColor: '#f0f2f5' }}>
+                {children}
+            </div>
+
+        </div>
         </body>
         </html>
     );

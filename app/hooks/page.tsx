@@ -211,7 +211,116 @@ export default function Counter() {
                             </div>
 
                         </div>
+                        {/* Блок: Ленивая инициализация */}
+                        {/* Блок: Что такое функция-инициализатор */}
+                        <div style={{
+                            backgroundColor: '#f6ffed',
+                            padding: '15px',
+                            borderRadius: '8px',
+                            borderLeft: '4px solid #52c41a',
+                            marginTop: '15px'
+                        }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 6px 0', color: '#237804' }}>📖 Терминология: Функция-инициализатор (Initializer Function)</p>
+                            <p style={{ fontSize: '0.95em', margin: 0 }}>
+                                Это чистая функция без аргументов, передаваемая в <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>useState</code> для отложенного вычисления начального состояния. Она запускается <b>ровно один раз</b> при инициализации компонента и полностью игнорируется при повторных рендерах, защищая приложение от лишней нагрузки.
+                            </p>
+                        </div>
+
+                        <div style={{
+                            backgroundColor: '#fffbe6',
+                            padding: '15px',
+                            borderRadius: '8px',
+                            borderLeft: '4px solid #faad14',
+                            marginTop: '15px'
+                        }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#856404' }}>⚡ Оптимизация: Ленивая инициализация (Lazy Initialization)</p>
+                            <p style={{ fontSize: '0.95em', margin: '0 0 10px 0' }}>
+                                Если начальное значение стейта вычисляется &laquo;тяжёлой&raquo; функцией (например, чтение из <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>localStorage</code>), то при обычном вызове она будет перезапускаться <b>при каждом рендере</b>.
+                            </p>
+
+                            <p style={{ fontSize: '0.95em', margin: '0 0 10px 0' }}>
+                                <b>Решение:</b> Передавай в <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>useState</code> не результат функции, а стрелочную функцию-колбэк. Тогда React вызовет её <b>строго один раз</b> при создании компонента.
+                            </p>
+
+                            <pre style={{
+                                display: 'block',
+                                backgroundColor: '#fff',
+                                padding: '12px',
+                                borderRadius: '6px',
+                                fontFamily: 'monospace',
+                                fontSize: '0.88em',
+                                color: '#333',
+                                border: '1px solid #ffe58f',
+                                margin: 0,
+                                whiteSpace: 'pre-wrap'
+                            }}>
+{`// ❌ Неправильно (вызывается при каждом рендере):
+const [data, setData] = useState(getHeavyData());
+
+//  Правильно (вызовется только один раз при старте):
+const [data, setData] = useState(() => getHeavyData());`}
+    </pre>
+                        </div>
                     </section>
+
+                    <section id="useEffect" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #52c41a',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        scrollMarginTop: '40px'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#237804', fontSize: '22px' }}>Синхронизация и эффекты (useEffect)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p><b>useEffect</b> &mdash; выполняет побочные эффекты (side-effects) после рендеринга компонента: запросы к API, подписки на события, работу с таймерами и прямое взаимодействие с DOM.</p>
+
+                            {/* Таблица режимов работы */}
+                            <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#237804' }}>Управление массивом зависимостей:</p>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.95em' }}>
+                                    <div>• <code style={codeInlineStyle}>useEffect(() =&gt; {"{}"})</code> &mdash; <b>Без массива:</b> запускается при <i>каждом</i> рендере приложения.</div>
+                                    <div>• <code style={codeInlineStyle}>useEffect(() =&gt; {"{}"}, [])</code> &mdash; <b>Пустой массив:</b> запускается ровно <i>один раз</i> при создании (монтировании) компонента.</div>
+                                    <div>• <code style={codeInlineStyle}>useEffect(() =&gt; {"{}"}, [id])</code> &mdash; <b>С переменными:</b> запускается на старте + каждый раз, когда меняется значение <code style={codeInlineStyle}>id</code>.</div>
+                                </div>
+                            </div>
+
+                            {/* Функция очистки */}
+                            <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#cf1322' }}>🧹 Функция очистки (Cleanup Function):</p>
+                                <p style={{ fontSize: '0.95em', margin: '0 0 8px 0' }}>
+                                    Если эффект создает подписку, таймер или глобальный слушатель, он обязан вернуть функцию-очистку для предотвращения утечек памяти.
+                                </p>
+                                <pre style={codeBlockStyle}>
+{`useEffect(() => {
+    const timer = setInterval(() => console.log('Тик'), 1000);
+    // Возвращаем очистку:
+    return () => clearInterval(timer);
+}, []);`}
+            </pre>
+                            </div>
+
+                            {/* Пример запроса к API */}
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Шаблон безопасного запроса данных (Fetch):</p>
+                                <pre style={codeBlockStyle}>
+{`useEffect(() => {
+    let isMounted = true; // Защита от race conditions
+    
+    fetch(\`https://api.com\${id}\`)
+        .then(res => res.json())
+        .then(data => {
+            if (isMounted) setUser(data);
+        });
+        
+    return () => { isMounted = false; }; // Сбрасываем при смене id
+}, [id]);`}
+            </pre>
+                            </div>
+                        </div>
+                    </section>
+
 
                 </div>
             </main>
