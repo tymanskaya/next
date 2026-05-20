@@ -120,7 +120,16 @@ export default function ReactHooksCheatSheet() {
                         🔹 useReducer (Диспетчер)
                     </a>
                     <a href="#useContext" style={anchorLinkStyle}>
-                        🔹 useReducer (Диспетчер)
+                        🔹 useContext (Глобальный транспорт)
+                    </a>
+                    <a href="#useMemo" style={anchorLinkStyle}>
+                        🔹 useMemo (Кэш значений)
+                    </a>
+                    <a href="#useCallback" style={anchorLinkStyle}>
+                        🔹 useCallback (Кэш функций)
+                    </a>
+                    <a href="#useLayoutEffect" style={anchorLinkStyle}>
+                        🔹 useLayoutEffect (Синхронный эффект)
                     </a>
                 </div>
             </aside>
@@ -688,6 +697,97 @@ export default function UserWidget() {
                             {/* Важное предупреждение об оптимизации */}
                             <div style={{ backgroundColor: '#fff1f0', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f', fontSize: '0.93em' }}>
                                 ⚠️ <b>Минус технологии (Важно знать):</b> Когда значение <code style={codeInlineStyle}>value</code> в провайдере меняется, <b>все</b> компоненты, которые вызывают <code style={codeInlineStyle}>useContext(MyContext)</code>, автоматически перерисовываются. Не используйте контекст для очень часто меняющихся данных (например, для позиций мыши или игровых таймеров), для этого лучше подходят стейт-менеджеры (Zustand, Redux).
+                            </div>
+                        </div>
+                        {/* Эту таблицу можно вставить прямо в JSX вашей шпаргалки */}
+                        <div style={{ overflowX: 'auto', marginTop: '20px' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9em' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#f5f5f5', borderBottom: '2px solid #ddd' }}>
+                                    <th style={{ padding: '12px' }}>Критерий</th>
+                                    <th style={{ padding: '12px', color: '#237804' }}>useState</th>
+                                    <th style={{ padding: '12px', color: '#d46b08' }}>useReducer</th>
+                                    <th style={{ padding: '12px', color: '#0050b3' }}>useContext</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ borderBottom: '1px solid #eee' }}>
+                                    <td style={{ padding: '12px', fontWeight: 'bold' }}>Где хранятся данные</td>
+                                    <td style={{ padding: '12px' }}>В ячейке памяти конкретного компонента.</td>
+                                    <td style={{ padding: '12px' }}>В ячейке памяти конкретного компонента.</td>
+                                    <td style={{ padding: '12px' }}>Внутри специального замыкания React (Fiber).</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #eee', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px', fontWeight: 'bold' }}>Тип данных</td>
+                                    <td style={{ padding: '12px' }}>Примитивы или простые плоские объекты.</td>
+                                    <td style={{ padding: '12px' }}>Сложные структуры (массивы, вложенные объекты).</td>
+                                    <td style={{ padding: '12px' }}>Любой тип данных (стейт, функции, конфиги).</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #eee' }}>
+                                    <td style={{ padding: '12px', fontWeight: 'bold' }}>Вынос логики</td>
+                                    <td style={{ padding: '12px' }}>Невозможен, привязан к телу компонента.</td>
+                                    <td style={{ padding: '12px' }}>Идеален. Редюсер можно тестировать отдельно в `.test.js`.</td>
+                                    <td style={{ padding: '12px' }}>Логики нет, только доставка.</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #eee', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px', fontWeight: 'bold' }}>Триггер рендера</td>
+                                    <td style={{ padding: '12px' }}>Вызов функции-сеттера с новым значением.</td>
+                                    <td style={{ padding: '12px' }}>Вызов функции <code style={codeInlineStyle}>dispatch(action)</code>.</td>
+                                    <td style={{ padding: '12px' }}>Смена ссылки на объект в <code style={codeInlineStyle}>value</code> Провайдера.</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #eee' }}>
+                                    <td style={{ padding: '12px', fontWeight: 'bold' }}>Покрытие тестами</td>
+                                    <td style={{ padding: '12px' }}>Сложное (только через UI или React Testing Library).</td>
+                                    <td style={{ padding: '12px' }}>Очень легкое (как обычная чистая функция JS).</td>
+                                    <td style={{ padding: '12px' }}>Требует создания фейкового Провайдера в тестах.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </section>
+                    <section id="useMemo" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #faad14', // Золотой/желтый цвет для оптимизации
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        marginTop: '40px',
+                        scrollMarginTop: '40px',
+                        fontFamily: 'sans-serif'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#ad7c00', fontSize: '22px' }}>Мемоизация вычислений (useMemo)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p><b>useMemo</b> &mdash; возвращает **мемоизированное (сохраненное в кэше) значение**. Он запускает функцию вычислений только тогда, когда меняется одна из зависимостей. Если зависимости прежние, React просто берет готовый результат из памяти.
+                            </p>
+
+                            <div style={{ backgroundColor: '#fffbe6', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #faad14', fontSize: '0.93em' }}>
+                                💡 <b>Главное правило:</b> Не оборачивайте в <code style={codeInlineStyle}>useMemo</code> всё подряд. Сам хук тоже тратит ресурсы памяти. Используйте его только для сложных циклов, фильтрации больших массивов (от 1000 элементов) или тяжелой математики.
+                            </div>
+
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Пример фильтрации списка пользователей:</p>
+                                <pre style={codeBlockStyle}>
+{`import React, { useState, useMemo } from 'react';
+
+export default function UsersList({ users }) {
+    const [search, setSearch] = useState('');
+
+    // Фильтрация запустится ТОЛЬКО при смене строки поиска или самого массива users
+    const filteredUsers = useMemo(() => {
+        console.log('Тяжелая фильтрация...');
+        return users.filter(user => user.name.toLowerCase().includes(search.toLowerCase()));
+    }, [search, users]);
+
+    return (
+        <div>
+            <input value={search} onChange={(e) => setSearch(e.target.value)} />
+            {filteredUsers.map(user => <p key={user.id}>{user.name}</p>)}
+        </div>
+    );
+}`}
+            </pre>
                             </div>
                         </div>
                     </section>
