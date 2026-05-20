@@ -72,8 +72,8 @@ export default function ReactHooksCheatSheet() {
                     <a href="#useEffect" style={anchorLinkStyle}>
                         🔹 useEffect (Эффекты)
                     </a>
-                    <a href="#useRef" style={{...anchorLinkStyle, opacity: 0.5, cursor: 'not-allowed'}} onClick={(e) => e.preventDefault()}>
-                        🔹 useRef (Скоро...)
+                    <a href="#useRef" style={anchorLinkStyle}>
+                        🔹 useRef (Ссылки)
                     </a>
                 </div>
             </aside>
@@ -317,6 +317,58 @@ const [data, setData] = useState(() => getHeavyData());`}
     return () => { isMounted = false; }; // Сбрасываем при смене id
 }, [id]);`}
             </pre>
+                            </div>
+                        </div>
+                    </section>
+                    <section id="useRef" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #fa8c16',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        scrollMarginTop: '40px'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#d46b08', fontSize: '22px' }}>Ссылки и неизменяемые данные (useRef)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p><b>useRef</b> &mdash; возвращает специальный объект с единственным свойством <code style={codeInlineStyle}>.current</code>. Изменение этого свойства происходит мгновенно и <b>никогда не вызывает перерендер компонента</b>.</p>
+
+                            {/* Две задачи хука */}
+                            <div style={{ backgroundColor: '#fff7e6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #fa8c16' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#d46b08' }}>Основные сценарии применения:</p>
+                                <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95em' }}>
+                                    <li><b>Доступ к DOM-элементам:</b> Управление фокусом, скроллом, запуск HTML5-видео плееров или интеграция со сторонними JS-библиотеками.</li>
+                                    <li><b>Хранение «тихих» переменных:</b> Сохранение ID таймеров (<code style={codeInlineStyle}>setInterval</code>), счетчиков шагов или предыдущих значений пропсов, которые не должны влиять на визуальный интерфейс при обновлении.</li>
+                                </ul>
+                            </div>
+
+                            {/* Пример с DOM */}
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Пример программного фокуса на поле ввода (DOM):</p>
+                                <pre style={codeBlockStyle}>
+{`import React, { useRef } from 'react';
+
+export default function InputFocus() {
+    const textInputRef = useRef(null); // 1. Создаем ссылку
+
+    const onButtonClick = () => {
+        textInputRef.current?.focus(); // 3. Управляем DOM напрямую
+    };
+
+    return (
+        <div>
+            {/* 2. Привязываем к тегу через атрибут ref */}
+            <input ref={textInputRef} type="text" />
+            <button onClick={onButtonClick}>Установить фокус</button>
+        </div>
+    );
+}`}
+            </pre>
+                            </div>
+
+                            {/* Сравнение с useState */}
+                            <div style={{ backgroundColor: '#f5f5f5', padding: '12px', borderRadius: '8px', fontSize: '0.93em' }}>
+                                💡 <b>Главное отличие от useState:</b> Перезапись <code style={codeInlineStyle}>setValue(5)</code> заставляет компонент полностью перерисоваться, чтобы отобразить изменения на экране. Запись <code style={codeInlineStyle}>myRef.current = 5</code> просто тихо меняет значение в памяти компьютера, экран при этом остается неподвижным.
                             </div>
                         </div>
                     </section>
