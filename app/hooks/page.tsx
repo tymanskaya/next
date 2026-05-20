@@ -69,8 +69,8 @@ export default function ReactHooksCheatSheet() {
                     <a href="#useState" style={anchorLinkStyle}>
                         🔹 useState (Состояние)
                     </a>
-                    <a href="#useEffect" style={{...anchorLinkStyle, opacity: 0.5, cursor: 'not-allowed'}} onClick={(e) => e.preventDefault()}>
-                        🔹 useEffect (Скоро...)
+                    <a href="#useEffect" style={anchorLinkStyle}>
+                        🔹 useEffect (Эффекты)
                     </a>
                     <a href="#useRef" style={{...anchorLinkStyle, opacity: 0.5, cursor: 'not-allowed'}} onClick={(e) => e.preventDefault()}>
                         🔹 useRef (Скоро...)
