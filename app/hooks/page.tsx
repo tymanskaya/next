@@ -24,6 +24,47 @@ export default function ReactHooksCheatSheet() {
         marginBottom: '4px',
         textDecoration: 'none'
     });
+    const codeInlineStyle = {
+        backgroundColor: '#f0f0f0',
+        padding: '2px 5px',
+        borderRadius: '4px',
+        fontFamily: 'monospace',
+        fontSize: '0.9em',
+        color: '#c41d7f'
+    };
+
+    const codeBlockStyle = {
+        display: 'block',
+        backgroundColor: '#f5f5f5',
+        padding: '12px',
+        borderRadius: '6px',
+        fontFamily: 'monospace',
+        fontSize: '0.88em',
+        color: '#333',
+        overflowX: 'auto',
+        margin: '8px 0 0 0',
+        whiteSpace: 'pre-wrap'
+    };
+
+    const paramRowStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px',
+        paddingBottom: '10px',
+        borderBottom: '1px solid #f0f0f0'
+    };
+
+    const paramCodeStyle = {
+        backgroundColor: '#f9f0ff',
+        padding: '3px 8px',
+        borderRadius: '4px',
+        fontFamily: 'monospace',
+        fontSize: '0.92em',
+        color: '#531dab',
+        alignSelf: 'flex-start',
+        fontWeight: 'bold'
+    };
+
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f0f2f5', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
@@ -428,6 +469,105 @@ dispatch({ type: 'add', payload: 'Купить молоко' });`}
                                 💡 <b>Когда использовать:</b> Если у тебя в <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>useState</code> становится слишком много перекрестных обновлений (например, при обновлении одного поля нужно обязательно пересчитать еще три), смело переписывай этот блок на <code style={{ backgroundColor: '#fff', padding: '1px 4px' }}>useReducer</code>. Это сделает код чище и упростит его тестирование.
                             </div>
                         </div>
+                        <section style={{
+                            backgroundColor: '#fff',
+                            padding: '25px',
+                            borderRadius: '12px',
+                            borderTop: '6px solid #722ed1',
+                            boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                            fontFamily: 'sans-serif',
+                            lineHeight: '1.6'
+                        }}>
+                            <h2 style={{ marginTop: 0, color: '#531dab', fontSize: '20px' }}>Анатомия useReducer: Входные и выходные данные</h2>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                <p>Вызов хука в коде выглядит так: <code style={codeInlineStyle}>const [state, dispatch] = useReducer(reducer, initialArg, init?)</code>. Давайте разберем, что скрывается за каждым параметром.</p>
+
+                                {/* ЧТО ПРИНИМАЕТ */}
+                                <div>
+                                    <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#722ed1', fontSize: '1.1em' }}>📥 Что ПРИНИМАЕТ хук (Аргументы):</p>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+                                        <div style={paramRowStyle}>
+                                            <code style={paramCodeStyle}>1. reducer (Функция)</code>
+                                            <p style={{ margin: 0, fontSize: '0.95em' }}>
+                                                Обязательная чистая функция, которая определяет, <i>как именно</i> меняется состояние. Она принимает текущий стейт и объект действия: <code style={codeInlineStyle}>(state, action) =&gt; newState</code>. Она должна проанализировать <code style={codeInlineStyle}>action.type</code> и вернуть <b>абсолютно новый объект</b> состояния.
+                                            </p>
+                                        </div>
+
+                                        <div style={paramRowStyle}>
+                                            <code style={paramCodeStyle}>2. initialArg (Любой тип)</code>
+                                            <p style={{ margin: 0, fontSize: '0.95em' }}>
+                                                Обязательный аргумент. Начальное значение состояния (число, строка, массив или объект). Это то, чем будет являться ваш стейт при самом первом запуске страницы (например: <code style={codeInlineStyle}>{"{ count: 0 }"}</code>).
+                                            </p>
+                                        </div>
+
+                                        <div style={paramRowStyle}>
+                                            <code style={paramCodeStyle}>3. init (Функция) &mdash; Необязательный</code>
+                                            <p style={{ margin: 0, fontSize: '0.95em' }}>
+                                                Функция для <b>ленивой инициализации</b>. Если она передана, то начальным состоянием станет результат её выполнения: <code style={codeInlineStyle}>init(initialArg)</code>. Это нужно, если стартовый стейт рассчитывается через тяжелые вычисления (например, парсинг данных из памяти).
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                {/* ЧТО ВОЗВРАЩАЕТ */}
+                                <div>
+                                    <p style={{ fontWeight: 'bold', margin: '15px 0 10px 0', color: '#237804', fontSize: '1.1em' }}>📤 Что ВОЗВРАЩАЕТ хук (Массив из двух элементов):</p>
+                                    <p style={{ margin: '0 0 10px 0', fontSize: '0.95em' }}>Хук возвращает массив, который деструктурируется на две переменные. Назвать их можно как угодно, но по стандарту пишут <code style={codeInlineStyle}>[state, dispatch]</code>.</p>
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+                                        <div style={paramRowStyle}>
+                                            <code style={{...paramCodeStyle, backgroundColor: '#f6ffed', color: '#237804'}}>Элемент 1: state</code>
+                                            <p style={{ margin: 0, fontSize: '0.95em' }}>
+                                                Текущее состояние компонента для чтения. При первом рендере оно равно <code style={codeInlineStyle} Dark>initialArg</code> (или результату функции <code style={codeInlineStyle}>init</code>). Вы выводите свойства этой переменной прямо в верстку (например, <code style={codeInlineStyle}>state.user.name</code>).
+                                            </p>
+                                        </div>
+
+                                        <div style={paramRowStyle}>
+                                            <code style={{...paramCodeStyle, backgroundColor: '#f6ffed', color: '#237804'}}>Элемент 2: dispatch (Функция)</code>
+                                            <p style={{ margin: 0, fontSize: '0.95em' }}>
+                                                Функция-отправитель. Единственный способ изменить состояние. Ты вызываешь её и передаешь внутрь объект действия (action): <code style={codeInlineStyle}>dispatch({"{ type: &apos;increment&apos; }"})</code>. React сам возьмет этот объект, передаст его в твой редьюсер вместе с текущим стейтом, обновит данные и перерисует интерфейс.
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                {/* ШАБЛОН С ЛЕНИВОЙ ИНИЦИАЛИЗАЦИЕЙ */}
+                                <div style={{ marginTop: '5px' }}>
+                                    <p style={{ fontWeight: 'bold', margin: '0 0 8px 0' }}>📋 Полный шаблон со всеми тремя аргументами (Ленивый редьюсер):</p>
+                                    <pre style={codeBlockStyle}>
+{`// 1. Функция-инициализатор (вызовется один раз при старте)
+function initValues(initialCount) {
+    return { count: initialCount, resetCount: 0 };
+}
+
+// 2. Редьюсер
+function reducer(state, action) {
+    switch (action.type) {
+        case 'increment': return { ...state, count: state.count + 1 };
+        case 'reset': return { ...state, count: state.resetCount };
+        default: return state;
+    }
+}
+
+// 3. Компонент
+export default function App() {
+    // Передаем: функцию редьюсера, число 10 (как initialArg) и функцию initValues
+    // Стартовый стейт станет равен: { count: 10, resetCount: 0 }
+    const [state, dispatch] = useReducer(reducer, 10, initValues);
+
+    return <button onClick={() => dispatch({ type: 'increment' })}>{state.count}</button>;
+}`}
+            </pre>
+                                </div>
+
+                            </div>
+                        </section>
+
                     </section>
 
 
@@ -480,3 +620,5 @@ const codeBlockStyle = {
     margin: '8px 0 0 0',
     whiteSpace: 'pre-wrap'
 };
+
+
