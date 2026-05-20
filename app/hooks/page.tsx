@@ -135,6 +135,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#useTransition" style={anchorLinkStyle}>
                         🔹 useTransition (Фоновый рендер)
                     </a>
+                    <a href="#useDeferredValue" style={anchorLinkStyle}>
+                        🔹 useDeferredValue (Отложенное эхо)
+                    </a>
 
                 </div>
             </aside>
@@ -981,6 +984,79 @@ const handleChange = (e) => {
                         </div>
                     </section>
 
+                    <section id="useDeferredValue" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #722ed1', // Красивый фиолетовый акцент
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        marginTop: '40px',
+                        scrollMarginTop: '40px',
+                        fontFamily: 'sans-serif'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#531dab', fontSize: '22px' }}>Отложенное значение (useDeferredValue)</h2>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <p>
+                                <b>useDeferredValue</b> &mdash; принимает значение (обычно строку или массив) и возвращает его <b>копию, которая обновляется с задержкой</b>, только когда процессор свободен. Он работает как встроенный Debounce (задержка), но без жестких таймеров — React сам выбирает лучший момент.
+                            </p>
+
+                            {/* Разница с useTransition */}
+                            <div style={{ backgroundColor: '#f9f0ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #722ed1' }}>
+                                <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#531dab' }}>⚖️ В чем разница с useTransition?</p>
+                                <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.92em' }}>
+                                    <li><b>useTransition:</b> Используется, когда у вас есть доступ к функции-сеттеру (<code style={codeInlineStyle}>setQuery</code>) и вы можете обернуть её код руками.</li>
+                                    <li><b>useDeferredValue:</b> Используется, когда вы получаете «тяжелое» значение извне (например, через пропсы от родителя) и не можете контролировать момент его изменения.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Шаблон использования:</p>
+                                <pre style={codeBlockStyle}>
+{`import React, { useState, useDeferredValue } from 'react';
+import HeavyList from './HeavyList'; // "Тяжелый" компонент списка
+
+export default function SearchPage() {
+    const [search, setSearch] = useState('');
+    
+    // Создаем отложенную копию строки поиска
+    const deferredSearch = useDeferredValue(search);
+
+    return (
+        <div>
+            {/* Текст тут вводится моментально и не лагает */}
+            <input value={search} onChange={e => setSearch(e.target.value)} />
+            
+            {/* Передаем ОТЛОЖЕННОЕ значение в тяжелый список */}
+            <HeavyList query={deferredSearch} />
+        </div>
+    );
+}`}
+            </pre>
+                            </div>
+
+                            {/* Фирменный блок правил */}
+                            <div style={{
+                                backgroundColor: '#fff7e6',
+                                padding: '18px',
+                                borderRadius: '8px',
+                                borderLeft: '4px solid #ffa940',
+                                fontSize: '0.93em',
+                                marginTop: '10px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '12px'
+                            }}>
+                                <p style={{ fontWeight: 'bold', margin: 0, color: '#d46b08', fontSize: '1.05em' }}>
+                                    🧱 Важные особенности:
+                                </p>
+                                <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', lineHeight: '1.5' }}>
+                                    <li><b>Индикация загрузки:</b> Вы можете узнать, откладывается ли рендер прямо сейчас, сравнив оригинальное значение и отложенное: <code style={codeInlineStyle}>const isStale = search !== deferredSearch;</code></li>
+                                    <li><b>Без искусственных таймеров:</b> В отличие от библиотеки lodash (`_.debounce`), этот хук не заставляет пользователя ждать фиксированные 300мс на быстрых устройствах. На мощном компьютере задержки почти не будет, а на слабом смартфоне она автоматически увеличится, спасая интерфейс от зависания.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
 
 
                 </div>
