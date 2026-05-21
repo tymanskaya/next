@@ -1221,7 +1221,7 @@ export default function Form() {
 }
 
 // Вспомогательные стили
-const sidebarTitleStyle = {
+export const sidebarTitleStyle = {
     fontSize: '11px',
     fontWeight: '700',
     color: '#8c95a0',
@@ -1230,7 +1230,7 @@ const sidebarTitleStyle = {
     margin: '0 0 10px 10px'
 };
 
-const anchorLinkStyle = {
+export const anchorLinkStyle = {
     display: 'block',
     padding: '8px 15px',
     color: '#57606a',

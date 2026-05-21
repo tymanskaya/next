@@ -1,8 +1,92 @@
 "use client";
 import React, { useEffect } from 'react';
+import {usePathname, useRouter} from "next/navigation";
+import {anchorLinkStyle, sidebarTitleStyle} from "@/app/hooks/page";
 
 export default function WebStorageCheatSheet() {
+    const pathname = usePathname();
+    const router = useRouter();
+    const getSidebarLinkStyle = (isActive) => ({
+        display: 'block',
+        width: '100%',
+        padding: '10px 15px',
+        borderRadius: '8px',
+        color: isActive ? '#0076ff' : '#57606a',
+        backgroundColor: isActive ? '#e6f7ff' : 'transparent',
+        fontWeight: isActive ? '600' : '500',
+        fontSize: '14px',
+        border: 'none',
+        textAlign: 'left',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        marginBottom: '4px',
+        textDecoration: 'none'
+    });
+
+
+    const codeBlockStyle = {
+        display: 'block',
+        backgroundColor: '#f5f5f5',
+        padding: '12px',
+        borderRadius: '6px',
+        fontFamily: 'monospace',
+        fontSize: '0.88em',
+        color: '#333',
+        overflowX: 'auto',
+        margin: '8px 0 0 0',
+        whiteSpace: 'pre-wrap'
+    };
+
     return (
+        <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f0f2f5', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+        {/* БОКОВОЕ МЕНЮ (SIDEBAR) */}
+    <aside style={{
+        width: '260px',
+        backgroundColor: '#fff',
+        borderRight: '1px solid #d1d9e0',
+        position: 'fixed',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        padding: '30px 20px',
+        display: 'flex',
+        flexDirection: 'column',
+        boxShadow: '2px 0 10px rgba(0,0,0,0.02)',
+        zIndex: 100
+    }}>
+        {/* Логотип/Название справочника */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '30px', paddingLeft: '10px' }}>
+            <div style={{ backgroundColor: '#00d8ff', width: '8px', height: '24px', borderRadius: '4px' }}></div>
+            <span style={{ fontWeight: '800', fontSize: '18px', color: '#1f2328' }}>DevDocs</span>
+        </div>
+
+        {/* Основные разделы (Глобальная навигация приложения) */}
+        <div style={{ marginBottom: '25px' }}>
+            <p style={sidebarTitleStyle}>Страницы</p>
+            <button onClick={() => router.push('/git')} style={getSidebarLinkStyle(pathname === '/git')}>
+                🪵 Git Справочник
+            </button>
+            <button onClick={() => router.push('/localStorage')} style={getSidebarLinkStyle(pathname === '/localStorage')}>
+                💾 Web Storage
+            </button>
+            <button onClick={() => router.push('/hooks')} style={getSidebarLinkStyle(pathname === '/hooks')}>
+                ⚛️ React Hooks
+            </button>
+        </div>
+
+        {/* Содержимое текущей страницы (Якорные ссылки) */}
+        <div>
+            <p style={sidebarTitleStyle}>На этой странице</p>
+            <a href="#localStorage" style={anchorLinkStyle}>
+                🔹 localStorage
+            </a>
+            <a href="#sessionStorage" style={anchorLinkStyle}>
+                🔹 sessionStorage
+            </a>
+
+
+        </div>
+    </aside>
         <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -65,7 +149,7 @@ export default function WebStorageCheatSheet() {
                 </div>
 
                 {/* РАЗДЕЛ 1: LOCALSTORAGE */}
-                <section style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '12px', borderTop: '6px solid #2f54eb', boxShadow: '0 4px 15px rgba(0,0,0,0.06)' }}>
+                <section id="localStorage" style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '12px', borderTop: '6px solid #2f54eb', boxShadow: '0 4px 15px rgba(0,0,0,0.06)' }}>
                     <h2 style={{ marginTop: 0, color: '#1d39c4', fontSize: '22px' }}>1. Постоянное хранилище (localStorage)</h2>
                     <p style={{ margin: '0 0 15px 0', color: '#555' }}>Идеально подходит для долгосрочных настроек пользователя, которые не должны сбрасываться (например, выбранная цветовая тема, токен авторизации или сохраненный язык интерфейса).</p>
 
@@ -136,7 +220,7 @@ export default function WebStorageCheatSheet() {
 
 
                 {/* РАЗДЕЛ 2: SESSIONSTORAGE */}
-                <section style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '12px', borderTop: '6px solid #722ed1', boxShadow: '0 4px 15px rgba(0,0,0,0.06)' }}>
+                <section id="sessionStorage" style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '12px', borderTop: '6px solid #722ed1', boxShadow: '0 4px 15px rgba(0,0,0,0.06)' }}>
                     <h2 style={{ marginTop: 0, color: '#531dab', fontSize: '22px' }}>2. Сессионное хранилище (sessionStorage)</h2>
                     <p style={{ margin: '0 0 15px 0', color: '#555' }}>Используется для временных данных в рамках одного сеанса (например, многошаговая форма регистрации, корзина покупок до оформления заказа или состояние фильтров в каталоге, которые должны обнулиться, если пользователь закроет сайт).</p>
 
@@ -232,6 +316,7 @@ if (rawData) {
                 </section>
 
             </div>
+        </div>
         </div>
     );
 }
