@@ -148,6 +148,36 @@ console.log(myArray.__proto__ === Array.prototype); // true
 // Все методы вроде .map() и .filter() лежат в одном месте — в Array.prototype`}
                         </pre>
                     </div>
+                    <section id="prototypeParadox" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #ff4d4f', // Красный цвет для продвинутых парадоксов
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        marginTop: '40px',
+                        fontFamily: 'sans-serif'
+                    }}>
+                        <h3 style={{ marginTop: 0, color: '#cf1322', fontSize: '20px' }}>🤯 Главный парадокс: Цепочка Function и Object</h3>
+                        <p style={{ lineHeight: '1.6' }}>
+                            В JavaScript встроенные конструкторы <code style={codeInlineStyle}>Function</code> и <code style={codeInlineStyle}>Object</code> замкнуты друг на друга. Это порождает забавные, но логичные правила:
+                        </p>
+
+                        <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f', fontFamily: 'monospace', fontSize: '0.93em' }}>
+                            <div style={{ color: '#cf1322' }}>// 1. Function — это функция, поэтому её прототипом является Function.prototype</div>
+                            <div>console.log(Function.__proto__ === Function.prototype); <span style={{ color: '#389e0d', fontWeight: 'bold' }}>// true</span></div>
+
+                            <div style={{ color: '#cf1322', marginTop: '10px' }}>// 2. Сам прототип функции — это объект, поэтому он наследуется от Object</div>
+                            <div>console.log(Function.prototype.__proto__ === Object.prototype); <span style={{ color: '#389e0d', fontWeight: 'bold' }}>// true</span></div>
+
+                            <div style={{ color: '#cf1322', marginTop: '10px' }}>// 3. А сам конструктор Object — это функция, поэтому он наследуется от Function!</div>
+                            <div>console.log(Object.__proto__ === Function.prototype); <span style={{ color: '#389e0d', fontWeight: 'bold' }}>// true</span></div>
+                        </div>
+
+                        <p style={{ marginTop: '15px', fontSize: '0.95em', color: '#555' }}>
+                            🚩 <b>Ментальная карта:</b> Все функции (включая <code style={codeInlineStyle}>Object</code>) происходят от <code style={codeInlineStyle}>Function.prototype</code>. А все объекты (включая <code style={codeInlineStyle}>Function.prototype</code>) в конечном счете происходят от <code style={codeInlineStyle}>Object.prototype</code>. В самом верху цепочки всегда лежит <code style={codeInlineStyle}>null</code>.
+                        </p>
+                    </section>
+
                 </section>
 
                 {/* Секция 3: Парадокс Function vs Object */}
