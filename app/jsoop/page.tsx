@@ -76,6 +76,8 @@ export default function JavaScriptOOP() {
 
             {/* Правый основной Контент */}
             <main style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '40px' }}>
+                {/* Карточка железного правила с идеальным выводом */}
+
 
                 {/* Секция 1: База ООП */}
                 <section id="oopBase" style={{
@@ -176,37 +178,78 @@ console.log(myArray.__proto__ === Array.prototype); // true
                         <p style={{ marginTop: '15px', fontSize: '0.95em', color: '#555' }}>
                             🚩 <b>Ментальная карта:</b> Все функции (включая <code style={codeInlineStyle}>Object</code>) происходят от <code style={codeInlineStyle}>Function.prototype</code>. А все объекты (включая <code style={codeInlineStyle}>Function.prototype</code>) в конечном счете происходят от <code style={codeInlineStyle}>Object.prototype</code>. В самом верху цепочки всегда лежит <code style={codeInlineStyle}>null</code>.
                         </p>
+
                     </section>
+                    <div style={{
+                        backgroundColor: '#fffbe6',
+                        padding: '20px',
+                        borderRadius: '12px',
+                        border: '2px dashed #fadb14',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.02)',
+                        fontFamily: 'sans-serif',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px'
+                    }}>
+                        <h3 style={{ margin: '0 0 5px 0', color: '#ad8b00', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            💡 Железное правило собеседований
+                        </h3>
 
-                </section>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '1.05em', lineHeight: '1.5' }}>
 
-                {/* Секция 3: Парадокс Function vs Object */}
-                <section id="prototypeParadox" style={{
-                    backgroundColor: '#fff',
-                    padding: '25px',
-                    borderRadius: '12px',
-                    borderTop: '6px solid #ff4d4f',
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
-                    scrollMarginTop: '40px'
-                }}>
-                    <h2 style={{ marginTop: 0, color: '#cf1322', fontSize: '22px' }}>🤯 Главный парадокс: Цепочка Function и Object</h2>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                        <p style={{ margin: 0, lineHeight: '1.6', color: '#333' }}>
-                            В JavaScript встроенные конструкторы замыкаются друг на друга. Происходит это потому, что <code style={codeInlineStyle}>Function</code> &mdash; это объект, а <code style={codeInlineStyle}>Object</code> &mdash; это функция.
-                        </p>
+                            {/* Пункт про __proto__ */}
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                                <span style={{ fontSize: '1.2em', marginTop: '2px' }}>🔗</span>
+                                <div style={{ width: '100%' }}>
+                                    <code style={{ ...codeInlineStyle, backgroundColor: '#fff', fontSize: '0.95em', fontWeight: 'bold' }}>__proto__</code>
+                                    &mdash; есть у <b>абсолютно каждого</b> объекта в JS.
 
-                        <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f', fontFamily: 'monospace', fontSize: '0.93em' }}>
-                            <div style={{ color: '#cf1322' }}>// Function — это функция, её прототип — Function.prototype</div>
-                            <div style={{ color: '#000' }}>console.log(Function.__proto__ === Function.prototype); <span style={{ color: '#389e0d', fontWeight: 'bold' }}>// true</span></div>
+                                    {/* ИСКЛЮЧЕНИЕ С ВШИТЫМ КОДОМ */}
+                                    <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f', fontSize: '0.9em', marginTop: '8px', color: '#1a1a1a' }}>
+                                        <span style={{ color: '#cf1322', fontWeight: 'bold' }}>⚠️ Исключение:</span> Объекты, созданные через <code style={{ ...codeInlineStyle, backgroundColor: '#fff' }}>Object.create(null)</code>. Они не наследуются ни от чего, у них нет <code style={{ ...codeInlineStyle, backgroundColor: '#fff' }}>__proto__</code>, и у них полностью отсутствуют базовые методы.
 
-                            <div style={{ color: '#cf1322', marginTop: '10px' }}>// Сам прототип функции — это объект, он наследуется от Object</div>
-                            <div style={{ color: '#000' }}>console.log(Function.prototype.__proto__ === Object.prototype); <span style={{ color: '#389e0d', fontWeight: 'bold' }}>// true</span></div>
+                                        <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #f0f0f0', marginTop: '10px', padding: '10px' }}>
+{`const cleanObj = Object.create(null);
 
-                            <div style={{ color: '#cf1322', marginTop: '10px' }}>// Конструктор Object — это функция, он наследуется от Function!</div>
-                            <div style={{ color: '#000' }}>console.log(Object.__proto__ === Function.prototype); <span style={{ color: '#389e0d', fontWeight: 'bold' }}>// true</span></div>
+console.log(cleanObj.__proto__); // undefined (свойства просто нет)
+cleanObj.name = "Эдвард";        // Свойства записывать можно
+
+// Попытка вызвать метод базового Object приведет к падению программы:
+console.log(cleanObj.toString()); // ❌ TypeError: cleanObj.toString is not a function`}
+                    </pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Пункт про prototype */}
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                                <span style={{ fontSize: '1.2em', marginTop: '2px' }}>🏗️</span>
+                                <div>
+                                    <code style={{ ...codeInlineStyle, backgroundColor: '#fff', fontSize: '0.95em', fontWeight: 'bold' }}>prototype</code>
+                                    &mdash; есть <b>только у функций-конструкторов</b> и классов. Это объект, который автоматически становится <code style={codeInlineStyle}>__proto__</code> для всех экземпляров, созданных через оператор <code style={codeInlineStyle}>new</code>.
+                                </div>
+                            </div>
+
+                            {/* ВАШ ФИНАЛЬНЫЙ ВЫВОД В ОДНУ СТРОКУ */}
+                            <div style={{
+                                backgroundColor: '#e6f7ff',
+                                padding: '12px 15px',
+                                borderRadius: '8px',
+                                borderLeft: '4px solid #1890ff',
+                                fontSize: '1em',
+                                fontWeight: 'bold',
+                                color: '#0050b3',
+                                marginTop: '5px'
+                            }}>
+                                🚀 Запомнить навсегда:<br/>
+                                • <code style={codeInlineStyle}>__proto__</code> &mdash; у экземпляра, смотрит вверх.<br/>
+                                • <code style={codeInlineStyle}>prototype</code> &mdash; у конструктора/класса, это то, на что смотрит <code style={codeInlineStyle}>__proto__</code> экземпляра.
+                            </div>
                         </div>
                     </div>
                 </section>
+
+
 
             </main>
         </div>
