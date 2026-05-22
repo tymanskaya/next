@@ -238,6 +238,48 @@ console.log(cleanObj.toString()); // ❌ TypeError: cleanObj.toString is not a f
                                     <li><code style={codeInlineStyle}>Object.setPrototypeOf(obj, proto)</code> &mdash; безопасная запись (замена для <code style={codeInlineStyle}>obj.__proto__ = proto</code>).</li>
                                 </ul>
                             </div>
+                            <section id="whyProtoForbidden" style={{
+                                backgroundColor: '#fff',
+                                padding: '25px',
+                                borderRadius: '12px',
+                                borderTop: '6px solid #ff4d4f', // Красный цвет опасности
+                                boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                                marginTop: '30px',
+                                fontFamily: 'sans-serif'
+                            }}>
+                                <h3 style={{ marginTop: 0, color: '#cf1322', fontSize: '20px' }}>❌ Почему __proto__ официально запрещен в продакшене?</h3>
+                                <p style={{ lineHeight: '1.6', color: '#333' }}>
+                                    В современном коде использование <code style={codeInlineStyle}>__proto__</code> карается линтерами (ESLint) по трем веским причинам:
+                                </p>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '15px' }}>
+
+                                    {/* Причина 1 */}
+                                    <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f' }}>
+                                        <h4 style={{ margin: '0 0 5px 0', color: '#cf1322' }}>🛡️ 1. Уязвимость Prototype Pollution (Взлом прототипа)</h4>
+                                        <p style={{ margin: 0, fontSize: '0.93em', lineHeight: '1.5' }}>
+                                            Если злоумышленник передаст строку <code style={codeInlineStyle}>"__proto__"</code> через форму или API, а ваш код тупо скопирует её в объект, хакер сможет внедриться в базовый <code style={codeInlineStyle}>Object.prototype</code>. После этого <b>все объекты приложения во всей памяти сервера</b> изменят свое поведение.
+                                        </p>
+                                    </div>
+
+                                    {/* Причина 2 */}
+                                    <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f' }}>
+                                        <h4 style={{ margin: '0 0 5px 0', color: '#cf1322' }}>🚀 2. Дикое падение производительности (Удар по V8)</h4>
+                                        <p style={{ margin: 0, fontSize: '0.93em', lineHeight: '1.5' }}>
+                                            Прямая мутация прототипа через <code style={codeInlineStyle}>obj.__proto__ = ...</code> мгновенно уничтожает внутренние оптимизации движка V8 (скрытые классы). Движок "выбрасывает" скомпилированный быстрый код и переключает работу с объектом в режим медленного словаря. Скорость падает до 50 раз!
+                                        </p>
+                                    </div>
+
+                                    {/* Причина 3 */}
+                                    <div style={{ backgroundColor: '#fafafa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #bfbfbf' }}>
+                                        <h4 style={{ margin: '0 0 5px 0', color: '#595959' }}>📜 3. Статус Устаревшего (Deprecated)</h4>
+                                        <p style={{ margin: 0, fontSize: '0.93em', lineHeight: '1.5' }}>
+                                            Свойство признано устаревшим в спецификации ECMAScript [1]. Настоящий стандарт для чтения прототипа &mdash; это статический метод <code style={codeInlineStyle}>Object.getPrototypeOf(obj)</code>.
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </section>
                             {/* ВАШ ФИНАЛЬНЫЙ ВЫВОД В ОДНУ СТРОКУ */}
                             <div style={{
                                 backgroundColor: '#e6f7ff',
