@@ -229,7 +229,15 @@ console.log(cleanObj.toString()); // ❌ TypeError: cleanObj.toString is not a f
                                     &mdash; есть <b>только у функций-конструкторов</b> и классов. Это объект, который автоматически становится <code style={codeInlineStyle}>__proto__</code> для всех экземпляров, созданных через оператор <code style={codeInlineStyle}>new</code>.
                                 </div>
                             </div>
-
+                            {/* НОВЫЙ БЛОК: СОВРЕМЕННЫЙ СТАНДАРТ (Уровень Middle / Senior) */}
+                            <div style={{ backgroundColor: '#f6ffed', padding: '12px 15px', borderRadius: '8px', borderLeft: '4px solid #52c41a', fontSize: '0.95em', color: '#1a1a1a', marginTop: '5px' }}>
+                                🛠️ <b>Современный стандарт (Best Practice):</b><br/>
+                                В реальном коде использовать свойство <code style={codeInlineStyle}>__proto__</code> запрещено (оно устарело). Вместо него применяются статические методы класса Object:
+                                <ul style={{ margin: '5px 0 0 0', paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <li><code style={codeInlineStyle}>Object.getPrototypeOf(obj)</code> &mdash; безопасное чтение прототипа.</li>
+                                    <li><code style={codeInlineStyle}>Object.setPrototypeOf(obj, proto)</code> &mdash; безопасная запись (замена для <code style={codeInlineStyle}>obj.__proto__ = proto</code>).</li>
+                                </ul>
+                            </div>
                             {/* ВАШ ФИНАЛЬНЫЙ ВЫВОД В ОДНУ СТРОКУ */}
                             <div style={{
                                 backgroundColor: '#e6f7ff',
