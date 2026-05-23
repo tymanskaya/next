@@ -738,12 +738,84 @@ class Person {}`}
                             </div>
 
                             {/* Разбор Статики */}
+                            {/* Замените содержимое блока статики на этот вариант с живым кодом */}
                             <div style={{ backgroundColor: '#fff7e6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ffa940' }}>
                                 <h4 style={{ margin: '0 0 8px 0', color: '#d46b08' }}>4. Статические поля и методы (static)</h4>
-                                <p style={{ margin: 0, fontSize: '0.93em', lineHeight: '1.5', color: '#434343' }}>
-                                    Ключевое слово <code style={codeInlineStyle}>static</code> намертво привязывает свойства и методы к самой функции-классу. Вы не можете вызвать статический метод у инстанса (<code style={codeInlineStyle}>alex.compareAge()</code> выдаст ошибку). К ним обращаются строго через имя класса: <code style={codeInlineStyle}>Worker.compareAge(alex, bob)</code>. Чаще всего используются как хелперы или фабрики объектов.
+                                <p style={{ margin: '0 0 12px 0', fontSize: '0.93em', lineHeight: '1.5', color: '#434343' }}>
+                                    Ключевое слово <code style={codeInlineStyle}>static</code> означает, что поле или метод принадлежит <b>самому классу</b>, а не его экземплярам. Чаще всего они используются для создания утилит или фабричных методов.
                                 </p>
+
+                                {/* Код из вашего примера со скриншота */}
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #f0f0f0', padding: '15px', margin: 0, fontSize: '0.88em' }}>
+{`class MathHelper {
+    static PI = 3.14159 // статического поле
+
+    static circle(r) {   // статический метод
+        return MathHelper.PI * r * r
+    }
+}
+
+console.log(MathHelper.PI);       // 3.14159 ✅
+console.log(MathHelper.circle(5)); // 78.53 ✅
+
+const m = new MathHelper()
+console.log(m.PI);        // undefined ❌ — в инстансе нет
+console.log(m.circle(5)); // ❌ TypeError: m.circle is not a function — тоже нет`}
+    </pre>
+                                {/* Добавьте этот подраздел внутрь оранжевой карточки статики */}
+                                <div style={{ marginTop: '20px' }}>
+                                    <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#d46b08', fontSize: '0.95em' }}>
+                                        🔥 Продвинутый уровень: Статика наследуется!
+                                    </p>
+                                    <p style={{ margin: '0 0 10px 0', fontSize: '0.9em', color: '#434343', lineHeight: '1.4' }}>
+                                        В отличие от классических функций-конструкторов (где статику приходилось копировать руками), классы автоматически связывают сами функции-конструкторы друг с другом. Поэтому дочерний класс видит статические методы родителя и может переопределять его статические свойства:
+                                    </p>
+
+                                    <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #f0f0f0', padding: '15px', margin: 0, fontSize: '0.88em' }}>
+{`class Animal {
+    static planet = 'Земля'
+
+    static describe() {
+        return \`Живём на планете \${this.planet}\`
+    }
+}
+
+class Dog extends Animal {
+    static planet = 'Земля (псовые)' // переопределяем статическое свойство
+}
+
+console.log(Animal.describe()); // 'Живём на планете Земля'
+console.log(Dog.describe());    // 'Живём на планете Земля (псовые)' ✅`}
+    </pre>
+                                </div>
+                                {/* Добавьте этот подраздел в самый конец оранжевой карточки статики */}
+                                <div style={{ marginTop: '20px', borderTop: '1px dashed #ffa940', paddingTop: '15px' }}>
+                                    <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#d46b08', fontSize: '0.95em' }}>
+                                        🔒 Максимальная защита: static + приватность (#)
+                                    </p>
+                                    <p style={{ margin: '0 0 10px 0', fontSize: '0.9em', color: '#434343', lineHeight: '1.4' }}>
+                                        Вы можете объединить статику и инкапсуляцию, объявив приватное статическое поле через <code style={codeInlineStyle}>static #field</code>. Такое поле хранится в самом классе, но доступно <b>строго внутренним статическим методам</b> этого же класса:
+                                    </p>
+
+                                    <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #f0f0f0', padding: '15px', margin: 0, fontSize: '0.88em' }}>
+{`class IdGenerator {
+    static #nextId = 1 // приватное статическое поле
+
+    static generate() {
+        return IdGenerator.#nextId++
+    }
+}
+
+console.log(IdGenerator.generate()); // 1
+console.log(IdGenerator.generate()); // 2
+console.log(IdGenerator.generate()); // 3
+
+console.log(IdGenerator.#nextId); // ❌ SyntaxError: снаружи недоступно`}
+    </pre>
+                                </div>
+
                             </div>
+
 
                         </div>
                     </section>
@@ -808,6 +880,49 @@ class Person {}`}
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                    {/* Блок оптимизации памяти на основе вашего скриншота */}
+                    <div style={{ marginTop: '25px', fontFamily: 'sans-serif' }}>
+                        <h4 style={{ fontSize: '16px', color: '#111', margin: '0 0 10px 0' }}>Почему это важно (Оптимизация памяти)</h4>
+                        <p style={{ fontSize: '0.95em', lineHeight: '1.5', color: '#333', margin: '0 0 15px 0' }}>
+                            Объявление методов внутри конструктора заставляет движок JavaScript создавать **новую функцию при каждом создании объекта**. Если вынести метод наружу, он запишется в прототип в одном экземпляре, экономя оперативную память:
+                        </p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+                            {/* Антипаттерн */}
+                            <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f' }}>
+                                <span style={{ color: '#cf1322', fontWeight: 'bold', fontSize: '0.9em' }}>❌ Антипаттерн &mdash; Метод в конструкторе</span>
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', padding: '10px', margin: '8px 0 0 0', fontSize: '0.85em' }}>
+{`class Dog {
+    // ❌ Метод внутри конструктора
+    constructor(name) {
+        this.name = name;
+        this.bark = function() { return 'Woof!'; } // Новая функция для КАЖДОГО объекта
+    }
+}
+
+// 1000 объектов = 1000 копий функции bark в памяти 🎚️`}
+            </pre>
+                            </div>
+
+                            {/* Правильный подход */}
+                            <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                                <span style={{ color: '#237804', fontWeight: 'bold', fontSize: '0.9em' }}>✅ Правильно &mdash; Метод в прототипе</span>
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', padding: '10px', margin: '8px 0 0 0', fontSize: '0.85em' }}>
+{`class Dog {
+    // ✅ Метод вынесен в тело класса
+    constructor(name) {
+        this.name = name;
+    }
+    bark() { return 'Woof!'; } // Одна копия на всех (лежит в Dog.prototype)
+}
+
+// 1000 объектов = 1 копия функции bark ✅`}
+            </pre>
+                            </div>
+
                         </div>
                     </div>
 
