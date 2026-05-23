@@ -65,12 +65,16 @@ export default function JavaScriptOOP() {
                     <a href="#oopBase" onClick={(e) => handleScroll(e, 'oopBase')} style={anchorLinkStyle}>
                         🧱 Что такое ООП (База)
                     </a>
+                    <a href="#fourPillars" onClick={(e) => handleScroll(e, 'fourPillars')} style={anchorLinkStyle}>
+                        🏛️ 4 столпа ООП в JS
+                    </a>
                     <a href="#prototypeFormula" onClick={(e) => handleScroll(e, 'prototypeFormula')} style={anchorLinkStyle}>
                         🧬 Золотая формула прототипов
                     </a>
                     <a href="#prototypeParadox" onClick={(e) => handleScroll(e, 'prototypeParadox')} style={anchorLinkStyle}>
                         🤯 Парадокс Function vs Object
                     </a>
+
                 </div>
             </aside>
 
@@ -120,6 +124,171 @@ myCar.drive(); // "Audi (Красная) поехала!"`}
                             </pre>
                         </div>
                     </div>
+                    <section id="fourPillars" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #2f54eb', // Глубокий синий цвет архитектуры
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        marginTop: '40px',
+                        scrollMarginTop: '40px',
+                        fontFamily: 'sans-serif'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#1d39c4', fontSize: '22px' }}>🏛️ Четыре столпа ООП в реалиях JavaScript</h2>
+                        <p style={{ lineHeight: '1.6', color: '#333' }}>
+                            ООП держится на четырех базовых принципах. Давайте разберем, как они работают в современном JS:
+                        </p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '25px', marginTop: '20px' }}>
+
+                            {/* 1. ИНКАПСУЛЯЦИЯ */}
+                            <div style={{ backgroundColor: '#f0f5ff', padding: '18px', borderRadius: '8px', borderLeft: '4px solid #2f54eb' }}>
+                                <h3 style={{ margin: '0 0 8px 0', color: '#1d39c4', fontSize: '18px' }}>1. Инкапсуляция (Скрытие данных)</h3>
+                                <p style={{ margin: '0 0 12px 0', fontSize: '0.95em', lineHeight: '1.5' }}>
+                                    Это объединение данных и методов для работы с ними внутри одного объекта, а также **ограничение прямого доступа** к внутренностям извне. В современном JS для создания приватных полей используется символ решетки <code style={codeInlineStyle}>#</code>.
+                                </p>
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', padding: '12px' }}>
+{`class BankAccount {
+    #balance = 0; // Приватное свойство (скрыто от внешнего мира)
+
+    deposit(amount) {
+        if (amount > 0) this.#balance += amount; // Изменение только через метод
+    }
+
+    getBalance() { return this.#balance; } // Геттер для безопасного чтения
+}
+
+const account = new BankAccount();
+account.deposit(500);
+console.log(account.getBalance()); // 500
+console.log(account.#balance);      // ❌ SyntaxError: приватное поле нельзя вызвать напрямую!`}
+            </pre>
+                            </div>
+
+                            {/* 2. НАСЛЕДОВАНИЕ */}
+                            <div style={{ backgroundColor: '#f6ffed', padding: '18px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                                <h3 style={{ margin: '0 0 8px 0', color: '#237804', fontSize: '18px' }}>2. Наследование (Передача способностей)</h3>
+                                <p style={{ margin: '0 0 12px 0', fontSize: '0.95em', lineHeight: '1.5' }}>
+                                    Позволяет создать дочерний класс на основе родительского, чтобы не дублировать код. Дочерний класс получает все методы родителя. Реализуется через ключевое слово <code style={codeInlineStyle} >extends</code> (а под капотом работает наша золотая формула прототипов).
+                                </p>
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', padding: '12px' }}>
+{`class Animal {
+    constructor(name) { this.name = name; }
+    eat() { console.log(\`\${this.name} кушает\`); }
+}
+
+// Dog наследует всё от Animal
+class Dog extends Animal {
+    bark() { console.log(\`\${this.name} лает: Гав!\`); }
+}
+
+const rex = new Dog("Рекс");
+rex.eat();  // "Рекс кушает" (взято у родителя через __proto__)
+rex.bark(); // "Рекс лает: Гав!" (собственный метод)`}
+            </pre>
+                            </div>
+
+                            {/* 3. ПОЛИМОРФИЗМ */}
+                            <div style={{ backgroundColor: '#fff7e6', padding: '18px', borderRadius: '8px', borderLeft: '4px solid #ffa940' }}>
+                                <h3 style={{ margin: '0 0 8px 0', color: '#d46b08', fontSize: '18px' }}>3. Полиморфизм (Многообразие форм)</h3>
+                                <p style={{ margin: '0 0 12px 0', fontSize: '0.95em', lineHeight: '1.5' }}>
+                                    Возможность использовать один и тот же метод для разных классов, при этом каждый класс выполнит его по-своению (**переопределение методов**).
+                                </p>
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', padding: '12px' }}>
+{`class Instrument {
+    makeSound() { console.log("Какой-то звук"); }
+}
+
+class Guitar extends Instrument {
+    makeSound() { console.log("Брsection-нь!"); } // Переопределили метод родителя
+}
+
+class Drum extends Instrument {
+    makeSound() { console.log("Бум-бам!"); }      // Переопределили метод родителя
+}
+
+const orchestra = [new Guitar(), new Drum()];
+orchestra.forEach(item => item.makeSound()); // Выдаст: "Брsection-нь!", затем "Бум-бам!"`}
+            </pre>
+                            </div>
+
+                            {/* 4. АБСТРАКЦИЯ */}
+                            <div style={{ backgroundColor: '#fff0f6', padding: '18px', borderRadius: '8px', borderLeft: '4px solid #eb2f96' }}>
+                                <h3 style={{ margin: '0 0 8px 0', color: '#9e1055', fontSize: '18px' }}>4. Абстракция (Выделение главного)</h3>
+                                <p style={{ margin: '0 0 12px 0', fontSize: '0.95em', lineHeight: '1.5' }}>
+                                    Это сокрытие сложных деталей реализации и предоставление пользователю только простого и понятного интерфейса. Нам важно *что* делает объект, а не *как* он устроен внутри.
+                                </p>
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', padding: '12px' }}>
+{`class CoffeeMachine {
+    // Пользователю не нужно знать физику нагрева воды и давление помпы
+    #heatWater() { console.log("Вода нагревается до 95 градусов..."); }
+    #grindBeans() { console.log("Помол зерен..."); }
+
+    // Всё сложная внутренняя кухня запускается одной простой кнопкой:
+    makeCoffee() {
+        this.#grindBeans();
+        this.#heatWater();
+        console.log("Кофе готов! ☕");
+    }
+}
+
+const machine = new CoffeeMachine();
+machine.makeCoffee(); // Юзер нажал одну кнопку и получил результат.`}
+            </pre>
+                            </div>
+
+                        </div>
+                    </section>
+                    {/* Сводная таблица "Коротко о главном" */}
+                    <div style={{ marginTop: '30px', fontFamily: 'sans-serif' }}>
+                        <h3 style={{ fontSize: '18px', color: '#111', marginBottom: '15px' }}>Коротко о главном</h3>
+
+                        <div style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid #f0f0f0' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.92em' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fafafa', borderBottom: '1px solid #f0f0f0' }}>
+                                    <th style={{ padding: '12px 16px', color: '#8c8c8c', fontWeight: '500', width: '25%' }}>Концепция</th>
+                                    <th style={{ padding: '12px 16px', color: '#8c8c8c', fontWeight: '500', width: '45%' }}>Смысл</th>
+                                    <th style={{ padding: '12px 16px', color: '#8c8c8c', fontWeight: '500', width: '30%' }}>Ключевое слово</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {/* Инкапсуляция */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500', color: '#222' }}>Инкапсуляция</td>
+                                    <td style={{ padding: '12px 16px', color: '#434343' }}>Скрываем детали</td>
+                                    <td style={{ padding: '12px 16px' }}>
+                                        <code style={{ ...codeInlineStyle, backgroundColor: '#f5f5f5', color: '#000' }}>#privateField</code>
+                                    </td>
+                                </tr>
+                                {/* Наследование */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500', color: '#222' }}>Наследование</td>
+                                    <td style={{ padding: '12px 16px', color: '#434343' }}>Берём от родителя</td>
+                                    <td style={{ padding: '12px 16px', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                        <code style={{ ...codeInlineStyle, backgroundColor: '#f5f5f5', color: '#000' }}>extends</code>
+                                        <span style={{ color: '#bfbfbf' }}>,</span>
+                                        <code style={{ ...codeInlineStyle, backgroundColor: '#f5f5f5', color: '#000' }}>super</code>
+                                    </td>
+                                </tr>
+                                {/* Полиморфизм */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500', color: '#222' }}>Полиморфизм</td>
+                                    <td style={{ padding: '12px 16px', color: '#434343' }}>Один интерфейс &mdash; разное поведение</td>
+                                    <td style={{ padding: '12px 16px', color: '#595959', fontSize: '0.95em' }}>переопределение методов</td>
+                                </tr>
+                                {/* Абстракция */}
+                                <tr style={{ backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500', color: '#222' }}>Абстракция</td>
+                                    <td style={{ padding: '12px 16px', color: '#434343' }}>Упрощаем интерфейс</td>
+                                    <td style={{ padding: '12px 16px', color: '#595959', fontSize: '0.95em' }}>приватные методы</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
                 </section>
 
                 {/* Секция 2: Золотая формула */}
