@@ -74,6 +74,9 @@ export default function JavaScriptOOP() {
                     <a href="#prototypeParadox" onClick={(e) => handleScroll(e, 'prototypeParadox')} style={anchorLinkStyle}>
                         🤯 Парадокс Function vs Object
                     </a>
+                    <a href="#classes" onClick={(e) => handleScroll(e, 'classes')} style={anchorLinkStyle}>
+                        🏗️ Классы (Синтаксический сахар)
+                    </a>
 
                 </div>
             </aside>
@@ -467,6 +470,129 @@ console.log(cleanObj.toString()); // ❌ TypeError: cleanObj.toString is not a f
                         </div>
                     </div>
                 </section>
+                <section id="classes" style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #fa8c16', // Оранжевый цвет для синтаксических разборов
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                    marginTop: '40px',
+                    scrollMarginTop: '40px',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#d46b08', fontSize: '22px' }}>🏗️ Классы как синтаксический сахар</h2>
+                    <p style={{ lineHeight: '1.6', color: '#333' }}>
+                        В ES6 (2015 год) в JavaScript появилось ключевое слово <code style={codeInlineStyle}>class</code>. Но важно понимать: в JS <b>нет настоящих классов</b>, как в Java или C#. Классы в JS — это лишь красивая обертка над функциями-конструкторами и прототипами.
+                    </p>
+
+                    {/* Двухколоночное сравнение "До и После" */}
+                    <div style={{ marginTop: '20px' }}>
+                        <p style={{ fontWeight: 'bold', margin: '0 0 12px 0', color: '#222' }}>Эквивалентность кода под капотом движка V8:</p>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+
+                            {/* Левая колонка: Современный сахар */}
+                            <div style={{ backgroundColor: '#fff7e6', padding: '15px', borderRadius: '8px', borderTop: '3px solid #fa8c16' }}>
+                                <h4 style={{ margin: '0 0 8px 0', color: '#d46b08' }}>✨ Современный синтаксис (с сахаром)</h4>
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', padding: '10px', fontSize: '0.85em', margin: 0 }}>
+{`class User {
+    constructor(name) {
+        this.name = name;
+    }
+
+    sayHi() {
+        console.log(this.name);
+    }
+}
+
+const user = new User("Анна");`}
+                </pre>
+                            </div>
+
+                            {/* Правая колонка: Что происходит под капотом */}
+                            <div style={{ backgroundColor: '#f5f5f5', padding: '15px', borderRadius: '8px', borderTop: '3px solid #bfbfbf' }}>
+                                <h4 style={{ margin: '0 0 8px 0', color: '#595959' }}>⚙️ Как это работает на самом деле</h4>
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', padding: '10px', fontSize: '0.85em', margin: 0 }}>
+{`// 1. Создается обычная функция
+function User(name) {
+    this.name = name;
+}
+
+// 2. Метод пишется в prototype
+User.prototype.sayHi = function() {
+    console.log(this.name);
+};
+
+const user = new User("Анна");`}
+                </pre>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* Блок ключевых отличий класса от функции */}
+                    <div style={{
+                        backgroundColor: '#f9f0ff',
+                        padding: '18px',
+                        borderRadius: '8px',
+                        borderLeft: '4px solid #722ed1',
+                        fontSize: '0.93em',
+                        marginTop: '25px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px'
+                    }}>
+                        <p style={{ fontWeight: 'bold', margin: 0, color: '#531dab', fontSize: '1.05em' }}>
+                            ⚡ Но класс &mdash; это не на 100% просто функция. Есть важные технические отличия:
+                        </p>
+
+                        <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '10px', lineHeight: '1.5', color: '#333' }}>
+                            <li>
+                                <b>Обязательный <code style={codeInlineStyle}>new</code>:</b> Если вызвать функцию-конструктор без <code style={codeInlineStyle}>new</code>, она отработает (хоть и засрет глобальный контекст). Если вызвать класс без <code style={codeInlineStyle}>new</code>, JavaScript выбросит ошибку: <code style={{...codeInlineStyle, color: '#cf1322'}}>TypeError: Class constructor cannot be invoked without 'new'</code>.
+                            </li>
+                            <li>
+                                <b>Строгий режим автоматически:</b> Весь код внутри конструкции <code style={codeInlineStyle}>class</code> автоматически выполняется в строгом режиме (<code style={codeInlineStyle}>'use strict'</code>). Это защищает от случайного замусоривания глобального объекта <code style={codeInlineStyle}>window</code>.
+
+                                {/* Пример кода, наглядно показывающий поведение this */}
+                                <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #f0f0f0', padding: '15px', marginTop: '10px', fontSize: '0.88em' }}>
+{`// Обычная функция-конструктор (без strict):
+function Person() {
+  console.log(this);  // В браузере выдаст глобальный объект = window
+}
+Person(); 
+
+// Внутри класса:
+class Animal {
+  test() {
+    console.log(this);  // Всегда undefined, если метод вызван без контекста
+  }
+}
+const pet = new Animal();
+const brokenMethod = pet.test;
+brokenMethod(); // ❌ Вызовет undefined (строгий режим защитил код!)`}
+    </pre>
+                            </li>
+                            <li>
+                                <b>Неперечисляемые методы:</b> Все методы, объявленные внутри класса, автоматически получают флаг конфигурации <code style={codeInlineStyle}>enumerable: false</code>. Это значит, что при цикле <code style={codeInlineStyle}>for...in</code> по объекту методы класса не будут глупо вылезать наружу, в отличие от методов, добавленных в функцию вручную.
+                            </li>
+                            <li>
+                                <b>Отсутствие всплытия (No hoisting):</b> Функцию-конструктор, объявленную через <code style={codeInlineStyle}>function</code>, можно вызвать выше по коду, чем она написана в файле. Классы так делать запрещают. При попытке создать инстанс до объявления класса программа упадет со строгой ошибкой.
+                            </li>
+
+                            {/* Блок кода, в точности повторяющий ваш пример со скриншота */}
+                            <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #f0f0f0', padding: '15px', marginTop: '10px', fontSize: '0.88em' }}>
+{`// Функция: можно вызвать до объявления (hoisting)
+sayHi() // ✅ работает
+function sayHi() {}
+
+// Класс — нельзя
+const p = new Person() // ❌ ReferenceError
+class Person {}`}
+</pre>
+                        </ul>
+                    </div>
+                </section>
+
 
 
 
