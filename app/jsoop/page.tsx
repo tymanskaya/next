@@ -77,6 +77,9 @@ export default function JavaScriptOOP() {
                     <a href="#classes" onClick={(e) => handleScroll(e, 'classes')} style={anchorLinkStyle}>
                         🏗️ Классы (Синтаксический сахар)
                     </a>
+                    <a href="#classCreation" onClick={(e) => handleScroll(e, 'classCreation')} style={anchorLinkStyle}>
+                        🛠️ Создание классов (Полный гайд)
+                    </a>
 
                 </div>
             </aside>
@@ -591,6 +594,223 @@ class Person {}`}
 </pre>
                         </ul>
                     </div>
+                    {/* Итоговая таблица сравнения Функций-конструкторов и Классов */}
+                    <div style={{ marginTop: '30px', fontFamily: 'sans-serif' }}>
+                        <h3 style={{ fontSize: '18px', color: '#111', marginBottom: '15px' }}>Итоговая таблица</h3>
+
+                        <div style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid #f0f0f0' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.92em' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fafafa', borderBottom: '1px solid #f0f0f0' }}>
+                                    <th style={{ padding: '12px 16px', color: '#8c8c8c', fontWeight: '500', width: '30%' }}>Отличие</th>
+                                    <th style={{ padding: '12px 16px', color: '#8c8c8c', fontWeight: '500', width: '35%' }}>Функция-конструктор</th>
+                                    <th style={{ padding: '12px 16px', color: '#8c8c8c', fontWeight: '500', width: '35%' }}>Класс</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {/* 1. Вызов без new */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Вызов без <code style={codeInlineStyle}>new</code></td>
+                                    <td style={{ padding: '12px 16px', color: '#389e0d' }}>✅ (не падает)</td>
+                                    <td style={{ padding: '12px 16px', color: '#cf1322' }}>❌ TypeError</td>
+                                </tr>
+                                {/* 2. Hoisting */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Hoisting</td>
+                                    <td style={{ padding: '12px 16px', color: '#389e0d' }}>✅ всплывает</td>
+                                    <td style={{ padding: '12px 16px', color: '#cf1322' }}>❌ не всплывает</td>
+                                </tr>
+                                {/* 3. Strict mode */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Strict mode</td>
+                                    <td style={{ padding: '12px 16px', color: '#cf1322' }}>❌ не всегда</td>
+                                    <td style={{ padding: '12px 16px', color: '#389e0d' }}>✅ всегда</td>
+                                </tr>
+                                {/* 4. Методы в for...in */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Методы в <code style={codeInlineStyle}>for...in</code></td>
+                                    <td style={{ padding: '12px 16px', color: '#389e0d' }}>✅ видны</td>
+                                    <td style={{ padding: '12px 16px', color: '#cf1322' }}>❌ скрыты</td>
+                                </tr>
+                                {/* 5. Наследование статики */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Наследование статики</td>
+                                    <td style={{ padding: '12px 16px', color: '#cf1322' }}>❌ легко забыть</td>
+                                    <td style={{ padding: '12px 16px', color: '#389e0d' }}>✅ автоматически</td>
+                                </tr>
+                                {/* 6. super */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}><code style={codeInlineStyle}>super</code></td>
+                                    <td style={{ padding: '12px 16px', color: '#cf1322' }}>❌ только через <code style={codeInlineStyle}>.call</code></td>
+                                    <td style={{ padding: '12px 16px', color: '#389e0d' }}>✅ нативно</td>
+                                </tr>
+                                {/* 7. Приватные поля # */}
+                                <tr style={{ backgroundColor: '#fff' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Приватные поля <code style={codeInlineStyle}>#</code></td>
+                                    <td style={{ padding: '12px 16px', color: '#cf1322' }}>❌</td>
+                                    <td style={{ padding: '12px 16px', color: '#389e0d' }}>✅</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <section id="classCreation" style={{
+                        backgroundColor: '#fff',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        borderTop: '6px solid #52c41a', // Яркий зеленый цвет для конструктора
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                        marginTop: '40px',
+                        scrollMarginTop: '40px',
+                        fontFamily: 'sans-serif'
+                    }}>
+                        <h2 style={{ marginTop: 0, color: '#237804', fontSize: '22px' }}>🛠️ Анатомия создания классов в JavaScript</h2>
+                        <p style={{ lineHeight: '1.6', color: '#333' }}>
+                            Объявление класса состоит из нескольких типов полей и методов. Они принципиально отличаются тем, <b>где именно в памяти</b> они будут храниться — в самом инстансе, в общем прототипе или в теле функции-класса.
+                        </p>
+
+                        {/* Полный эталонный пример */}
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '15px 0 8px 0', color: '#111' }}>Полная структура современного класса:</p>
+                            <pre style={codeBlockStyle}>
+{`class Worker {
+    // 1. Публичное свойство инстанса (будет у каждого своя копия)
+    role = "Developer"; 
+
+    // 2. Приватное свойство инстанса (доступно только методам этого класса)
+    #salary = 5000; 
+
+    // 3. Статическое свойство (принадлежит самому классу, а не инстансам)
+    static company = "TechCorp";
+
+    // 4. Конструктор — инициализирует объект при вызове "new Worker()"
+    constructor(name, age) {
+        this.name = name; // Динамическое свойство
+        this.age = age;
+    }
+
+    // 5. Обычный метод (автоматически улетает в Worker.prototype)
+    getDetails() {
+        return \`\${this.name} работает как \${this.role}\`;
+    }
+
+    // 6. Геттер и Сеттер (выглядят как свойства, но являются методами)
+    get salaryInfo() {
+        return \`Зарплата заблокирована на уровне \${this.#salary}\`;
+    }
+    set updateSalary(amount) {
+        if (amount > 0) this.#salary = amount;
+    }
+
+    // 7. Статический метод (используется для утилит, не имеет доступа к инстансу)
+    static compareAge(workerA, workerB) {
+        return workerA.age - workerB.age;
+    }
+}`}
+        </pre>
+                        </div>
+
+                        {/* Детальный разбор каждого элемента */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '25px' }}>
+
+                            {/* Разбор Constructor */}
+                            <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                                <h4 style={{ margin: '0 0 8px 0', color: '#237804' }}>1. Конструктор (constructor)</h4>
+                                <p style={{ margin: 0, fontSize: '0.93em', lineHeight: '1.5', color: '#434343' }}>
+                                    Это специальный метод, который вызывается автоматически в момент написания <code style={codeInlineStyle}>new Worker(...)</code>. Его задача — наполнить только что созданный пустой объект стартовыми данными через ключевое слово <code style={codeInlineStyle}>this</code>. Если вы не напишете конструктор руками, React/JS автоматически создаст пустой дефолтный конструктор.
+                                </p>
+                            </div>
+
+                            {/* Разбор Свойств: Публичные vs Приватные */}
+                            <div style={{ backgroundColor: '#fafafa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #d9d9d9' }}>
+                                <h4 style={{ margin: '0 0 8px 0', color: '#262626' }}>2. Свойства инстанса (Поля класса)</h4>
+                                <p style={{ margin: 0, fontSize: '0.93em', lineHeight: '1.5', color: '#434343' }}>
+                                    Поля, объявленные прямо в теле класса (например, <code style={codeInlineStyle}>role = "Developer"</code>), физически копируются в каждый создаваемый объект. У объектов будут абсолютно независимые копии этих переменных. Поля с решеткой <code style={codeInlineStyle}>#</code> инкапсулируются внутри класса и полностью защищены от чтения снаружи.
+                                </p>
+                            </div>
+
+                            {/* Разбор Прототипных методов */}
+                            <div style={{ backgroundColor: '#e6f7ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #1890ff' }}>
+                                <h4 style={{ margin: '0 0 8px 0', color: '#0050b3' }}>3. Обычные методы (Прототипные)</h4>
+                                <p style={{ margin: 0, fontSize: '0.93em', lineHeight: '1.5', color: '#434343' }}>
+                                    Когда вы объявляете обычный метод вроде <code style={codeInlineStyle}>getDetails() {}</code>, он <b>не копируется</b> в инстансы. Он записывается в единственном экземпляре в объект <code style={codeInlineStyle}>Worker.prototype</code>. Все созданные рабочие будут делить этот метод через свои скрытые ссылки <code style={codeInlineStyle}>__proto__</code>, колоссально экономя оперативную память.
+                                </p>
+                            </div>
+
+                            {/* Разбор Статики */}
+                            <div style={{ backgroundColor: '#fff7e6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ffa940' }}>
+                                <h4 style={{ margin: '0 0 8px 0', color: '#d46b08' }}>4. Статические поля и методы (static)</h4>
+                                <p style={{ margin: 0, fontSize: '0.93em', lineHeight: '1.5', color: '#434343' }}>
+                                    Ключевое слово <code style={codeInlineStyle}>static</code> намертво привязывает свойства и методы к самой функции-классу. Вы не можете вызвать статический метод у инстанса (<code style={codeInlineStyle}>alex.compareAge()</code> выдаст ошибку). К ним обращаются строго через имя класса: <code style={codeInlineStyle}>Worker.compareAge(alex, bob)</code>. Чаще всего используются как хелперы или фабрики объектов.
+                                </p>
+                            </div>
+
+                        </div>
+                    </section>
+                    {/* Сводная таблица хранения элементов класса в памяти */}
+                    <div style={{ marginTop: '30px', fontFamily: 'sans-serif' }}>
+                        <h3 style={{ fontSize: '18px', color: '#111', marginBottom: '15px' }}>Итоговая таблица хранения и доступа</h3>
+
+                        <div style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid #f0f0f0' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.92em' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fafafa', borderBottom: '1px solid #f0f0f0' }}>
+                                    <th style={{ padding: '12px 16px', color: '#8c8c8c', fontWeight: '500', width: '20%' }}>Тип</th>
+                                    <th style={{ padding: '12px 16px', color: '#8c8c8c', fontWeight: '500', width: '25%' }}>Синтаксис</th>
+                                    <th style={{ padding: '12px 16px', color: '#8c8c8c', fontWeight: '500', width: '30%' }}>Где хранится</th>
+                                    <th style={{ padding: '12px 16px', color: '#8c8c8c', fontWeight: '500', width: '25%' }}>Доступ</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {/* 1. Поле экземпляра */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Поле экземпляра</td>
+                                    <td style={{ padding: '12px 16px' }}>
+                                        <code style={codeInlineStyle}>this.x = ...</code> / <code style={codeInlineStyle}>x = ...</code>
+                                    </td>
+                                    <td style={{ padding: '12px 16px', color: '#434343' }}>В каждом <code style={codeInlineStyle}>new</code></td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>obj.x</code></td>
+                                </tr>
+                                {/* 2. Приватное поле */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Приватное поле</td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>#x = ...</code></td>
+                                    <td style={{ padding: '12px 16px', color: '#434343' }}>В каждом <code style={codeInlineStyle}>new</code></td>
+                                    <td style={{ padding: '12px 16px', color: '#8c8c8c', fontSize: '0.95em' }}>Только внутри класса</td>
+                                </tr>
+                                {/* 3. Метод */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Метод</td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>foo() &#123;&#125;</code></td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>Class.prototype</code></td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>obj.foo()</code></td>
+                                </tr>
+                                {/* 4. Геттер/сеттер */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Геттер/сеттер</td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>get x() &#123;&#125;</code></td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>Class.prototype</code></td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>obj.x</code></td>
+                                </tr>
+                                {/* 5. Статическое поле */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Статическое поле</td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>static x = ...</code></td>
+                                    <td style={{ padding: '12px 16px', color: '#434343' }}>В самом классе</td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>Class.x</code></td>
+                                </tr>
+                                {/* 6. Статический метод */}
+                                <tr style={{ backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}>Статический метод</td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>static foo() &#123;&#125;</code></td>
+                                    <td style={{ padding: '12px 16px', color: '#434343' }}>В самом классе</td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>Class.foo()</code></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </section>
 
 
