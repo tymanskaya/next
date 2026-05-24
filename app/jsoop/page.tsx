@@ -714,12 +714,169 @@ class Person {}`}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '25px' }}>
 
                             {/* Разбор Constructor */}
-                            <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
-                                <h4 style={{ margin: '0 0 8px 0', color: '#237804' }}>1. Конструктор (constructor)</h4>
-                                <p style={{ margin: 0, fontSize: '0.93em', lineHeight: '1.5', color: '#434343' }}>
-                                    Это специальный метод, который вызывается автоматически в момент написания <code style={codeInlineStyle}>new Worker(...)</code>. Его задача — наполнить только что созданный пустой объект стартовыми данными через ключевое слово <code style={codeInlineStyle}>this</code>. Если вы не напишете конструктор руками, React/JS автоматически создаст пустой дефолтный конструктор.
+                            <section id="constructorDeep" style={{
+                                backgroundColor: '#fff',
+                                padding: '25px',
+                                borderRadius: '12px',
+                                borderTop: '6px solid #52c41a', // Фирменный зеленый цвет конструктора
+                                boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                                marginTop: '40px',
+                                scrollMarginTop: '40px',
+                                fontFamily: 'sans-serif'
+                            }}>
+                                <h2 style={{ marginTop: 0, color: '#237804', fontSize: '22px' }}>Конструктор (constructor) под молекулярным микроскопом</h2>
+                                <p style={{ lineHeight: '1.6', color: '#333' }}>
+                                    Метод <code style={codeInlineStyle}>constructor</code> &mdash; это специальная функция внутри класса, которая автоматически вызывается при создании объекта через оператор <code style={codeInlineStyle}>new</code>. Её главная задача &mdash; инициализировать и наполнить новый инстанс свойствами.
                                 </p>
-                            </div>
+
+                                {/* 1. БАЗОВЫЙ СИНТАКСИС И МЕХАНИКА NEW */}
+                                <div style={{ marginTop: '20px' }}>
+                                    <h3 style={{ fontSize: '18px', color: '#111', margin: '0 0 10px 0' }}>1. Базовый синтаксис и магия оператора <code style={codeInlineStyle}>new</code></h3>
+                                    <pre style={codeBlockStyle}>
+{`class Dog {
+    constructor(name) {
+        this.name = name; // Записываем свойство прямо в инстанс
+    }
+}
+
+const rex = new Dog('Рекс');
+
+// =======================================================
+// ЧТО ПРОИСХОДИТ ПРИ ВЫЗОВЕ NEW — ПО ШАГАМ:
+// =======================================================
+// 1. Создаётся новый пустой объект: {}
+// 2. Его скрытому свойству __proto__ присваивается ссылка на Dog.prototype
+// 3. Вызывается метод constructor, при этом "this" внутри равен этому новому объекту
+// 4. Выполняется тело конструктора: объекту записывается свойство name = 'Рекс'
+// 5. Конструктор автоматически возвращает этот заполненный объект (this)
+// 6. Переменная rex получает готовый объект { name: 'Рекс' }
+
+console.log(rex.name); // 'Рекс'
+console.log(Object.getPrototypeOf(rex) === Dog.prototype); // true`}
+        </pre>
+                                </div>
+
+                                {/* 2. КОНСТРУКТОР ПО УМОЛЧАНИЮ */}
+                                <div style={{ marginTop: '30px', borderTop: '1px dashed #e1e8e1', paddingTop: '20px' }}>
+                                    <h3 style={{ fontSize: '18px', color: '#111', margin: '0 0 10px 0' }}>2. Конструктор по умолчанию (Implicit Constructor)</h3>
+                                    <p style={{ fontSize: '0.95em', color: '#434343', margin: '0 0 12px 0' }}>
+                                        Если внутри класса вообще опустить метод <code style={codeInlineStyle}>constructor</code>, JavaScript не выдаст ошибку. Движок V8 создаст его автоматически. Поведение зависит от того, является ли класс дочерним:
+                                    </p>
+                                    <pre style={codeBlockStyle}>
+{`// А. В обычном базовом классе:
+class Cat {} 
+// Под капотом JS автоматически добавляет:
+// constructor() {} — пустой конструктор
+
+
+// Б. В дочернем классе (Конструктор с наследованием):
+class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+class Puppy extends Animal {
+    // Конструктор не написан — JS развернет полноценный прокси-метод:
+    // constructor(...args) { super(...args); }
+}
+
+const spot = new Puppy('Спот'); 
+console.log(spot.name); // 'Спот' ✅ — аргументы автоматически прокинулись к родителю`}
+        </pre>
+                                </div>
+
+                                {/* 3. КОНСТРУКТОР С НАСЛЕДОВАНИЕМ И SUPER */}
+                                <div style={{ marginTop: '30px', borderTop: '1px dashed #e1e8e1', paddingTop: '20px' }}>
+                                    <h3 style={{ fontSize: '18px', color: '#111', margin: '0 0 10px 0' }}>3. Конструктор с наследованием — <code style={codeInlineStyle}>super()</code></h3>
+                                    <p style={{ fontSize: '0.95em', color: '#434343', margin: '0 0 12px 0' }}>
+                                        В классах-наследниках (<code style={codeInlineStyle}>extends</code>) вы <b>обязаны</b> вызвать родительский конструктор через <code style={codeInlineStyle}>super()</code> строго до того, как попытаетесь использовать <code style={codeInlineStyle}>this</code>.
+                                    </p>
+                                    <pre style={codeBlockStyle}>
+{`class Vehicle {
+    constructor(type) {
+        this.type = type;
+    }
+}
+
+// ✅ ПРАВИЛЬНО: Сначала super(), только потом свои свойства
+class Car extends Vehicle {
+    constructor(type, brand) {
+        super(type);         // Сначала super! Родитель создает объект в памяти
+        this.brand = brand;   // Только теперь доступен собственный this
+    }
+}
+
+// ❌ ОШИБКА: Попытка использовать this до вызова родителя
+class BadCar extends Vehicle {
+    constructor(type, brand) {
+        this.brand = brand; // ❌ ReferenceError: Must call super() before accessing 'this'
+        super(type);
+    }
+}`}
+        </pre>
+                                </div>
+
+                                {/* 4. СВОДНАЯ ТАБЛИЦА ПОВЕДЕНИЯ */}
+                                <div style={{ marginTop: '30px', borderTop: '1px dashed #e1e8e1', paddingTop: '20px' }}>
+                                    <h3 style={{ fontSize: '18px', color: '#111', marginBottom: '15px' }}>4. Шпаргалка: Поведение конструктора в разных ситуациях</h3>
+
+                                    <div style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid #e1e8e1' }}>
+                                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.92em' }}>
+                                            <thead>
+                                            <tr style={{ backgroundColor: '#f6ffed', borderBottom: '1px solid #e1e8e1' }}>
+                                                <th style={{ padding: '12px 16px', color: '#52c41a', fontWeight: '500', width: '35%' }}>Ситуация</th>
+                                                <th style={{ padding: '12px 16px', color: '#52c41a', fontWeight: '500', width: '65%' }}>Поведение движка JS</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr style={{ borderBottom: '1px solid #e1e8e1' }}>
+                                                <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>constructor</code> не написан</td>
+                                                <td style={{ padding: '12px 16px', color: '#434343' }}>Создаётся пустой автоматически</td>
+                                            </tr>
+                                            <tr style={{ borderBottom: '1px solid #e1e8e1', backgroundColor: '#fafafa' }}>
+                                                <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>extends</code> без <code style={codeInlineStyle}>constructor</code></td>
+                                                <td style={{ padding: '12px 16px', color: '#434343' }}><code style={codeInlineStyle}>super(...args)</code> добавляется автоматически</td>
+                                            </tr>
+                                            <tr style={{ borderBottom: '1px solid #e1e8e1' }}>
+                                                <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>extends</code> с <code style={codeInlineStyle}>constructor</code></td>
+                                                <td style={{ padding: '12px 16px', color: '#434343' }}><code style={codeInlineStyle}>super()</code> обязателен до обращения к <code style={codeInlineStyle}>this</code></td>
+                                            </tr>
+                                            <tr style={{ borderBottom: '1px solid #e1e8e1', backgroundColor: '#fafafa' }}>
+                                                <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>async constructor</code></td>
+                                                <td style={{ padding: '12px 16px', color: '#cf1322', fontWeight: '500' }}>
+                                                    ❌ невозможно &mdash; использовать статический фабричный метод
+                                                </td>
+                                            </tr>
+                                            <tr style={{ borderBottom: '1px solid #e1e8e1' }}>
+                                                <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>return</code> примитив</td>
+                                                <td style={{ padding: '12px 16px', color: '#434343' }}>Игнорируется &mdash; возвращается <code style={codeInlineStyle}>this</code></td>
+                                            </tr>
+                                            <tr style={{ backgroundColor: '#fafafa' }}>
+                                                <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>return</code> объект</td>
+                                                <td style={{ padding: '12px 16px', color: '#434343' }}>Вернётся именно этот сторонний объект (подмена <code style={codeInlineStyle}>this</code>)</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {/* Главное архитектурное правило */}
+                                    <div style={{
+                                        backgroundColor: '#e6f7ff',
+                                        padding: '15px',
+                                        borderRadius: '8px',
+                                        borderLeft: '4px solid #1890ff',
+                                        fontSize: '0.95em',
+                                        color: '#0050b3',
+                                        marginTop: '15px',
+                                        lineHeight: '1.5'
+                                    }}>
+                                        <b>📌 Золотое правило архитектуры:</b> Конструктор предназначен <u>только для инициализации полей</u>. Сложную бизнес-логику, сетевые запросы (fetch/axios) или тяжелые вычисления всегда выносите в отдельные методы или статические фабрики!
+                                    </div>
+                                </div>
+                            </section>
+
+
 
                             {/* Разбор Свойств: Публичные vs Приватные */}
                             <div style={{ backgroundColor: '#fafafa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #d9d9d9' }}>
@@ -728,6 +885,97 @@ class Person {}`}
                                     Поля, объявленные прямо в теле класса (например, <code style={codeInlineStyle}>role = "Developer"</code>), физически копируются в каждый создаваемый объект. У объектов будут абсолютно независимые копии этих переменных. Поля с решеткой <code style={codeInlineStyle}>#</code> инкапсулируются внутри класса и полностью защищены от чтения снаружи.
                                 </p>
                             </div>
+                            <section id="privateFields" style={{
+                                backgroundColor: '#fff',
+                                padding: '25px',
+                                borderRadius: '12px',
+                                borderTop: '6px solid #ff4d4f', // Красный цвет безопасности и защиты
+                                boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                                marginTop: '40px',
+                                scrollMarginTop: '40px',
+                                fontFamily: 'sans-serif'
+                            }}>
+                                <h2 style={{ marginTop: 0, color: '#cf1322', fontSize: '22px' }}>Приватные поля и методы класса (<code style={{...codeInlineStyle, color: '#cf1322'}}>#</code>)</h2>
+                                <p style={{ lineHeight: '1.6', color: '#333' }}>
+                                    В старом JavaScript приватность имитировали с помощью нижнего подчеркивания (<code style={codeInlineStyle}>_balance</code>), но это было лишь джентльменским соглашением. Современный JS поддерживает настоящую приватность на уровне движка с помощью символа <code style={codeInlineStyle}>#</code>.
+                                </p>
+
+                                {/* Основной пример кода */}
+                                <div>
+                                    <p style={{ fontWeight: 'bold', margin: '15px 0 8px 0', color: '#111' }}>Живой пример инкапсуляции через приватность:</p>
+                                    <pre style={codeBlockStyle}>
+{`class BankAccount {
+    name;             // Публичное свойство (доступно всем)
+    #balance = 0;     // Приватное свойство (строго внутри класса)
+
+    constructor(name, initialDeposit) {
+        this.name = name;
+        this.#balance = initialDeposit;
+    }
+
+    // Публичный метод имеет доступ к приватным полям
+    deposit(amount) {
+        if (amount > 0) {
+            this.#balance += amount;
+            this.#logTransaction(\`Пополнение на \${amount}\`);
+        }
+    }
+
+    // Приватный метод — его нельзя вызвать снаружи
+    #logTransaction(msg) {
+        console.log(\`[LOG]: \${msg}\`);
+    }
+
+    // Безопасный геттер для чтения приватного поля
+    get currentBalance() {
+        return \`На счету: \${this.#balance} руб.\`;
+    }
+}
+
+const wallet = new BankAccount("Эдуард", 1000);
+
+console.log(wallet.name);           // "Эдуард" ✅ работает
+console.log(wallet.currentBalance); // "На счету: 1000 руб." ✅ работает (через геттер)
+
+// Попытки взлома:
+wallet.#balance = 5000000;  // ❌ SyntaxError: Private field '#balance' must be declared in an enclosing class
+wallet.#logTransaction();   // ❌ SyntaxError: Приватный метод вызвать снаружи нельзя`}
+        </pre>
+                                </div>
+
+                                {/* Важные правила и особенности */}
+                                <div style={{
+                                    backgroundColor: '#fff1f0',
+                                    padding: '18px',
+                                    borderRadius: '8px',
+                                    borderLeft: '4px solid #ff4d4f',
+                                    fontSize: '0.93em',
+                                    marginTop: '25px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '12px'
+                                }}>
+                                    <p style={{ fontWeight: 'bold', margin: 0, color: '#cf1322', fontSize: '1.05em' }}>
+                                        🧱 Важные правила приватности (Что нужно знать для собеседования):
+                                    </p>
+
+                                    <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '10px', lineHeight: '1.5', color: '#333' }}>
+                                        <li>
+                                            <b>Обязательное объявление:</b> Все приватные поля <span style={{fontWeight: 'bold'}}>обязаны</span> быть объявлены прямо в теле класса (над конструктором). Нельзя создать приватное свойство на лету внутри конструктора, как это делается с публичными свойствами.
+                                        </li>
+                                        <li>
+                                            <b>Решётка — часть имени:</b> Символ <code style={codeInlineStyle}>#</code> — это не просто модификатор доступа (как <code style={codeInlineStyle}>private</code> в TypeScript). Это физическая часть имени переменной. Нельзя обратиться к полю без решётки.
+                                        </li>
+                                        <li>
+                                            <b>Динамический доступ запрещён:</b> К приватным полям нельзя обратиться через квадратные скобки. Код <code style={codeInlineStyle}>obj['#balance']</code> вернет <code style={codeInlineStyle}>undefined</code>, а не значение свойства. Это гарантирует жесткую защиту от обхода инкапсуляции.
+                                        </li>
+                                        <li>
+                                            <b>Не наследуются:</b> Дочерние классы (<code style={codeInlineStyle}>extends</code>) **не имеют доступа** к приватным полям родителя напрямую. Если класс <code style={codeInlineStyle}>PremiumAccount</code> наследует <code style={codeInlineStyle}>BankAccount</code>, его методы не смогут прочитать <code style={codeInlineStyle} >this.#balance</code>. Чтение возможно только через публичные геттеры/сеттеры родительского класса.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </section>
+
 
                             {/* Разбор Прототипных методов */}
                             <div style={{ backgroundColor: '#e6f7ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #1890ff' }}>
