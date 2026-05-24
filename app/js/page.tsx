@@ -80,6 +80,9 @@ export default function JavaScriptOOP() {
                     <a href="#classCreation" onClick={(e) => handleScroll(e, 'classCreation')} style={anchorLinkStyle}>
                         🛠️ Создание классов (Полный гайд)
                     </a>
+                    <a href="#thisKeyword" onClick={(e) => handleScroll(e, 'thisKeyword')} style={anchorLinkStyle}>
+                        🎯 Контекст вызова (this)
+                    </a>
 
                 </div>
             </aside>
@@ -1272,6 +1275,90 @@ rex.bark(); // "Рекс лает: Гав-гав!"`}
                         </div>
                     </section>
 
+                </section>
+                <section id="thisKeyword" style={{
+                    backgroundColor: '#fff',
+                    padding: '25px',
+                    borderRadius: '12px',
+                    borderTop: '6px solid #13c2c2', // Красивый бирюзовый цвет для работы с контекстом
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+                    marginTop: '40px',
+                    scrollMarginTop: '40px',
+                    fontFamily: 'sans-serif'
+                }}>
+                    <h2 style={{ marginTop: 0, color: '#006d75', fontSize: '22px' }}>🎯 Контекст вызова (this) и методы его привязки</h2>
+                    <p style={{ lineHeight: '1.6', color: '#333' }}>
+                        Ключевое слово <code style={codeInlineStyle}>this</code> в JavaScript определяется <b>динамически в момент вызова функции</b>, а не в момент её объявления. Из-за этого в ООП часто возникает проблема «потери контекста», когда метод класса передается как колбэк (например, в <code style={codeInlineStyle}>setTimeout</code>).
+                    </p>
+
+                    {/* Пример потери контекста */}
+                    <div style={{ marginTop: '15px' }}>
+                        <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#111' }}>⚠️ Классическая потеря контекста в ООП:</p>
+                        <pre style={codeBlockStyle}>
+{`class User {
+    constructor(name) { this.name = name; }
+    
+    sayHi() { console.log(\`Привет, меня зовут \${this.name}\`); }
+}
+
+const alex = new User("Алексей");
+alex.sayHi(); // ✅ Работает: "Привет, меня зовут Алексей"
+
+// ПОТЕРЯ КОНТЕКСТА: передаем метод как обычную функцию
+const greet = alex.sayHi; 
+greet(); // ❌ TypeError: Cannot read properties of undefined (reading 'name')
+// Так как внутри класса по умолчанию включен 'use strict', this стал равен undefined!`}
+        </pre>
+                    </div>
+
+                    {/* 3 метода принудительной привязки */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '25px' }}>
+                        <h3 style={{ fontSize: '18px', color: '#111', margin: 0 }}>Явное управление контекстом: call, apply, bind</h3>
+
+                        {/* bind */}
+                        <div style={{ backgroundColor: '#e6f7ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #1890ff' }}>
+                            <h4 style={{ margin: '0 0 5px 0', color: '#0050b3' }}>1. метод .bind(context) &mdash; Жесткая привязка</h4>
+                            <p style={{ margin: '0 0 8px 0', fontSize: '0.92em', color: '#434343' }}>
+                                Не вызывает функцию сразу, а <b>возвращает её новую копию</b>, намертво привязанную к указанному объекту. Идеально для колбэков.
+                            </p>
+                            <code style={{ ...codeInlineStyle, display: 'block', padding: '8px' }}>
+                                {`const safeGreet = alex.sayHi.bind(alex);\nsafeGreet(); // ✅ Успешно: "Привет, меня зовут Алексей"`}
+                            </code>
+                        </div>
+
+                        {/* call и apply */}
+                        <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                            <h4 style={{ margin: '0 0 5px 0', color: '#237804' }}>2. методы .call() и .apply() &mdash; Мгновенный вызов</h4>
+                            <p style={{ margin: '0 0 8px 0', fontSize: '0.92em', color: '#434343' }}>
+                                <b>Вызывают функцию мгновенно</b>, подменяя <code style={codeInlineStyle}>this</code> на переданный объект. Разница только в передаче аргументов:
+                            </p>
+                            <ul style={{ margin: '0 0 10px 0', paddingLeft: '20px', fontSize: '0.9em', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <li><code style={codeInlineStyle}>.call(context, arg1, arg2)</code> &mdash; принимает аргументы <b>через запятую</b>.</li>
+                                <li><code style={codeInlineStyle}>.apply(context, [arg1, arg2])</code> &mdash; принимает аргументы <b>в виде массива</b>.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* Стрелочные функции в ООП */}
+                    <div style={{ backgroundColor: '#fff7e6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ffa940', marginTop: '25px' }}>
+                        <h4 style={{ margin: '0 0 8px 0', color: '#d46b08' }}>🚀 Современное решение: Стрелочные функции в классах</h4>
+                        <p style={{ margin: '0 0 10px 0', fontSize: '0.93em', lineHeight: '1.5', color: '#333' }}>
+                            У стрелочных функций <span style={{ fontWeight: 'bold' }}>нет своего контекста</span>. Они берут <code style={codeInlineStyle}>this</code> из внешнего окружения в момент создания. Если объявить метод класса как стрелку, его контекст <b>никогда не потеряется</b>:
+                        </p>
+                        <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', padding: '10px', margin: 0 }}>
+{`class Autopilot {
+    constructor(brand) { this.brand = brand; }
+
+    // Метод-стрелка намертво привязан к инстансу при создании
+    start = () => {
+        console.log(\`Автопилот \${this.brand} запущен\`);
+    }
+}
+
+const tesla = new Autopilot("Tesla");
+setTimeout(tesla.start, 1000); // ✅ Работает через секунду! Контекст не потерялся.`}
+        </pre>
+                    </div>
                 </section>
 
 

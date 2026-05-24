@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import JavaScriptOOP from "@/app/js/page";
 
 export default function Sidebar() {
     const pathname = usePathname();
@@ -58,6 +59,10 @@ export default function Sidebar() {
                 <button onClick={() => router.push('/hooks')} style={getSidebarLinkStyle(pathname === '/hooks')}>
                     ⚛️ React Hooks
                 </button>
+                <button onClick={() => router.push('/js')} style={getSidebarLinkStyle(pathname === '/js')}>
+                    ⚛️ JavaScript
+                </button>
+
             </div>
         </aside>
     );
