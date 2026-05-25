@@ -1286,10 +1286,67 @@ rex.bark(); // "Рекс лает: Гав-гав!"`}
                     scrollMarginTop: '40px',
                     fontFamily: 'sans-serif'
                 }}>
-                    <h2 style={{ marginTop: 0, color: '#006d75', fontSize: '22px' }}>🎯 Контекст вызова (this) и методы его привязки</h2>
-                    <p style={{ lineHeight: '1.6', color: '#333' }}>
-                        Ключевое слово <code style={codeInlineStyle}>this</code> в JavaScript определяется <b>динамически в момент вызова функции</b>, а не в момент её объявления. Из-за этого в ООП часто возникает проблема «потери контекста», когда метод класса передается как колбэк (например, в <code style={codeInlineStyle}>setTimeout</code>).
-                    </p>
+                    <h2 style={{ marginTop: 0, color: '#006d75', fontSize: '22px' }}>🎯 Контекст вызова (this)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+
+                        {/* ВАША ФУНДАМЕНТАЛЬНАЯ ФОРМУЛИРОВКА */}
+                        <div style={{
+                            backgroundColor: '#e6fffb',
+                            padding: '15px 18px',
+                            borderRadius: '8px',
+                            borderLeft: '4px solid #13c2c2',
+                            lineHeight: '1.6'
+                        }}>
+                            <p style={{ margin: '0 0 8px 0', fontSize: '1.05em', color: '#1a1a1a' }}>
+                                <b><code style={{...codeInlineStyle, backgroundColor: '#fff', color: '#006d75'}}>this</code></b> &mdash; ключевое слово, которое указывает на объект, в контексте которого выполняется код.
+                            </p>
+                            <p style={{ margin: 0, fontSize: '1.05em', fontWeight: 'bold', color: '#006d75' }}>
+                                🚀 Значение this зависит не от того, где функция написана, а от того, как она вызвана.
+                            </p>
+                        </div>
+
+                        {/* Шпаргалка: От чего зависит this */}
+                        <div style={{ backgroundColor: '#fafafa', padding: '15px', borderRadius: '8px', border: '1px solid #f0f0f0' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#595959' }}>📊 Четыре режима определения контекста:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95em', color: '#222' }}>
+                                <li><b>Вызов от точки (<code style={codeInlineStyle}>obj.foo()</code>):</b> <code style={codeInlineStyle}>this</code> равен объекту перед точкой (<code style={codeInlineStyle}>obj</code>).</li>
+                                <li><b>Обычный вызов (<code style={codeInlineStyle}>foo()</code>):</b> В классах и строгом режиме равен <code style={{...codeInlineStyle, color: '#cf1322'}}>undefined</code>, без строгого режима &mdash; объекту <code style={codeInlineStyle}>window</code>.</li>
+                                <li><b>С оператором <code style={codeInlineStyle}>new</code>:</b> Равен новому, только что созданному пустому объекту.</li>
+                                <li><b>В стрелочных функциях:</b> Своего <code style={codeInlineStyle}>this</code> нет, забирается из внешнего окружения.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    {/* Подраздел глобального контекста и дефолтного связывания для вставки в #thisKeyword */}
+                    <div style={{ marginTop: '20px', fontFamily: 'sans-serif' }}>
+                        <h3 style={{ fontSize: '18px', color: '#006d75', margin: '0 0 10px 0' }}>1. Глобальный контекст и обычный вызов (Default Binding)</h3>
+                        <p style={{ fontSize: '0.95em', lineHeight: '1.5', color: '#333', margin: '0 0 15px 0' }}>
+                            Поведение <code style={codeInlineStyle}>this</code> при вызове функции «сама по себе» зависит от окружения (браузер/Node.js) и включения строгой директивы <code style={codeInlineStyle}>'use strict'</code>:
+                        </p>
+
+                        <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #b5f5ec', padding: '15px', margin: 0, fontSize: '0.88em' }}>
+{`// 🌍 А. Глобальный контекст (вне функций)
+console.log(this);  // window (в браузере) / global (в Node.js)
+
+// 🏢 Б. Обычный вызов функции в НЕСТРОГОМ режиме
+function sayHi() {
+  console.log(this);  // window — ссылается на глобальный объект
+}
+sayHi();
+
+// 🔒 В. Обычный вызов функции в СТРОГОМ режиме ('use strict')
+function sayHiStrict() {
+  'use strict'
+  console.log(this);  // undefined — строгий режим защищает от утечки контекста
+}
+sayHiStrict();`}
+    </pre>
+
+                        <div style={{ backgroundColor: '#fff7e6', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #ffa940', fontSize: '0.9em', marginTop: '12px', color: '#d46b08' }}>
+                            ⚠️ <b>Важно для ООП:</b> Так как внутри всех ES6 классов режим <code style={codeInlineStyle}>'use strict'</code> активирован **автоматически**, любая потеря метода класса (например, при передаче в колбэк) превратит его <code style={codeInlineStyle}>this</code> строго в <code style={codeInlineStyle}>undefined</code>, а не в <code style={codeInlineStyle}>window</code>.
+                        </div>
+                    </div>
+
 
                     {/* Пример потери контекста */}
                     <div style={{ marginTop: '15px' }}>
