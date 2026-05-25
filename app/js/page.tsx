@@ -1375,7 +1375,7 @@ console.log(greet());       // 'Привет, я undefined' ❌ (в нестро
     </pre>
 
                         <div style={{ backgroundColor: '#e6f7ff', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #1890ff', fontSize: '0.9em', marginTop: '12px', color: '#0050b3' }}>
-                            💡 <b>Ментальное правило:</b> Посмотрите на строчку, где вызывается функция (со скобками <code style={codeInlineStyle}>()</code>). Если прямо перед скобками **есть точка** (например, <code style={codeInlineStyle}>user.greet()</code>), то <code style={codeInlineStyle}>this</code> равен тому, что стоит слева от точки. Если точки нет (<code style={codeInlineStyle} >greet()</code>), контекст потерян.
+                            💡 <b>Ментальное правило:</b> Посмотрите на строчку, где вызывается функция (со скобками <code style={codeInlineStyle}>()</code>). Если если перед методом() - т.е. функцией **есть точка** (например, <code style={codeInlineStyle}>user.greet()</code>), то <code style={codeInlineStyle}>this</code> равен тому, что стоит слева от точки. Если точки нет (<code style={codeInlineStyle} >greet()</code>), контекст потерян.
                         </div>
                     </div>
 
@@ -1399,33 +1399,45 @@ greet(); // ❌ TypeError: Cannot read properties of undefined (reading 'name')
         </pre>
                     </div>
 
-                    {/* 3 метода принудительной привязки */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '25px' }}>
-                        <h3 style={{ fontSize: '18px', color: '#111', margin: 0 }}>Явное управление контекстом: call, apply, bind</h3>
 
-                        {/* bind */}
-                        <div style={{ backgroundColor: '#e6f7ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #1890ff' }}>
-                            <h4 style={{ margin: '0 0 5px 0', color: '#0050b3' }}>1. метод .bind(context) &mdash; Жесткая привязка</h4>
-                            <p style={{ margin: '0 0 8px 0', fontSize: '0.92em', color: '#434343' }}>
-                                Не вызывает функцию сразу, а <b>возвращает её новую копию</b>, намертво привязанную к указанному объекту. Идеально для колбэков.
-                            </p>
-                            <code style={{ ...codeInlineStyle, display: 'block', padding: '8px' }}>
-                                {`const safeGreet = alex.sayHi.bind(alex);\nsafeGreet(); // ✅ Успешно: "Привет, меня зовут Алексей"`}
-                            </code>
-                        </div>
+                    {/* Подраздел 4. Явная привязка для вставки в #thisKeyword */}
+                    <div style={{ marginTop: '30px', borderTop: '1px dashed #b5f5ec', paddingTop: '20px', fontFamily: 'sans-serif' }}>
+                        <h3 style={{ fontSize: '18px', color: '#006d75', margin: '0 0 10px 0' }}>3. Явная привязка контекста (Explicit Binding)</h3>
+                        <p style={{ fontSize: '0.95em', lineHeight: '1.5', color: '#333', margin: '0 0 15px 0' }}>
+                            Если контекст потерян или функцию нужно вызвать в контексте чужого объекта, используются нативные методы JavaScript: <code style={codeInlineStyle}>call</code>, <code style={codeInlineStyle}>apply</code> и <code style={codeInlineStyle}>bind</code>.
+                        </p>
 
-                        {/* call и apply */}
-                        <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
-                            <h4 style={{ margin: '0 0 5px 0', color: '#237804' }}>2. методы .call() и .apply() &mdash; Мгновенный вызов</h4>
-                            <p style={{ margin: '0 0 8px 0', fontSize: '0.92em', color: '#434343' }}>
-                                <b>Вызывают функцию мгновенно</b>, подменяя <code style={codeInlineStyle}>this</code> на переданный объект. Разница только в передаче аргументов:
-                            </p>
-                            <ul style={{ margin: '0 0 10px 0', paddingLeft: '20px', fontSize: '0.9em', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                <li><code style={codeInlineStyle}>.call(context, arg1, arg2)</code> &mdash; принимает аргументы <b>через запятую</b>.</li>
-                                <li><code style={codeInlineStyle}>.apply(context, [arg1, arg2])</code> &mdash; принимает аргументы <b>в виде массива</b>.</li>
-                            </ul>
+                        {/* Код в точности как на вашем скриншоте */}
+                        <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #b5f5ec', padding: '15px', margin: 0, fontSize: '0.88em' }}>
+{`function greet(greeting) {
+  return \`\${greeting}, я \${this.name}\`
+}
+
+const user = { name: 'Катя' }
+const admin = { name: 'Иван' }
+
+// ⚡ call — вызов сразу, аргументы через запятую
+greet.call(user, 'Привет')     // 'Привет, я Катя'
+greet.call(admin, 'Здравствуй') // 'Здравствуй, я Иван'
+
+// ⚡ apply — вызов сразу, аргументы массивом
+greet.apply(user, ['Привет']) // 'Привет, я Катя'
+
+// ⚡ bind — возвращает НОВУЮ функцию с привязанным this (без мгновенного вызова)
+const greetKate = greet.bind(user)
+greetKate('Привет') // 'Привет, я Катя' ✅
+greetKate('Пока')   // 'Пока, я Катя'   ✅`}
+    </pre>
+
+                        {/* Небольшая памятка по разнице для закрепления */}
+                        <div style={{ backgroundColor: '#e6f7ff', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #1890ff', fontSize: '0.9em', marginTop: '12px', color: '#0050b3' }}>
+                            💡 <b>Как легко запомнить разницу:</b><br />
+                            • <b>C</b>all — аргументы через <b>C</b>omma (запятую).<br />
+                            • <b>A</b>pply — аргументы через <b>A</b>rray (массив).<br />
+                            • <b>B</b>ind — создает <b>B</b>ound function (новую связанную функцию).
                         </div>
                     </div>
+
 
                     {/* Стрелочные функции в ООП */}
                     <div style={{ backgroundColor: '#fff7e6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ffa940', marginTop: '25px' }}>
@@ -1447,6 +1459,79 @@ const tesla = new Autopilot("Tesla");
 setTimeout(tesla.start, 1000); // ✅ Работает через секунду! Контекст не потерялся.`}
         </pre>
                     </div>
+                    {/* Сводная таблица по всем режимам определения this */}
+                    <div style={{ marginTop: '30px', fontFamily: 'sans-serif' }}>
+                        <h3 style={{ fontSize: '18px', color: '#006d75', marginBottom: '15px' }}>Итоговая таблица: Чему равен this?</h3>
+
+                        <div style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid #b5f5ec' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.92em' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#e6fffb', borderBottom: '1px solid #b5f5ec' }}>
+                                    <th style={{ padding: '12px 16px', color: '#006d75', fontWeight: '500', width: '45%' }}>Как вызвана</th>
+                                    <th style={{ padding: '12px 16px', color: '#006d75', fontWeight: '500', width: '55%' }}><code style={codeInlineStyle}>this</code> равен</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {/* Глобально (non-strict) */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px' }}>Глобально (non-strict)</td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>window</code> / <code style={codeInlineStyle}>global</code></td>
+                                </tr>
+                                {/* Глобально (strict) */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px' }}>Глобально (strict)</td>
+                                    <td style={{ padding: '12px 16px', color: '#cf1322', fontWeight: '500' }}><code style={codeInlineStyle}>undefined</code></td>
+                                </tr>
+                                {/* Метод объекта */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px' }}>Метод объекта <code style={codeInlineStyle}>obj.fn()</code></td>
+                                    <td style={{ padding: '12px 16px', fontWeight: '500' }}><code style={codeInlineStyle}>obj</code></td>
+                                </tr>
+                                {/* new Class() */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>new Class()</code></td>
+                                    <td style={{ padding: '12px 16px', color: '#389e0d' }}>Новый инстанс (экземпляр)</td>
+                                </tr>
+                                {/* fn.call(ctx) */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>fn.call(ctx)</code></td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>ctx</code></td>
+                                </tr>
+                                {/* fn.apply(ctx) */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0', backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>fn.apply(ctx)</code></td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>ctx</code></td>
+                                </tr>
+                                {/* fn.bind(ctx)() */}
+                                <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>fn.bind(ctx)()</code></td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>ctx</code></td>
+                                </tr>
+                                {/* Стрелочная функция */}
+                                <tr style={{ backgroundColor: '#fafafa' }}>
+                                    <td style={{ padding: '12px 16px' }}>Стрелочная функция <code style={codeInlineStyle}>() =&gt; &#123;&#125;</code></td>
+                                    <td style={{ padding: '12px 16px' }}><code style={codeInlineStyle}>this</code> внешнего контекста (лексического)</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Главное правило и исключение в точности как на скриншоте */}
+                        <div style={{
+                            backgroundColor: '#f5f5f5',
+                            padding: '15px 18px',
+                            borderRadius: '8px',
+                            borderLeft: '4px solid #595959',
+                            fontSize: '0.98em',
+                            marginTop: '20px',
+                            lineHeight: '1.6'
+                        }}>
+                            • <b>Главное правило:</b> <code style={codeInlineStyle}>this</code> определяется в момент вызова, а не написания.
+                            <br />
+                            • <b>Исключение &mdash; стрелочные функции:</b> их <code style={codeInlineStyle}>this</code> фиксируется в момент создания.
+                        </div>
+                    </div>
+
                 </section>
 
 
