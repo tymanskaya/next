@@ -1347,6 +1347,37 @@ sayHiStrict();`}
                         </div>
                     </div>
 
+                    {/* Подраздел 2. Метод объекта и потеря контекста для вставки в #thisKeyword */}
+                    <div style={{ marginTop: '30px', borderTop: '1px dashed #b5f5ec', paddingTop: '20px', fontFamily: 'sans-serif' }}>
+                        <h3 style={{ fontSize: '18px', color: '#006d75', margin: '0 0 10px 0' }}>2. Метод объекта и потеря контекста (Implicit Binding)</h3>
+                        <p style={{ fontSize: '0.95em', lineHeight: '1.5', color: '#333', margin: '0 0 15px 0' }}>
+                            Когда функция вызывается как метод объекта (через точку), её <code style={codeInlineStyle}>this</code> указывает на сам объект. Но если оторвать метод от объекта и скопировать в переменную — контекст теряется!
+                        </p>
+
+                        <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #b5f5ec', padding: '15px', margin: 0, fontSize: '0.88em' }}>
+{`// 🔵 Вызов метода объекта — this = сам объект перед точкой
+const user = {
+  name: 'Катя',
+  greet() {
+    return \`Привет, я \${this.name}\`  // this указывает на объект user
+  }
+}
+
+console.log(user.greet());  // 'Привет, я Катя' ✅
+
+// ⚠️ Важно — контекст зависит от того, кто ВЫЗЫВАЕТ, а не где написано
+const greet = user.greet;   // вытащили функцию и записали в переменную (оторвали от объекта)
+
+// Вызов функции без объекта ("в лоб")
+console.log(greet());       // 'Привет, я undefined' ❌ (в нестрогом режиме)
+                            // Либо падение с ошибкой TypeError (в 'use strict')
+                            // this больше не указывает на user!`}
+    </pre>
+
+                        <div style={{ backgroundColor: '#e6f7ff', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #1890ff', fontSize: '0.9em', marginTop: '12px', color: '#0050b3' }}>
+                            💡 <b>Ментальное правило:</b> Посмотрите на строчку, где вызывается функция (со скобками <code style={codeInlineStyle}>()</code>). Если прямо перед скобками **есть точка** (например, <code style={codeInlineStyle}>user.greet()</code>), то <code style={codeInlineStyle}>this</code> равен тому, что стоит слева от точки. Если точки нет (<code style={codeInlineStyle} >greet()</code>), контекст потерян.
+                        </div>
+                    </div>
 
                     {/* Пример потери контекста */}
                     <div style={{ marginTop: '15px' }}>
