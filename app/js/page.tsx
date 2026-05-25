@@ -1459,6 +1459,38 @@ const tesla = new Autopilot("Tesla");
 setTimeout(tesla.start, 1000); // ✅ Работает через секунду! Контекст не потерялся.`}
         </pre>
                     </div>
+                    {/* Подраздел 5. Стрелочные функции для вставки в #thisKeyword */}
+                    <div style={{ marginTop: '30px', borderTop: '1px dashed #b5f5ec', paddingTop: '20px', fontFamily: 'sans-serif' }}>
+                        <h3 style={{ fontSize: '18px', color: '#006d75', margin: '0 0 10px 0' }}>4. Контекст в стрелочных функциях (Lexical Binding)</h3>
+                        <p style={{ fontSize: '0.95em', lineHeight: '1.5', color: '#333', margin: '0 0 15px 0' }}>
+                            У стрелочных функций <span style={{ fontWeight: 'bold' }}>нет собственного контекста вызова</span>. При обращении к <code style={codeInlineStyle}>this</code> они не смотрят на то, кто их вызвал — они берут значение из внешнего окружения. Их контекст фиксируется раз и навсегда в момент создания.
+                        </p>
+
+                        <pre style={{ ...codeBlockStyle, backgroundColor: '#fff', border: '1px solid #b5f5ec', padding: '15px', margin: 0, fontSize: '0.88em' }}>
+{`// 🏹 Стрелочная функция — this берётся из внешнего контекста
+const obj = {
+  name: 'Катя',
+  // Обычный метод объекта создаёт контекст
+  regularMethod() {
+    // Стрелка внутри метода возьмет this у regularMethod (то есть obj)
+    const arrow = () => console.log(this.name);
+    arrow();
+  },
+  // Стрелка как метод объекта — внешним контекстом для неё будет являться window!
+  arrowMethod: () => {
+    console.log(this.name); 
+  }
+};
+
+obj.regularMethod(); // 'Катя' ✅ (стрелка заглянула на один уровень вверх)
+obj.arrowMethod();   // undefined ❌ (стрелка вышла на глобальный уровень window/global)`}
+    </pre>
+
+                        <div style={{ backgroundColor: '#fff7e6', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #ffa940', fontSize: '0.9em', marginTop: '12px', color: '#d46b08' }}>
+                            ⚠️ <b>Важное правило для классов:</b> Именно из-за этого свойства стрелки идеальны для методов классов, которые передаются как колбэки (например, в обработчики кликов React или <code style={codeInlineStyle}>setTimeout</code>). Метод-стрелка внутри класса намертво привязывается к создаваемому инстансу и никогда не потеряет свой <code style={codeInlineStyle}>this</code>.
+                        </div>
+                    </div>
+
                     {/* Сводная таблица по всем режимам определения this */}
                     <div style={{ marginTop: '30px', fontFamily: 'sans-serif' }}>
                         <h3 style={{ fontSize: '18px', color: '#006d75', marginBottom: '15px' }}>Итоговая таблица: Чему равен this?</h3>
