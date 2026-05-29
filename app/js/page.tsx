@@ -2428,6 +2428,46 @@ for (let i = 0, len = fruits.length; i < len; i++) {
   console.log(fruits[i]);
 }`}
   </pre>
+                        <div style={{ marginTop: '40px', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif', color: '#334155' }}>
+                            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '12px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+                                ❓ Обязательны ли все 3 элемента в цикле for?
+                            </h2>
+
+                            <p style={{ fontSize: '15px', color: '#475569', marginBottom: '16px', lineHeight: '1.6' }}>
+                                <strong>Нет, не обязательны.</strong> Вы можете пропустить инициализацию, условие или шаг. Главное — сохранить две точки с запятой <code style={{ backgroundColor: '#f1f5f9', padding: '2px 4px', borderRadius: '4px', fontFamily: 'monospace' }}>; ;</code> внутри круглых скобок.
+                            </p>
+
+                            <pre style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '16px',
+                                overflowX: 'auto',
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '14px',
+                                color: '#334155',
+                                whiteSpace: 'pre'
+                            }}>
+{`// 1. Без инициализации (если переменная создана ранее)
+let i = 0;
+for (; i < 3; i++) {
+  console.log(i);
+}
+
+// 2. Без шага (изменяем счетчик внутри тела)
+for (let j = 0; j < 6; ) {
+  console.log(j);
+  j += 2; 
+}
+
+// 3. Без условий и параметров (бесконечный цикл)
+for (;;) {
+  console.log("Работаю вечно...");
+  if (Math.random() > 0.8) break; // Обязательный ручной break
+}`}
+  </pre>
+                        </div>
+
                     </div>
 
                     {/* Блок 1 */}
