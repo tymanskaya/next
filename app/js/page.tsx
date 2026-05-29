@@ -83,6 +83,9 @@ export default function JavaScriptOOP() {
                     <a href="#thisKeyword" onClick={(e) => handleScroll(e, 'thisKeyword')} style={anchorLinkStyle}>
                         🎯 Контекст вызова (this)
                     </a>
+                    <a href="#cycle" onClick={(e) => handleScroll(e, 'cycle')} style={anchorLinkStyle}>
+                        🔄 Циклы в JavaScript
+                    </a>
 
                 </div>
             </aside>
@@ -2291,7 +2294,9 @@ obj.arrowMethod();   // undefined ❌ (стрелка вышла на глоба
 
                 </section>
                 {/* !!!!!!! ЦИКЛЫ*/}
-                <div style={{
+                <div
+                    id="cycle"
+                    style={{
                     width: '100%',
                     padding: '30px',
                     backgroundColor: '#ffffff',
@@ -2303,6 +2308,7 @@ obj.arrowMethod();   // undefined ❌ (стрелка вышла на глоба
                     boxSizing: 'border-box',
                     marginTop: '24px',
                     marginBottom: '24px'
+
                 }}>
 
                     {/* Шапка конспекта */}
@@ -2320,7 +2326,7 @@ obj.arrowMethod();   // undefined ❌ (стрелка вышла на глоба
                     </h1>
 
                     {/* Инфо-блок с бирюзовой линией */}
-                    <div style={{
+                    <div  style={{
                         borderLeft: '4px solid #06b6d4',
                         backgroundColor: 'rgba(236, 254, 255, 0.5)',
                         padding: '16px',
@@ -2373,6 +2379,56 @@ obj.arrowMethod();   // undefined ❌ (стрелка вышла на глоба
                             <div><strong style={{ color: '#db2777', fontWeight: '600' }}>Методы массивов (forEach, map)</strong>: современный функциональный подход.</div>
                         </li>
                     </ul>
+
+                    <div style={{ marginTop: '40px', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif', color: '#334155' }}>
+                        <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '12px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+                            ⛏️ Глубокий разбор классического цикла for
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#475569', marginBottom: '16px', lineHeight: '1.6' }}>
+                            Синтаксис <code style={{ backgroundColor: '#f1f5f9', padding: '2px 4px', borderRadius: '4px' }}>for (инициализация; условие; шаг)</code> управляет итерациями по строгой цепочке событий:
+                        </p>
+
+                        {/* Карточки этапов выполнения */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '24px' }}>
+                            <div style={{ padding: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+                                <span style={{ fontWeight: '700', color: '#0f172a', display: 'block', marginBottom: '4px' }}>1. Инициализация</span>
+                                <span style={{ fontSize: '14px', color: '#64748b' }}>Выполняется 1 раз при старте. Создает изолированный счетчик.</span>
+                            </div>
+                            <div style={{ padding: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+                                <span style={{ fontWeight: '700', color: '#0f172a', display: 'block', marginBottom: '4px' }}>2. Проверка условия</span>
+                                <span style={{ fontSize: '14px', color: '#64748b' }}>Срабатывает ДО тела цикла. Если false — цикл завершается.</span>
+                            </div>
+                            <div style={{ padding: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+                                <span style={{ fontWeight: '700', color: '#0f172a', display: 'block', marginBottom: '4px' }}>3. Шаг (Инкремент)</span>
+                                <span style={{ fontSize: '14px', color: '#64748b' }}>Срабатывает ПОСЛЕ тела цикла, изменяя значение счетчика.</span>
+                            </div>
+                        </div>
+
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#334155',
+                            whiteSpace: 'pre'
+                        }}>
+{`// 🔁 Обход массива с конца (Обратный счетчик)
+const fruits = ['яблоко', 'банан', 'груша'];
+
+for (let i = fruits.length - 1; i >= 0; i--) {
+  console.log(fruits[i]); // 'груша', 'банан', 'яблоко'
+}
+
+// ⚡ Оптимальное кэширование длины для больших массивов
+for (let i = 0, len = fruits.length; i < len; i++) {
+  console.log(fruits[i]);
+}`}
+  </pre>
+                    </div>
 
                     {/* Блок 1 */}
                     <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b', marginTop: '32px', marginBottom: '12px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
