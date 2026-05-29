@@ -2467,6 +2467,87 @@ for (;;) {
 }`}
   </pre>
                         </div>
+                        <div style={{ marginTop: '40px', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif', color: '#334155' }}>
+                            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '12px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+                                📦 Вложенные циклы (Nested Loops)
+                            </h2>
+
+                            <p style={{ fontSize: '15px', color: '#475569', marginBottom: '16px', lineHeight: '1.6' }}>
+                                Цикл можно вложить внутрь другого цикла. Внутренний цикл будет полностью выполнять <strong>все свои итерации</strong> на каждый отдельный шаг внешнего цикла. Обычно это применяется для обхода матриц (двумерных массивов) или координатных сеток.
+                            </p>
+
+                            {/* Важное правило для вложенных циклов */}
+                            <div style={{
+                                borderLeft: '4px solid #f59e0b',
+                                backgroundColor: '#fef3c7',
+                                padding: '12px 16px',
+                                borderRadius: '0 6px 6px 0',
+                                marginBottom: '20px',
+                                fontSize: '14px',
+                                color: '#78350f'
+                            }}>
+                                ⚠️ <strong>Правило именования:</strong> Никогда не используйте одно и то же имя переменной (например, <code style={{ fontFamily: 'monospace' }}>i</code>) для внешнего и внутреннего циклов. Это приведет к перезаписи счетчика и бесконечному зацикливанию. Стандартные имена для вложенных циклов: <code style={{ fontFamily: 'monospace' }}>i</code>, <code style={{ fontFamily: 'monospace' }}>j</code>, <code style={{ fontFamily: 'monospace' }}>k</code>.
+                            </div>
+
+                            <pre style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '16px',
+                                overflowX: 'auto',
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '14px',
+                                color: '#334155',
+                                marginBottom: '24px',
+                                whiteSpace: 'pre'
+                            }}>
+{`// 📊 Обход двумерного массива (матрицы / таблицы)
+const matrix = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+];
+
+// Внешний цикл идет по строкам (i)
+for (let i = 0; i < matrix.length; i++) {
+  
+  // Внутренний цикл идет по элементам внутри строки (j)
+  for (let j = 0; j < matrix[i].length; j++) {
+    console.log(\`Элемент матрицы [\${i}][\${j}]:\`, matrix[i][j]);
+  }
+}`}
+  </pre>
+
+                            <h3 style={{ fontSize: '15px', fontWeight: '600', color: '#0f172a', margin: '16px 0 8px 0' }}>
+                                🏷️ Метки для выхода из вложенных циклов (Labels)
+                            </h3>
+                            <p style={{ fontSize: '15px', color: '#475569', marginBottom: '12px' }}>
+                                Обычный <code style={{ backgroundColor: '#f1f5f9', padding: '2px 4px', borderRadius: '4px' }}>break</code> прерывает только тот цикл, в котором он находится (внутренний). Если нужно по условию выйти сразу из <strong>обоих</strong> циклов, используются специальные метки:
+                            </p>
+
+                            <pre style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '16px',
+                                overflowX: 'auto',
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '14px',
+                                color: '#334155',
+                                whiteSpace: 'pre'
+                            }}>
+{`// Устанавливаем метку "outerLoop" перед внешним циклом
+outerLoop: for (let i = 0; i < 3; i++) {
+  for (let j = 0; j < 3; j++) {
+    if (i === 1 && j === 1) {
+      console.log('Нашли нужную точку. Прерываем ВСЕ циклы!');
+      break outerLoop; // Выходит сразу из внешнего цикла
+    }
+    console.log(\`i:\${i}, j:\${j}\`);
+  }
+}`}
+  </pre>
+                        </div>
 
                     </div>
 
