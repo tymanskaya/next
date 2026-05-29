@@ -2551,6 +2551,118 @@ outerLoop: for (let i = 0; i < 3; i++) {
 
                     </div>
 
+                    <div style={{ marginTop: '40px', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif', color: '#334155' }}>
+                        <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '12px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+                            ⏳ Циклы с условием: while и do...while
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#475569', marginBottom: '16px', lineHeight: '1.6' }}>
+                            В отличие от цикла <code style={{ backgroundColor: '#f1f5f9', padding: '2px 4px', borderRadius: '4px' }}>for</code>, эти циклы используются тогда, когда количество шагов **неизвестно заранее**. Они работают до тех пор, пока выполняется определенное логическое условие.
+                        </p>
+
+                        {/* Сравнение двух циклов */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+
+                            {/* Карточка WHILE */}
+                            <div style={{ padding: '16px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+      <span style={{ fontWeight: '700', color: '#0f172a', display: 'block', marginBottom: '6px' }}>
+        🟢 Cycle WHILE (С предусловием)
+      </span>
+                                <span style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', display: 'block' }}>
+        Проверяет условие <strong>ДО</strong> выполнения кода. Если условие изначально ложно (<code style={{ fontFamily: 'monospace' }}>false</code>), тело цикла не выполнится <strong>ни разу</strong>.
+      </span>
+                            </div>
+
+                            {/* Карточка DO WHILE */}
+                            <div style={{ padding: '16px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+      <span style={{ fontWeight: '700', color: '#0f172a', display: 'block', marginBottom: '6px' }}>
+        🔵 Cycle DO...WHILE (С постусловием)
+      </span>
+                                <span style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', display: 'block' }}>
+        Проверяет условие <strong>ПОСЛЕ</strong> выполнения кода. Это гарантирует, что тело цикла выполнится <strong>минимум один раз</strong> в любом случае.
+      </span>
+                            </div>
+
+                        </div>
+
+                        {/* Код для while */}
+                        <h3 style={{ fontSize: '15px', fontWeight: '600', color: '#0f172a', margin: '16px 0 8px 0' }}>
+                            1. Использование классического цикла while
+                        </h3>
+                        <p style={{ fontSize: '14px', color: '#475569', margin: '0 0 12px 0' }}>
+                            Часто применяется в задачах, где состояние меняется динамически под воздействием внешних факторов (например, генерация случайных чисел, чтение потока данных или игровая логика):
+                        </p>
+
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#334155',
+                            marginBottom: '24px',
+                            whiteSpace: 'pre'
+                        }}>
+{`// Пример: Имитация бросков кубика, пока не выпадет шестерка
+let diceResult = 0;
+let attempts = 0;
+
+while (diceResult !== 6) {
+  diceResult = Math.floor(Math.random() * 6) + 1;
+  attempts++;
+  console.log(\`Бросок №\${attempts}: Выпало \${diceResult}\`);
+}
+
+console.log(\`Ура! Шестерка выпала с \${attempts}-й попытки.\`);`}
+  </pre>
+
+                        {/* Код для do while */}
+                        <h3 style={{ fontSize: '15px', fontWeight: '600', color: '#0f172a', margin: '16px 0 8px 0' }}>
+                            2. Особенность цикла do...while
+                        </h3>
+                        <p style={{ fontSize: '14px', color: '#475569', margin: '0 0 12px 0' }}>
+                            Идеально подходит для сценариев интерактивного взаимодействия, когда перед проверкой условия нужно совершить обязательное действие (например, запросить ввод у пользователя):
+                        </p>
+
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#334155',
+                            marginBottom: '24px',
+                            whiteSpace: 'pre'
+                        }}>
+{`// Пример: Запрос ввода пароля (выполнится минимум 1 раз для проверки)
+let password = "";
+
+do {
+  // В реальном браузере это был бы prompt(), здесь имитируем логику
+  password = prompt("Введите мастер-пароль:");
+} while (password !== "secret123");
+
+console.log("Доступ успешно предоставлен!");`}
+  </pre>
+
+                        {/* Опасность бесконечных циклов */}
+                        <div style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b'
+                        }}>
+                            🚨 <strong>Критическая ошибка новичков:</strong> Внутри тела <code style={{ fontFamily: 'monospace' }}>while</code> обязательно должно происходить изменение переменных, участвующих в условии (например, инкремент или смена флага). Если забыть изменить условие внутри фигурных скобок, цикл станет бесконечным, процессор загрузится на 100%, а вкладка намертво зависнет.
+                        </div>
+
+                    </div>
+
                     {/* Блок 1 */}
                     <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b', marginTop: '32px', marginBottom: '12px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
                         1. Глобальный контекст и обычный вызов (Default Binding)
