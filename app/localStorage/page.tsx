@@ -38,75 +38,75 @@ export default function WebStorageCheatSheet() {
     };
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f0f2f5', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+        <div style={{ display: 'flex', gap: '30px', padding: '20px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
         {/* БОКОВОЕ МЕНЮ (SIDEBAR) */}
-    <aside style={{
-        width: '260px',
-        backgroundColor: '#fff',
-        borderRight: '1px solid #d1d9e0',
-        position: 'fixed',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        padding: '30px 20px',
-        display: 'flex',
-        flexDirection: 'column',
-        boxShadow: '2px 0 10px rgba(0,0,0,0.02)',
-        zIndex: 100
-    }}>
-        {/* Логотип/Название справочника */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '30px', paddingLeft: '10px' }}>
-            <div style={{ backgroundColor: '#00d8ff', width: '8px', height: '24px', borderRadius: '4px' }}></div>
-            <span style={{ fontWeight: '800', fontSize: '18px', color: '#1f2328' }}>DevDocs</span>
-        </div>
+            {/* БОКОВОЕ МЕНЮ (SIDEBAR) */}
+            <aside style={{ width: '280px', position: 'sticky', top: '20px', height: 'fit-content' }}>
+                <div style={{ backgroundColor: '#fafafa', padding: '15px', borderRadius: '12px', border: '1px solid #f0f0f0' }}>
+                    <p style={sidebarTitleStyle}>На этой странице</p>
+                    <a href="#localStorage" style={anchorLinkStyle}>
+                        🔹 localStorage
+                    </a>
+                    <a href="#sessionStorage" style={anchorLinkStyle}>
+                        🔹 sessionStorage
+                    </a>
 
-        {/* Основные разделы (Глобальная навигация приложения) */}
-        <div style={{ marginBottom: '25px' }}>
-            <p style={sidebarTitleStyle}>Страницы</p>
-            <button onClick={() => router.push('/git')} style={getSidebarLinkStyle(pathname === '/git')}>
-                🪵 Git Справочник
-            </button>
-            <button onClick={() => router.push('/localStorage')} style={getSidebarLinkStyle(pathname === '/localStorage')}>
-                💾 Web Storage
-            </button>
-            <button onClick={() => router.push('/hooks')} style={getSidebarLinkStyle(pathname === '/hooks')}>
-                ⚛️ React Hooks
-            </button>
-        </div>
+                    <a href="#JSON" style={anchorLinkStyle}>
+                        🔹 Сериализация структур данных
+                    </a>
+                    <a href="#limitmemory" style={anchorLinkStyle}>
+                        🔹 Лимиты памяти и ограничения объемов
+                    </a>
+                    <a href="#integrationnext" style={anchorLinkStyle}>
+                        🔹 Специфика интеграции в Next.js
+                    </a>
 
-        {/* Содержимое текущей страницы (Якорные ссылки) */}
-        <div>
-            <p style={sidebarTitleStyle}>На этой странице</p>
-            <a href="#localStorage" style={anchorLinkStyle}>
-                🔹 localStorage
-            </a>
-            <a href="#sessionStorage" style={anchorLinkStyle}>
-                🔹 sessionStorage
-            </a>
+                </div>
+            </aside>
+            <aside style={{
+                width: '260px',
+                backgroundColor: '#fff',
+                borderRight: '1px solid #d1d9e0',
+                position: 'fixed',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                padding: '30px 20px',
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: '2px 0 10px rgba(0,0,0,0.02)',
+                zIndex: 100
+            }}>
+                {/* Логотип/Название справочника */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '30px', paddingLeft: '10px' }}>
+                    <div style={{ backgroundColor: '#00d8ff', width: '8px', height: '24px', borderRadius: '4px' }}></div>
+                    <span style={{ fontWeight: '800', fontSize: '18px', color: '#1f2328' }}>DevDocs</span>
+                </div>
 
-            <a href="#JSON" style={anchorLinkStyle}>
-                🔹 Сериализация структур данных
-            </a>
-            <a href="#limitmemory" style={anchorLinkStyle}>
-                🔹 Лимиты памяти и ограничения объемов
-            </a>
-            <a href="#integrationnext" style={anchorLinkStyle}>
-                🔹 Специфика интеграции в Next.js
-            </a>
+                {/* Основные разделы (Глобальная навигация приложения) */}
+                <div style={{ marginBottom: '25px' }}>
+                    <p style={sidebarTitleStyle}>Страницы</p>
+                    <button onClick={() => router.push('/git')} style={getSidebarLinkStyle(pathname === '/git')}>
+                        🪵 Git Справочник
+                    </button>
+                    <button onClick={() => router.push('/localStorage')} style={getSidebarLinkStyle(pathname === '/localStorage')}>
+                        💾 Web Storage
+                    </button>
+                    <button onClick={() => router.push('/hooks')} style={getSidebarLinkStyle(pathname === '/hooks')}>
+                        ⚛️ React Hooks
+                    </button>
+                    <button onClick={() => router.push('/js')} style={getSidebarLinkStyle(pathname === '/js')}>
+                        ⚛️ JavaScript
+                    </button>
 
-        </div>
-    </aside>
-        <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            minHeight: '100vh',
-            backgroundColor: '#f0f2f5',
-            padding: '40px 20px',
-            fontFamily: 'system-ui, -apple-system, sans-serif',
-            lineHeight: '1.6'
-        }}>
-            <div style={{ width: '100%', maxWidth: '850px', display: 'flex', flexDirection: 'column', gap: '25px' }}>
+                </div>
+
+                {/* Содержимое текущей страницы (Якорные ссылки) */}
+
+            </aside>
+
+            <main style={{flex: 1, display: 'flex', flexDirection: 'column', gap: '40px'}}>
+                <div style={{ width: '100%', maxWidth: '800px', display: 'flex', flexDirection: 'column', gap: '25px' }}>
 
                 {/* ЕДИНАЯ КРАСИВАЯ ШАПКА СТРАНИЦЫ */}
                 <div style={{ textAlign: 'center', marginBottom: '20px' }}>
@@ -325,8 +325,8 @@ if (rawData) {
                     </div>
                 </section>
 
-            </div>
-        </div>
+                </div>
+            </main>
         </div>
     );
 }

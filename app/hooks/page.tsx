@@ -145,6 +145,10 @@ export default function ReactHooksCheatSheet() {
                     <button onClick={() => router.push('/hooks')} style={getSidebarLinkStyle(pathname === '/hooks')}>
                         ⚛️ React Hooks
                     </button>
+                    <button onClick={() => router.push('/js')} style={getSidebarLinkStyle(pathname === '/js')}>
+                        ⚛️ JavaScript
+                    </button>
+
                 </div>
 
                 {/* Содержимое текущей страницы (Якорные ссылки) */}

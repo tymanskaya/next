@@ -61,7 +61,7 @@ export default function JavaScriptOOP() {
             {/* Левый Сайдбар навигации */}
             <aside style={{ width: '280px', position: 'sticky', top: '20px', height: 'fit-content' }}>
                 <div style={{ backgroundColor: '#fafafa', padding: '15px', borderRadius: '12px', border: '1px solid #f0f0f0' }}>
-                    <p style={sidebarTitleStyle}>JavaScript & ООП</p>
+                    <p style={sidebarTitleStyle}>На этой странице</p>
                     <a href="#oopBase" onClick={(e) => handleScroll(e, 'oopBase')} style={anchorLinkStyle}>
                         🧱 Что такое ООП (База)
                     </a>
