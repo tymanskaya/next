@@ -29,15 +29,6 @@ export const Header = () => {
                         Back
                     </button>
                 </li>
-
-                <li>
-                    <button
-                        onClick={() => router.push("/")}
-                        className={`${styles.link} ${isActive("/") ? styles.active : ""}`}
-                    >
-                        Main
-                    </button>
-                </li>
                 <li>
                     <button
                         onClick={() => router.push("/git")}
@@ -68,22 +59,6 @@ export const Header = () => {
                         className={`${styles.link} ${isActive("/js") ? styles.active : ""}`}
                     >
                         JavaScript
-                    </button>
-                </li>
-                <li>
-                    <button
-                        onClick={() => router.push("/profile")}
-                        className={`${styles.link} ${isActive("/profile") ? styles.active : ""}`}
-                    >
-                        Profile
-                    </button>
-                </li>
-                <li>
-                    <button
-                        onClick={() => router.push("/profile/123")}
-                        className={`${styles.link} ${isActive("/profile/123") ? styles.active : ""}`}
-                    >
-                        Profile 123
                     </button>
                 </li>
                 <li>
