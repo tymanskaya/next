@@ -8,7 +8,7 @@ export default function ReactHooksCheatSheet() {
     const router = useRouter();
 
     // Общий стиль для ссылок меню
-    const getSidebarLinkStyle = (isActive) => ({
+    const getSidebarLinkStyle = (isActive: boolean): React.CSSProperties  => ({
         display: 'block',
         width: '100%',
         padding: '10px 15px',
@@ -31,7 +31,7 @@ export default function ReactHooksCheatSheet() {
         fontFamily: 'monospace',
         fontSize: '0.9em',
         color: '#c41d7f'
-    };
+    } as const;
 
     const codeBlockStyle = {
         display: 'block',
@@ -44,7 +44,7 @@ export default function ReactHooksCheatSheet() {
         overflowX: 'auto',
         margin: '8px 0 0 0',
         whiteSpace: 'pre-wrap'
-    };
+    } as const;
 
     const paramRowStyle = {
         display: 'flex',
@@ -52,7 +52,7 @@ export default function ReactHooksCheatSheet() {
         gap: '4px',
         paddingBottom: '10px',
         borderBottom: '1px solid #f0f0f0'
-    };
+    } as const;
 
     const paramCodeStyle = {
         backgroundColor: '#f9f0ff',
@@ -63,7 +63,7 @@ export default function ReactHooksCheatSheet() {
         color: '#531dab',
         alignSelf: 'flex-start',
         fontWeight: 'bold'
-    };
+    } as const;
 
 
     return (
@@ -581,7 +581,7 @@ dispatch({ type: 'add', payload: 'Купить молоко' });`}
                                         <div style={paramRowStyle}>
                                             <code style={{...paramCodeStyle, backgroundColor: '#f6ffed', color: '#237804'}}>Элемент 1: state</code>
                                             <p style={{ margin: 0, fontSize: '0.95em' }}>
-                                                Текущее состояние компонента для чтения. При первом рендере оно равно <code style={codeInlineStyle} Dark>initialArg</code> (или результату функции <code style={codeInlineStyle}>init</code>). Вы выводите свойства этой переменной прямо в верстку (например, <code style={codeInlineStyle}>state.user.name</code>).
+                                                Текущее состояние компонента для чтения. При первом рендере оно равно <code style={codeInlineStyle}>initialArg</code> (или результату функции <code style={codeInlineStyle}>init</code>). Вы выводите свойства этой переменной прямо в верстку (например, <code style={codeInlineStyle}>state.user.name</code>).
                                             </p>
                                         </div>
 
@@ -929,7 +929,7 @@ export default function Shop() {
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                             <p>
-                                <b>useTransition</b> &mdash; позволяет разделять обновления состояния на <b>срочные</b> (ввод текста в инпут, клики) и <b>фоновые</b> (рендеринг больших списков, графиков). Благодаря этому интерфейс приложения никогда не блокируется и не "зависает".
+                                <b>useTransition</b> &mdash; позволяет разделять обновления состояния на <b>срочные</b> (ввод текста в инпут, клики) и <b>фоновые</b> (рендеринг больших списков, графиков). Благодаря этому интерфейс приложения никогда не блокируется и не зависает.
                             </p>
 
                             <div style={{ backgroundColor: '#e6fffb', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #13c2c2' }}>
@@ -938,7 +938,7 @@ export default function Shop() {
                                     {`const [isPending, startTransition] = useTransition();`}
                                 </code>
                                 <ul style={{ margin: '10px 0 0 0', paddingLeft: '20px', fontSize: '0.9em', display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                    <li><b>startTransition:</b> Обертка для "тяжелых" изменений стейта, которые можно отложить.</li>
+                                    <li><b>startTransition:</b> Обертка для тяжелых изменений стейта, которые можно отложить.</li>
                                     <li><b>isPending:</b> Флаг, сообщающий, что тяжелые вычисления прямо сейчас идут в фоновом режиме.</li>
                                 </ul>
                             </div>
@@ -1222,7 +1222,7 @@ export default function Form() {
 }
 
 // Вспомогательные стили
-export const sidebarTitleStyle = {
+const sidebarTitleStyle = {
     fontSize: '11px',
     fontWeight: '700',
     color: '#8c95a0',
@@ -1231,7 +1231,7 @@ export const sidebarTitleStyle = {
     margin: '0 0 10px 10px'
 };
 
-export const anchorLinkStyle = {
+ const anchorLinkStyle = {
     display: 'block',
     padding: '8px 15px',
     color: '#57606a',

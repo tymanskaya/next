@@ -1,7 +1,26 @@
 "use client";
 import React, { useEffect } from 'react';
 import {usePathname, useRouter} from "next/navigation";
-import {anchorLinkStyle, sidebarTitleStyle} from "@/app/hooks/page";
+
+const sidebarTitleStyle = {
+    fontSize: '11px',
+    fontWeight: '700',
+    color: '#8c95a0',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    margin: '0 0 10px 10px'
+};
+
+const anchorLinkStyle = {
+    display: 'block',
+    padding: '8px 15px',
+    color: '#57606a',
+    fontSize: '13px',
+    fontWeight: '500',
+    textDecoration: 'none',
+    borderRadius: '6px',
+    transition: 'color 0.2s'
+};
 
 export default function WebStorageCheatSheet() {
     const pathname = usePathname();
@@ -344,3 +363,4 @@ const codeBlockStyle = {
     margin: '8px 0 0 0',
     whiteSpace: 'pre-wrap'
 };
+

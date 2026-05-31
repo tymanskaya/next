@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import JavaScriptOOP from "@/app/js/page";
 
 export default function Sidebar() {
     const pathname = usePathname();
