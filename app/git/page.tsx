@@ -1,5 +1,168 @@
+"use client";
+
+import {usePathname, useRouter} from "next/navigation";
+import React from "react";
+
 export default function Page() {
+    const pathname = usePathname();
+    const router = useRouter();
+
+    // Общий стиль для ссылок меню
+    const getSidebarLinkStyle = (isActive: boolean): React.CSSProperties  => ({
+        display: 'block',
+        width: '100%',
+        padding: '10px 15px',
+        borderRadius: '8px',
+        color: isActive ? '#0076ff' : '#57606a',
+        backgroundColor: isActive ? '#e6f7ff' : 'transparent',
+        fontWeight: isActive ? '600' : '500',
+        fontSize: '14px',
+        border: 'none',
+        textAlign: 'left',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        marginBottom: '4px',
+        textDecoration: 'none'
+    });
+    const codeInlineStyle = {
+        backgroundColor: '#f0f0f0',
+        padding: '2px 5px',
+        borderRadius: '4px',
+        fontFamily: 'monospace',
+        fontSize: '0.9em',
+        color: '#c41d7f'
+    } as const;
+
+    const codeBlockStyle = {
+        display: 'block',
+        backgroundColor: '#f5f5f5',
+        padding: '12px',
+        borderRadius: '6px',
+        fontFamily: 'monospace',
+        fontSize: '0.88em',
+        color: '#333',
+        overflowX: 'auto',
+        margin: '8px 0 0 0',
+        whiteSpace: 'pre-wrap'
+    } as const;
+
+    const paramRowStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px',
+        paddingBottom: '10px',
+        borderBottom: '1px solid #f0f0f0'
+    } as const;
+
+    const paramCodeStyle = {
+        backgroundColor: '#f9f0ff',
+        padding: '3px 8px',
+        borderRadius: '4px',
+        fontFamily: 'monospace',
+        fontSize: '0.92em',
+        color: '#531dab',
+        alignSelf: 'flex-start',
+        fontWeight: 'bold'
+    } as const;
     return (
+
+        <div style={{ display: 'flex', gap: '30px', padding: '20px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
+            <aside style={{ width: '280px', position: 'sticky', top: '20px', height: 'fit-content' }}>
+                <div style={{ backgroundColor: '#fafafa', padding: '15px', borderRadius: '12px', border: '1px solid #f0f0f0' }}>
+                    <p style={sidebarTitleStyle}>На этой странице</p>
+                    <a href="#git status" style={anchorLinkStyle}>
+                        🔹 Проверка состояния (git status)
+                    </a>
+                    <a href="#git diff" style={anchorLinkStyle}>
+                        🔹 Сравнение изменений (git diff)
+                    </a>
+                    <a href="#git log" style={anchorLinkStyle}>
+                        🔹 История изменений (git log)
+                    </a>
+                    <a href="#GitHub" style={anchorLinkStyle}>
+                        🔹 Размещение нового проекта на GitHub (с нуля)
+                    </a>
+                    <a href="#commit" style={anchorLinkStyle}>
+                        🔹 Локальные commit
+                    </a>
+                    <a href="#server" style={anchorLinkStyle}>
+                        🔹 Отправка на сервер
+                    </a>
+                    <a href="#deleteR" style={anchorLinkStyle}>
+                        🔹 Удаление из удаленного репозитория (GitHub)
+                    </a>
+                    <a href="#deleteRc" style={anchorLinkStyle}>
+                        🔹 Удаление коммитов из удаленного репозитория
+                    </a>
+
+                    <a href="#cloneR" style={anchorLinkStyle}>
+                        🔹 Клонирование репозитория:
+                    </a>
+                    <a href="#freedom" style={anchorLinkStyle}>
+                        🔹 Как дать доступ другому разработчику
+                    </a>
+                    <a href="#git pull" style={anchorLinkStyle}>
+                        🔹 Получение обновлений (git pull)
+                    </a>
+                    <a href="#fork" style={anchorLinkStyle}>
+                        🔹 Работа с чужими репозиториями
+                    </a>
+                    <a href="#GitHub Gist" style={anchorLinkStyle}>
+                        🔹 Публикация сниппетов (GitHub Gist)
+                    </a>
+                    <a href="#branches" style={anchorLinkStyle}>
+                        🔹 Ветки (Branches)
+                    </a>
+                    <a href="#Git Stash" style={anchorLinkStyle}>
+                    🔹 Временное хранилище (Git Stash / Unstash)
+                </a>
+                    <a href="#Local History" style={anchorLinkStyle}>
+                        🔹 Встроенная машина времени (WebStorm Local History)
+                    </a>
+
+                </div>
+            </aside>
+            <aside style={{
+                width: '260px',
+                backgroundColor: '#fff',
+                borderRight: '1px solid #d1d9e0',
+                position: 'fixed',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                padding: '30px 20px',
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: '2px 0 10px rgba(0,0,0,0.02)',
+                zIndex: 100
+            }}>
+                {/* Логотип/Название справочника */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '30px', paddingLeft: '10px' }}>
+                    <div style={{ backgroundColor: '#00d8ff', width: '8px', height: '24px', borderRadius: '4px' }}></div>
+                    <span style={{ fontWeight: '800', fontSize: '18px', color: '#1f2328' }}>DevDocs</span>
+                </div>
+
+                {/* Основные разделы (Глобальная навигация приложения) */}
+                <div style={{ marginBottom: '25px' }}>
+                    <p style={sidebarTitleStyle}>Страницы</p>
+                    <button onClick={() => router.push('/git')} style={getSidebarLinkStyle(pathname === '/git')}>
+                        🪵 Git Справочник
+                    </button>
+                    <button onClick={() => router.push('/localStorage')} style={getSidebarLinkStyle(pathname === '/localStorage')}>
+                        💾 Web Storage
+                    </button>
+                    <button onClick={() => router.push('/hooks')} style={getSidebarLinkStyle(pathname === '/hooks')}>
+                        ⚛️ React Hooks
+                    </button>
+                    <button onClick={() => router.push('/js')} style={getSidebarLinkStyle(pathname === '/js')}>
+                        ⚛️ JavaScript
+                    </button>
+
+                </div>
+
+                {/* Содержимое текущей страницы (Якорные ссылки) */}
+
+            </aside>
         <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -92,7 +255,7 @@ export default function Page() {
                     boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
                     fontFamily: 'sans-serif'
                 }}>
-                    <h2 style={{ marginTop: 0, color: '#263238', fontSize: '20px' }}>Проверка состояния (git status)</h2>
+                    <h2 id="git status" style={{ marginTop: 0, color: '#263238', fontSize: '20px' }}>Проверка состояния (git status)</h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <p><b>git status</b> &mdash; это самая главная команда для проверки текущего состояния твоего репозитория. Она показывает, на какой ты ветке и что происходит с твоими файлами.</p>
@@ -133,7 +296,7 @@ export default function Page() {
                     boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
                     fontFamily: 'sans-serif'
                 }}>
-                    <h2 style={{ marginTop: 0, color: '#d4380d', fontSize: '20px' }}>Сравнение изменений (git diff)</h2>
+                    <h2 id='git diff' style={{ marginTop: 0, color: '#d4380d', fontSize: '20px' }}>Сравнение изменений (git diff)</h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <p><b>git diff</b> &mdash; показывает разницу между твоим текущим (незакоммиченным) кодом в файлах и состоянием последнего коммита. Помогает проверить себя перед тем, как делать <code>git add</code>.</p>
@@ -171,7 +334,7 @@ export default function Page() {
                     boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
                     fontFamily: 'sans-serif'
                 }}>
-                    <h2 style={{ marginTop: 0, color: '#263238', fontSize: '20px' }}>История изменений (git log)</h2>
+                    <h2 id="git log" style={{ marginTop: 0, color: '#263238', fontSize: '20px' }}>История изменений (git log)</h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <p><b>git log</b> &mdash; выводит список всех коммитов в текущей ветке, начиная с самых свежих. Помогает понять, кто, когда и что изменял в проекте.</p>
@@ -196,7 +359,7 @@ export default function Page() {
                     </div>
                 </section>
 
-                <section style={{
+                <section  id="GitHub" style={{
                     backgroundColor: '#fff',
                     padding: '25px',
                     borderRadius: '12px',
@@ -260,7 +423,7 @@ export default function Page() {
 
 
                 {/* Секция: Локальные commit / Revert */}
-                <section style={{
+                <section id="commit" style={{
                     backgroundColor: '#fff',
                     padding: '20px',
                     borderRadius: '10px',
@@ -350,7 +513,7 @@ export default function Page() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '25px', padding: '20px', fontFamily: 'sans-serif', backgroundColor: '#f8f9fa' }}>
 
                 {/* Отправка на сервер */}
-                <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', borderTop: '5px solid #555', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                <div id="server" style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', borderTop: '5px solid #555', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
                     <p><b>Отправка на сервер:</b></p>
                     <ul style={{ margin: '10px 0 0 0', paddingLeft: '20px' }}>
                         <li style={{ marginBottom: '10px' }}><code style={{ backgroundColor: '#f0f0f0', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git push origin main</code> — Она отправляет ваши локальные коммиты из ветки main в удаленный репозиторий (например, на GitHub), который по умолчанию называется origin</li>
@@ -360,7 +523,7 @@ export default function Page() {
                 </div>
 
                 {/* Удаление из удаленного репозитория */}
-                <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', borderTop: '5px solid #ff4d4f', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                <div id="deleteR" style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', borderTop: '5px solid #ff4d4f', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
                     <p><b>Удаление из удаленного репозитория (GitHub):</b></p>
                     <ul style={{ margin: '10px 0', paddingLeft: '20px' }}>
                         <li style={{ marginBottom: '8px' }}><code style={{ backgroundColor: '#f0f0f0', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git rm --cached [file]</code> — убрать файл из Git, но <b>оставить</b> его на компьютере.</li>
@@ -371,7 +534,7 @@ export default function Page() {
                 </div>
 
                 {/* Удаление коммитов из удаленного репозитория */}
-                <div style={{ backgroundColor: '#fff5f5', padding: '20px', borderRadius: '10px', borderLeft: '5px solid #ff4d4f', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                <div id="#deleteRc" style={{ backgroundColor: '#fff5f5', padding: '20px', borderRadius: '10px', borderLeft: '5px solid #ff4d4f', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
                     <p><b>Удаление коммитов из удаленного репозитория:</b></p>
                     <ol style={{ paddingLeft: '20px', margin: '10px 0' }}>
                         <li>Сначала делаем локальный откат: <code style={{ backgroundColor: '#fff', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git reset --hard HEAD~1</code></li>
@@ -386,7 +549,7 @@ export default function Page() {
                 </div>
 
                 {/* Клонирование репозитория */}
-                <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', borderTop: '5px solid #4CAF50', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                <div id="cloneR" style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', borderTop: '5px solid #4CAF50', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
                     <p><b>Клонирование репозитория:</b></p>
                     <ul style={{ margin: '10px 0', paddingLeft: '20px' }}>
                         <li style={{ marginBottom: '8px' }}><code style={{ backgroundColor: '#f0f0f0', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git clone git@github.com:имя-пользователя/название-репозитория.git</code> — скачать проект на компьютер.</li>
@@ -396,7 +559,7 @@ export default function Page() {
                 </div>
 
                 {/* Как дать доступ */}
-                <div style={{ backgroundColor: '#f8f5ff', padding: '20px', borderRadius: '10px', borderTop: '5px solid #722ed1', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                <div id="freedom" style={{ backgroundColor: '#f8f5ff', padding: '20px', borderRadius: '10px', borderTop: '5px solid #722ed1', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
                     <p><b>Как дать доступ другому разработчику:</b></p>
                     <ol style={{ paddingLeft: '20px', margin: '10px 0' }}>
                         <li>GitHub &gt; Repository &gt; <b>Settings</b></li>
@@ -408,7 +571,7 @@ export default function Page() {
                 </div>
 
                 {/* Получение обновлений */}
-                <div style={{ backgroundColor: '#e3f2fd', padding: '20px', borderRadius: '10px', borderTop: '5px solid #2196F3', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                <div id="git pull" style={{ backgroundColor: '#e3f2fd', padding: '20px', borderRadius: '10px', borderTop: '5px solid #2196F3', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
                     <p><b>Получение обновлений (git pull):</b></p>
                     <div style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #2196F3', margin: '15px 0' }}>
                         <b>Зачем она нужна:</b> Чтобы ваш код на компьютере был актуальным и вы видели правки, которые сделали ваши коллеги или вы сами с другого устройства.
@@ -419,7 +582,7 @@ export default function Page() {
                     </ul>
                     <p style={{ fontSize: '0.9em', color: '#2196F3', marginTop: '15px' }}><i>💡 Совет: всегда делайте <b>pull</b> перед началом рабочего дня, чтобы работать с самой свежей версией проекта.</i></p>
                 </div>
-                <section style={{
+                <section id="fork" style={{
                     backgroundColor: '#fff',
                     padding: '25px',
                     borderRadius: '12px',
@@ -456,7 +619,7 @@ export default function Page() {
                         </div>
                     </div>
                 </section>
-                <section style={{
+                <section id="GitHub Gist" style={{
                     backgroundColor: '#fff',
                     padding: '25px',
                     borderRadius: '12px',
@@ -514,7 +677,7 @@ export default function Page() {
                     </div>
                 </section>
 
-                <section style={{
+                <section id="branches" style={{
                     backgroundColor: '#fff',
                     padding: '25px',
                     borderRadius: '12px',
@@ -679,7 +842,7 @@ export default function Page() {
 
                     </div>
                 </section>
-                <section style={{
+                <section id="Git Stash" style={{
                     backgroundColor: '#fff',
                     padding: '25px',
                     borderRadius: '12px',
@@ -718,7 +881,7 @@ export default function Page() {
                         </div>
                     </div>
                 </section>
-                <section style={{
+                <section id="Local History" style={{
                     backgroundColor: '#fff',
                     padding: '25px',
                     borderRadius: '12px',
@@ -759,5 +922,26 @@ export default function Page() {
 
 </div>
         </div>
+        </div>
     );
 }
+
+const sidebarTitleStyle = {
+    fontSize: '11px',
+    fontWeight: '700',
+    color: '#8c95a0',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    margin: '0 0 10px 10px'
+};
+
+const anchorLinkStyle = {
+    display: 'block',
+    padding: '8px 15px',
+    color: '#57606a',
+    fontSize: '13px',
+    fontWeight: '500',
+    textDecoration: 'none',
+    borderRadius: '6px',
+    transition: 'color 0.2s'
+};
