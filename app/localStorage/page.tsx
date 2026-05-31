@@ -25,7 +25,7 @@ const anchorLinkStyle = {
 export default function WebStorageCheatSheet() {
     const pathname = usePathname();
     const router = useRouter();
-    const getSidebarLinkStyle = (isActive) => ({
+    const getSidebarLinkStyle = (isActive: boolean): React.CSSProperties => ({
         display: 'block',
         width: '100%',
         padding: '10px 15px',
@@ -54,7 +54,7 @@ export default function WebStorageCheatSheet() {
         overflowX: 'auto',
         margin: '8px 0 0 0',
         whiteSpace: 'pre-wrap'
-    };
+    } as const;
 
     return (
         <div style={{ display: 'flex', gap: '30px', padding: '20px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
