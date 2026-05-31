@@ -7,7 +7,7 @@ export default function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
 
-    const getSidebarLinkStyle = (isActive: boolean): React.CSSProperties => ({
+    const getSidebarLinkStyle = (isActive: boolean): import('react').CSSProperties => ({
         display: 'block',
         width: '100%',
         padding: '10px 15px',
