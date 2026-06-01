@@ -2840,6 +2840,129 @@ for (const letter of greeting) {
                         </div>
                     </div>
 
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя желтая полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#facc15'
+                        }} />
+
+                        {/* Заголовок */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#b45309', // Приглушенный оранжево-желтый цвет
+                            margin: '0 0 12px 0'
+                        }}>
+                            Что такое цикл for...in в JavaScript (База)
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            <strong>Цикл for...in</strong> — это специальный инструмент для перебора всех перечисляемых свойств (<strong>ключей</strong>) объекта. Он заглядывает внутрь объекта и на каждом шаге выдает строку — имя очередного поля (свойства).
+                        </p>
+
+                        {/* Главная ментальная модель (желтый блок) */}
+                        <div style={{
+                            backgroundColor: '#fefce8',
+                            border: '1px solid #fef08a',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#713f12'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                ✍️ Главная ментальная модель:
+                            </div>
+                            <div style={{ marginBottom: '6px' }}>
+                                <strong>Ключ (Имя свойства):</strong> Это название переменной внутри объекта (например, <code style={{ fontFamily: 'monospace', color: '#be123c' }}>"name"</code>). Цикл возвращает именно его в виде обычной <strong>строки</strong>.
+                            </div>
+                            <div>
+                                <strong>Значение свойства:</strong> Автоматически цикл его не дает. Чтобы вытащить данные, нужно обратиться к объекту через квадратные скобки: <code style={{ fontFamily: 'monospace', color: '#be123c' }}>obj[key]</code>. Использовать точку (<code style={{ fontFamily: 'monospace' }}>obj.key</code>) нельзя, так как JavaScript будет искать поле с буквальным именем «key».
+                            </div>
+                        </div>
+
+                        {/* Текст перед кодом */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Пример работы с объектом:
+                        </div>
+
+                        {/* Серая плашка для кода */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`const developer = {
+  name: "Alex",
+  role: "Frontend"
+};
+
+for (const key in developer) {
+  console.log("Имя ключа:", key);             // "name", "role"
+  console.log("Значение поля:", developer[key]); // "Alex", "Frontend"
+}`}
+  </pre>
+
+                        {/* Подзаголовок "Под капотом" */}
+                        <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: '24px 0 8px 0' }}>
+                            ⚙️ Подводные камни и поведение под капотом
+                        </h3>
+                        <p style={{ fontSize: '15px', color: '#475569', margin: '0 0 16px 0', lineHeight: '1.6' }}>
+                            Цикл <code style={{ fontFamily: 'monospace', color: '#be123c' }}>for...in</code> обладает специфическим поведением, о котором критически важно помнить на коммерческих проектах и технических интервью:
+                        </p>
+
+                        {/* Список особенностей */}
+                        <ul style={{ listStyle: 'none', paddingLeft: 0, margin: '0 0 24px 0', fontSize: '14px', lineHeight: '1.6' }}>
+                            <li style={{ display: 'flex', alignItems: 'start', marginBottom: '10px' }}>
+                                <span style={{ color: '#d97706', marginRight: '8px', flexShrink: 0 }}>🔸</span>
+                                <div><strong>Перебор прототипов:</strong> Цикл бежит не только по собственным свойствам объекта, но и по свойствам из его цепочки прототипов (<code style={{ fontFamily: 'monospace' }}>__proto__</code>). Чтобы отфильтровать чужие поля, используют метод <code style={{ fontFamily: 'monospace', color: '#2563eb' }}>obj.hasOwnProperty(key)</code>.</div>
+                            </li>
+                            <li style={{ display: 'flex', alignItems: 'start', marginBottom: '10px' }}>
+                                <span style={{ color: '#d97706', marginRight: '8px', flexShrink: 0 }}>🔸</span>
+                                <div><strong>Порядок сортировки ключей:</strong> Если ключи объекта являются целыми числами (например, <code style={{ fontFamily: 'monospace' }}>"4"</code>, <code style={{ fontFamily: 'monospace' }}>"1"</code>), JavaScript автоматически отсортирует их по возрастанию. Строковые же свойства выводятся строго в порядке их создания.</div>
+                            </li>
+                        </ul>
+
+                        {/* Красное предупреждение */}
+                        <div style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}>
+                            🚨 <strong>Главное табу:</strong> Никогда не используйте <code style={{ fontFamily: 'monospace' }}>for...in</code> для массивов! Массив в JS — это тоже объект, поэтому цикл сработает, но индексы превратятся в <em>строки</em> (<code style={{ fontFamily: 'monospace' }}>"0"</code>, <code style={{ fontFamily: 'monospace' }}>"1"</code>), что сломает математику (например, <code style={{ fontFamily: 'monospace' }}>key + 1</code> даст результат <code style={{ fontFamily: 'monospace' }}>"01"</code>). Кроме того, скорость работы такого перебора в разы ниже стандартных методов.
+                        </div>
+                    </div>
 
                     {/* Блок 1 */}
                     <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b', marginTop: '32px', marginBottom: '12px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
