@@ -3071,6 +3071,106 @@ for (let i = 0; i < 5; i++) {
   console.log(i); // Выведет: 0, 1, 3, 4 (двойку пропустит)
 }`}
   </pre>
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        marginTop: '32px'
+                    }}>
+
+                        {/* Заголовок таблицы */}
+                        <h2 style={{
+                            fontSize: '22px',
+                            fontWeight: '800',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            letterSpacing: '-0.02em'
+                        }}>
+                            Когда что использовать
+                        </h2>
+
+                        {/* Таблица */}
+                        <div style={{ overflowX: 'auto', marginBottom: '32px' }}>
+                            <table style={{
+                                width: '100%',
+                                borderCollapse: 'collapse',
+                                fontSize: '15px',
+                                textAlign: 'left'
+                            }}>
+                                <thead>
+                                <tr style={{ color: '#64748b', fontWeight: '600' }}>
+                                    <th style={{ padding: '10px 16px', width: '60%' }}>Ситуация</th>
+                                    <th style={{ padding: '10px 16px', width: '40%' }}>Выбор</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ backgroundColor: '#ffffff' }}>
+                                    <td style={{ padding: '12px 16px', color: '#334155' }}>Знаешь количество повторений</td>
+                                    <td style={{ padding: '12px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>for</code>
+                                    </td>
+                                </tr>
+                                <tr style={{ backgroundColor: '#f8fafc' }}>
+                                    <td style={{ padding: '12px 16px', color: '#334155' }}>Не знаешь количество повторений</td>
+                                    <td style={{ padding: '12px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>while</code>
+                                    </td>
+                                </tr>
+                                <tr style={{ backgroundColor: '#ffffff' }}>
+                                    <td style={{ padding: '12px 16px', color: '#334155' }}>Нужно выполнить хотя бы раз</td>
+                                    <td style={{ padding: '12px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>do...while</code>
+                                    </td>
+                                </tr>
+                                <tr style={{ backgroundColor: '#f8fafc' }}>
+                                    <td style={{ padding: '12px 16px', color: '#334155' }}>Перебрать массив / строку</td>
+                                    <td style={{ padding: '12px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>for...of</code>
+                                    </td>
+                                </tr>
+                                <tr style={{ backgroundColor: '#ffffff' }}>
+                                    <td style={{ padding: '12px 16px', color: '#334155' }}>Перебрать ключи объекта</td>
+                                    <td style={{ padding: '12px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>for...in</code>
+                                    </td>
+                                </tr>
+                                <tr style={{ backgroundColor: '#f8fafc' }}>
+                                    <td style={{ padding: '12px 16px', color: '#334155' }}>Трансформировать массив</td>
+                                    <td style={{ padding: '12px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>map / filter / reduce</code>
+                                    </td>
+                                </tr>
+                                <tr style={{ backgroundColor: '#ffffff' }}>
+                                    <td style={{ padding: '12px 16px', color: '#334155' }}>Просто пробежаться по массиву</td>
+                                    <td style={{ padding: '12px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>forEach</code>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Нижняя инфо-плашка с бирюзовой линией */}
+                        <div style={{
+                            borderLeft: '4px solid #0d9488', // Красивый темно-бирюзовый цвет (Teal)
+                            backgroundColor: '#f0fdfa',
+                            padding: '16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '15px',
+                            lineHeight: '1.6',
+                            color: '#115e59',
+                            fontStyle: 'italic'
+                        }}>
+                            <strong>Главное:</strong> <code style={{ fontFamily: 'monospace', fontStyle: 'normal', fontWeight: '600' }}>for...of</code> — для массивов, <code style={{ fontFamily: 'monospace', fontStyle: 'normal', fontWeight: '600' }}>for...in</code> — для объектов, <code style={{ fontFamily: 'monospace', fontStyle: 'normal', fontWeight: '600' }}>while</code> — когда условие динамическое. А методы массива (<code style={{ fontFamily: 'monospace', fontStyle: 'normal' }}>map</code>, <code style={{ fontFamily: 'monospace', fontStyle: 'normal' }}>filter</code>, <code style={{ fontFamily: 'monospace', fontStyle: 'normal' }}>reduce</code>) в большинстве случаев чище и читаемее, чем ручной цикл.
+                        </div>
+
+                    </div>
 
                 </div>
 
