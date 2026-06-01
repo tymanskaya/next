@@ -2963,6 +2963,111 @@ for (const key in developer) {
                             🚨 <strong>Главное табу:</strong> Никогда не используйте <code style={{ fontFamily: 'monospace' }}>for...in</code> для массивов! Массив в JS — это тоже объект, поэтому цикл сработает, но индексы превратятся в <em>строки</em> (<code style={{ fontFamily: 'monospace' }}>"0"</code>, <code style={{ fontFamily: 'monospace' }}>"1"</code>), что сломает математику (например, <code style={{ fontFamily: 'monospace' }}>key + 1</code> даст результат <code style={{ fontFamily: 'monospace' }}>"01"</code>). Кроме того, скорость работы такого перебора в разы ниже стандартных методов.
                         </div>
                     </div>
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя бирюзовая полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#0d9488'
+                        }} />
+
+                        {/* Заголовок */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#115e59', // Темно-бирюзовый цвет для заголовка
+                            margin: '0 0 12px 0'
+                        }}>
+                            Просто пробежаться по массиву (forEach)
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            <strong>Метод array.forEach()</strong> — это встроенный метод массивов, который принимает функцию-колбэк и выполняет её <strong>один раз для каждого элемента</strong>. Он заменяет классический цикл `for`, делая код более декларативным и лаконичным.
+                        </p>
+
+                        {/* Главная ментальная модель (зеленый блок) */}
+                        <div style={{
+                            backgroundColor: '#f0fdf4',
+                            border: '1px solid #bbf7d0',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#166534'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                ⚙️ Главная ментальная модель:
+                            </div>
+                            <div style={{ marginBottom: '6px' }}>
+                                <strong>Ничего не возвращает:</strong> Метод всегда возвращает <code style={{ fontFamily: 'monospace', color: '#be123c' }}>undefined</code>. Он используется исключительно ради <strong>побочных эффектов</strong> (side-effects) — например, вывести логи в консоль, записать данные в localStorage или обновить состояние UI.
+                            </div>
+                            <div>
+                                <strong>Три аргумента колбэка:</strong> В функцию, которую вы передаете внутрь, JavaScript автоматически прокидывает три параметра: текущий элемент (<code style={{ fontFamily: 'monospace' }}>item</code>), его индекс (<code style={{ fontFamily: 'monospace' }}>index</code>) и сам исходный массив (<code style={{ fontFamily: 'monospace' }}>array</code>).
+                            </div>
+                        </div>
+
+                        {/* Текст перед кодом */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Примеры использования с разным набором аргументов:
+                        </div>
+
+                        {/* Серая плашка для кода */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`const fruits = ["яблоко", "банан", "груша"];
+
+// 1. Простой перебор (только элементы)
+fruits.forEach((fruit) => {
+  console.log("Фрукт:", fruit);
+});
+
+// 2. Использование элемента вместе с его индексом
+fruits.forEach((fruit, index) => {
+  console.log(\`\${index + 1}-й элемент — это \${fruit}\`);
+});`}
+  </pre>
+
+                        {/* Красная предупреждающая плашка внизу — САМЫЙ ЧАСТЫЙ ВОПРОС НА ИНТЕРВЬЮ */}
+                        <div style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}>
+                            🚨 <strong>Критическое ограничение (Железное правило):</strong> Внутри <code style={{ fontFamily: 'monospace' }}>.forEach()</code> **невозможно** прервать выполнение или пропустить шаг. Операторы <code style={{ fontFamily: 'monospace' }}>break</code> и <code style={{ fontFamily: 'monospace' }}>continue</code> вызовут синтаксическую ошибку, а оператор <code style={{ fontFamily: 'monospace' }}>return</code> просто завершит текущую маленькую функцию-колбэк и сразу перейдет к следующему элементу массива. Если вам нужно останавливать перебор по условию — используйте обычный <code style={{ fontFamily: 'monospace' }}>for...of</code>.
+                        </div>
+                    </div>
 
                     {/* Блок 1 */}
                     <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b', marginTop: '32px', marginBottom: '12px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
