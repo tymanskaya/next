@@ -2663,6 +2663,184 @@ console.log("Доступ успешно предоставлен!");`}
 
                     </div>
 
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя фиолетовая полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#8b5cf6'
+                        }} />
+
+                        {/* Заголовок */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#6d28d9', // Фиолетовый оттенок для заголовка
+                            margin: '0 0 12px 0'
+                        }}>
+                            Что такое цикл for...of в JavaScript (База)
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            <strong>Цикл for...of</strong> — это современный синтаксис (появился в ES6) для последовательного обхода <strong>значений</strong> итерируемых коллекций (массивов, строк, Map/Set) [1]. В отличие от классического `for`, он не требует ручного управления счетчиком `i` и индексами.
+                        </p>
+
+                        {/* Главная ментальная модель (фиолетовый блок) */}
+                        <div style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                ✍️ Главная ментальная модель:
+                            </div>
+                            <div style={{ marginBottom: '6px' }}>
+                                <strong>Прямой доступ к элементу:</strong> Цикл сам заходит в коллекцию и на каждом шаге достает готовое <strong>значение</strong> (например, саму строку <code style={{ fontFamily: 'monospace', color: '#be123c' }}>"React"</code>), а не его порядковый номер.
+                            </div>
+                            <div>
+                                <strong>Итератор под капотом:</strong> Цикл работает только с теми структурами, у которых есть скрытый метод <code style={{ fontFamily: 'monospace', color: '#be123c' }}>[Symbol.iterator]</code>. Он последовательно запрашивает элементы, пока они не закончатся.
+                            </div>
+                        </div>
+                        <div style={{ marginTop: '24px', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif' }}>
+                            {/* Подзаголовок в стиле конспекта */}
+                            <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: '0 0 8px 0' }}>
+                                ⚙️ У кого есть скрытый метод [Symbol.iterator]?
+                            </h3>
+
+                            <p style={{ fontSize: '15px', color: '#475569', margin: '0 0 16px 0', lineHeight: '1.6' }}>
+                                Цикл <code style={{ fontFamily: 'monospace', color: '#be123c' }}>for...of</code> работает только с теми структурами, которые содержат этот метод. Проверить его наличие у любого объекта можно вручную через строгий тип функции.
+                            </p>
+
+                            {/* Код с примерами проверки */}
+                            <pre style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '16px',
+                                overflowX: 'auto',
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '14px',
+                                color: '#0f172a',
+                                margin: '0 0 20px 0',
+                                whiteSpace: 'pre',
+                                lineHeight: '1.5'
+                            }}>
+{`// 🟢 ТИПЫ С ИТЕРАТОРОМ (Вернут функцию):
+console.log(typeof [][Symbol.iterator]);       // "function" (Массив)
+console.log(typeof "JS"[Symbol.iterator]);     // "function" (Строка)
+console.log(typeof new Set()[Symbol.iterator]);// "function" (Коллекция Set)
+
+// ❌ ТИПЫ БЕЗ ИТЕРАТОРА (Вернут undefined):
+const user = { name: "Alex" };
+console.log(typeof user[Symbol.iterator]);     // "undefined" (Обычный объект)`}
+  </pre>
+                            <div style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '16px',
+                                marginTop: '20px',
+                                fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                color: '#334155'
+                            }}>
+                                <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    📦 Объяснение простыми словами:
+                                </div>
+                                <p style={{ fontSize: '14px', lineHeight: '1.6', margin: 0 }}>
+                                    <strong>Итерируемый объект</strong> — это просто «коробка с элементами», в которую можно заглянуть и последовательно, один за другим, достать все вещи от первой до последней.
+                                    Если объект гарантирует, что у него есть внутренний порядок и элементы можно пересчитать (как буквы в строке или элементы в массиве) — он <strong>итерируемый</strong>.
+                                    Если элементы лежат хаотичной кучей без номеров (как свойства в обычном объекте) — объект <strong>неитерируемый</strong>.
+                                </p>
+                            </div>
+
+
+                            {/* Ментальный лайфхак как обойти объект */}
+                            <div style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '14px 16px',
+                                fontSize: '14px',
+                                lineHeight: '1.5',
+                                color: '#334155'
+                            }}>
+                                💡 <strong>Лайфхак для объектов:</strong> Если вам кровь из носу нужно обработать обычный объект через <code style={{ fontFamily: 'monospace' }}>for...of</code>, преобразуйте его в массив с помощью <code style={{ fontFamily: 'monospace', color: '#2563eb' }}>Object.values()</code> (массив значений) или <code style={{ fontFamily: 'monospace', color: '#2563eb' }}>Object.entries()</code> (массив пар ключ-значение). У полученных массивов итератор точно будет!
+                            </div>
+                        </div>
+
+                        {/* Текст перед кодом */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Пример работы с массивом и строкой:
+                        </div>
+
+                        {/* Серая плашка для кода */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`// 1. Перебор элементов массива
+const technologies = ["React", "Next.js", "TypeScript"];
+
+for (const tech of technologies) {
+  console.log(tech); // "React", "Next.js", "TypeScript"
+}
+
+// 2. Посимвольный перебор строки
+const greeting = "JS";
+
+
+for (const letter of greeting) {
+  console.log(letter); // "J", "S"
+}`}
+
+  </pre>
+
+
+                        {/* Зеленая плашка с преимуществами и фишками для собеседований */}
+                        <div style={{
+                            borderLeft: '4px solid #10b981',
+                            backgroundColor: '#f0fdf4',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#065f46',
+                            lineHeight: '1.5'
+                        }}>
+                            💡 <strong>Плюсы и отличия от .forEach():</strong> Внутри <code style={{ fontFamily: 'monospace' }}>for...of</code> можно полноценно использовать ключевые слова контроля <code style={{ color: '#b91c1c', fontWeight: '600' }}>break</code> (для остановки) и <code style={{ color: '#b91c1c', fontWeight: '600' }}>continue</code> (для пропуска шага) [1]. Также он нативно поддерживает асинхронные операции через <code style={{ color: '#b91c1c', fontWeight: '600' }}>await</code>. В методе <code style={{ fontFamily: 'monospace' }}>.forEach()</code> так сделать нельзя [1].
+                        </div>
+                    </div>
+
+
                     {/* Блок 1 */}
                     <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b', marginTop: '32px', marginBottom: '12px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
                         1. Глобальный контекст и обычный вызов (Default Binding)
