@@ -3543,8 +3543,17 @@ console.log("текст" / 2);         // NaN
 console.log(NaN === NaN);         // false
 
 // Единственный надежный способ проверить на NaN:
-console.log(Number.isNaN("abc" / 2)); // true`}
-  </pre>
+console.log(Number.isNaN("abc" / 2)); // true
+
+// ⚡ Решение проблемы округления (0.1 + 0.2):
+const result = +(0.1 + 0.2).toFixed(2); 
+console.log(result);              // 0.3 ✅
+
+// Разбор типов под капотом:
+console.log(typeof (0.1 + 0.2).toFixed(2));  // 'string' (toFixed возвращает строку)
+console.log(typeof +(0.1 + 0.2).toFixed(2)); // 'number' (унарный плюс вернул тип Number) ✅`}
+</pre>
+
 
                         {/* Важное предупреждение (Красная сноска внизу — ловушка на собеседованиях) */}
                         <div style={{
