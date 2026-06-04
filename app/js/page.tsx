@@ -3451,6 +3451,129 @@ console.log(typeof currentJob);    // "undefined"`}
                     }}>
                         ⚠️ <strong>Официальный баг языка:</strong> Вызов <code style={{ fontFamily: 'monospace' }}>typeof null</code> возвращает строковое значение <code style={{ fontFamily: 'monospace' }}>"object"</code> [1, 7]. Это признанная историческая ошибка в архитектуре JavaScript, которую нельзя исправить, чтобы не сломать миллионы старых сайтов [7]. На самом деле <code style={{ fontFamily: 'monospace' }}>null</code> — это самостоятельный примитив [1, 5].
                     </div>
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя синяя полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#2563eb'
+                        }} />
+
+                        {/* Заголовок */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#1e3a8a',
+                            margin: '0 0 12px 0'
+                        }}>
+                            Тип данных Number (Числа)
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            <strong>Тип Number</strong> в JavaScript представляет числа как в виде целых значений, так и в виде чисел с плавающей точкой (дробных). Под капотом язык использует единый международный стандарт <strong>IEEE 754</strong> (двойная точность, 64 бит), из-за чего существуют важные математические особенности.
+                        </p>
+
+                        {/* Главная ментальная модель (голубой блок) */}
+                        <div style={{
+                            backgroundColor: '#eff6ff',
+                            border: '1px solid #bfdbfe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#1e40af'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                🧠 Три специальных числовых значения (Спец-типы):
+                            </div>
+                            <div style={{ marginBottom: '6px' }}>
+                                <strong>Infinity (Бесконечность):</strong> Математическая бесконечность <code style={{ fontFamily: 'monospace', color: '#be123c' }}>∞</code>. Получается, например, при делении любого ненулевого числа на ноль: <code style={{ fontFamily: 'monospace' }}>1 / 0</code>.
+                            </div>
+                            <div style={{ marginBottom: '6px' }}>
+                                <strong>-Infinity:</strong> Отрицательная бесконечность. Получается при делении отрицательного числа на ноль: <code style={{ fontFamily: 'monospace' }}>-1 / 0</code>.
+                            </div>
+                            <div>
+                                <strong>NaN (Not a Number):</strong> Результат вычислительной ошибки. Означает, что математическая операция завершилась некорректно (например, при попытке разделить строку на число). Любая операция с <code style={{ fontFamily: 'monospace', color: '#be123c' }}>NaN</code> снова возвращает <code style={{ fontFamily: 'monospace' }}>NaN</code>.
+                            </div>
+                        </div>
+
+                        {/* Текст перед кодом */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Примеры работы и встроенные проверки:
+                        </div>
+
+                        {/* Серая плашка для кода */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`const intNum = 100;              // Целое число
+const floatNum = 10.5;            // Дробное число
+
+console.log(1 / 0);               // Infinity
+console.log("текст" / 2);         // NaN
+
+// ⚠️ Особенность проверки NaN: он не равен абсолютно никому, даже самому себе!
+console.log(NaN === NaN);         // false
+
+// Единственный надежный способ проверить на NaN:
+console.log(Number.isNaN("abc" / 2)); // true`}
+  </pre>
+
+                        {/* Важное предупреждение (Красная сноска внизу — ловушка на собеседованиях) */}
+                        <div style={{
+                            borderLeft: '4px solid #f59e0b',
+                            backgroundColor: '#fef3c7',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#78350f',
+                            lineHeight: '1.5',
+                            marginBottom: '20px'
+                        }}>
+                            ⚠️ <strong>Ловушка точности (0.1 + 0.2):</strong> Из-за того, что в стандарте IEEE 754 числа переводятся в двоичную систему счисления, бесконечные дроби округляются. Выражение <code style={{ fontFamily: 'monospace' }}>0.1 + 0.2 === 0.3</code> вернет <code style={{ fontFamily: 'monospace' }}>false</code>, так как результат равен <code style={{ fontFamily: 'monospace' }}>0.30000000000000004</code>. Для исправления используют метод округления до знаков: <code style={{ fontFamily: 'monospace' }}>+(0.1 + 0.2).toFixed(2)</code>.
+                        </div>
+
+                        {/* Безопасные лимиты чисел */}
+                        <div style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}>
+                            🚨 <strong>Ограничение по величине:</strong> Тип Number не может надежно хранить целые числа больше чем <code style={{ fontFamily: 'monospace' }}>9007199254740991</code> (это <code style={{ fontFamily: 'monospace' }}>2^53 - 1</code>) и меньше чем <code style={{ fontFamily: 'monospace' }}>-9007199254740991</code>. Всё, что выходит за эти рамки, теряет точность. Если вам нужны сверхбольшие числа (например, для криптографии или ID из БД) — используйте тип <strong>BigInt</strong>.
+                        </div>
+                    </div>
+
                 </div>
 
 
