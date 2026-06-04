@@ -86,6 +86,9 @@ export default function JavaScriptOOP() {
                     <a href="#cycle" onClick={(e) => handleScroll(e, 'cycle')} style={anchorLinkStyle}>
                         🔄 Циклы в JavaScript
                     </a>
+                    <a href="#dataTypes" onClick={(e) => handleScroll(e, 'dataTypes')} style={anchorLinkStyle}>
+                        📦 Типы данных подробно
+                    </a>
 
                 </div>
             </aside>
@@ -3277,7 +3280,179 @@ for (let i = 0; i < 5; i++) {
 
                     </div>
 
+
                 </div>
+                <div id="dataTypes" style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '8px',
+                    border: '1px solid #e2e8f0',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                    padding: '24px sm:32px',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                    color: '#334155',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    marginTop: '32px'
+                }}>
+                    {/* Верхняя синяя полоса карточки */}
+
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя синяя полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#2563eb'
+                        }} />
+
+                        {/* Заголовок в стиле ваших лекций */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#1e3a8a',
+                            margin: '0 0 12px 0'
+                        }}>
+                            Типы данных в JavaScript (Введение)
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            <strong>Тип данных</strong> — это классификация, которая сообщает движку JavaScript, какие операции можно производить с конкретным значением. Всего в современном JavaScript существует <strong>8 типов данных</strong>, которые делятся на две глобальные категории: примитивы и объекты.
+                        </p>
+
+                        {/* Главные характеристики типизации JS */}
+                        <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', margin: '16px 0 12px 0' }}>
+                            🎯 Три главных правила типизации языка:
+                        </h3>
+
+                        <ul style={{ listStyle: 'none', paddingLeft: 0, margin: '0 0 24px 0' }}>
+                            <li style={{ display: 'flex', alignItems: 'start', gap: '8px', marginBottom: '12px', fontSize: '14px' }}>
+                                <span style={{ color: '#2563eb', marginTop: '2px', flexShrink: 0 }}>▪</span>
+                                <div><strong style={{ color: '#1e3a8a', fontWeight: '600' }}>Динамическая типизация:</strong> Вам не нужно вручную указывать тип переменной (как в Java или C#). JavaScript сам определяет его автоматически в момент присвоения значения.</div>
+                            </li>
+                            <li style={{ display: 'flex', alignItems: 'start', gap: '8px', marginBottom: '12px', fontSize: '14px' }}>
+                                <span style={{ color: '#2563eb', marginTop: '2px', flexShrink: 0 }}>▪</span>
+                                <div><strong style={{ color: '#1e3a8a', fontWeight: '600' }}>Типизируются значения, а не переменные:</strong> Одна и та же переменная <code style={{ fontFamily: 'monospace' }}>let data</code> может сначала хранить число, а затем строку. Ограничений на смену типа внутри переменной нет.</div>
+                            </li>
+                            <li style={{ display: 'flex', alignItems: 'start', gap: '8px', marginBottom: '12px', fontSize: '14px' }}>
+                                <span style={{ color: '#2563eb', marginTop: '2px', flexShrink: 0 }}>▪</span>
+                                <div><strong style={{ color: '#1e3a8a', fontWeight: '600' }}>Автовызов оператора typeof:</strong> Для быстрой проверки того, что именно сейчас лежит в переменной, используется встроенный оператор <code style={{ fontFamily: 'monospace', color: '#b91c1c' }}>typeof</code>, который возвращает тип в виде строки.</div>
+                            </li>
+                        </ul>
+
+                        {/* Ментальная модель введения (сине-голубой блок) */}
+                        <div style={{
+                            backgroundColor: '#f0f9ff',
+                            border: '1px solid #bae6fd',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#0369a1'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                                💡 Ментальное разделение категорий:
+                            </div>
+                            <div>
+                                Все типы делятся по принципу их хранения в памяти компьютера. <strong>Примитивы (7 типов)</strong> — это «простые кирпичики», они хранятся и копируются как конечные значения. <strong>Объекты (8-й тип)</strong> — это «сложные коробки данных», которые могут динамически расти и передаются исключительно по адресу-ссылке.
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1e3a8a', margin: '0 0 12px 0' }}>
+                        Примитивные типы данных (Primitives)
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        В JavaScript существует 7 примитивных типов [1, 2]. Когда вы копируете примитив, создается <strong>абсолютно новая независимая копия</strong> значения в памяти [2, 3].
+                    </p>
+
+                    {/* Ментальная модель */}
+                    <div style={{
+                        backgroundColor: '#eff6ff',
+                        border: '1px solid #bfdbfe',
+                        padding: '16px',
+                        borderRadius: '6px',
+                        marginBottom: '24px',
+                        fontSize: '14px',
+                        lineHeight: '1.6',
+                        color: '#1e40af'
+                    }}>
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Семь примитивов на пальцах:
+                        </div>
+                        <ul style={{ paddingLeft: '16px', margin: 0, listStyleType: 'disc' }}>
+                            <li><strong>Number:</strong> Любые числа (целые, дробные), а также <code style={{ fontFamily: 'monospace' }}>NaN</code> и <code style={{ fontFamily: 'monospace' }}>Infinity</code> [1].</li>
+                            <li><strong>BigInt:</strong> Числа произвольной длины, создаются добавлением <code style={{ fontFamily: 'monospace' }}>n</code> в конец [1, 4].</li>
+                            <li><strong>String:</strong> Текстовые строки в одинарных, двойных или косых кавычках [1].</li>
+                            <li><strong>Boolean:</strong> Логический тип, только два значения: <code style={{ fontFamily: 'monospace' }}>true</code> или <code style={{ fontFamily: 'monospace' }}>false</code> [1].</li>
+                            <li><strong>Null:</strong> Отдельный тип, означающий «значение намеренно пусто или неизвестно» [1, 5].</li>
+                            <li><strong>Undefined:</strong> Означает, что «значение вообще не было присвоено» [1, 6].</li>
+                            <li><strong>Symbol:</strong> Уникальный идентификатор, используемый для скрытых свойств объектов [1].</li>
+                        </ul>
+                    </div>
+
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Примеры кода и оператор typeof:
+                    </div>
+
+                    <pre style={{
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '6px',
+                        padding: '16px',
+                        overflowX: 'auto',
+                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                        fontSize: '14px',
+                        color: '#0f172a',
+                        margin: '0 0 20px 0',
+                        whiteSpace: 'pre',
+                        lineHeight: '1.5'
+                    }}>
+{`const score = 42;                 // Number
+const bigNum = 9007199254740991n;  // BigInt
+const name = "Alex";               // String
+const isOnline = true;             // Boolean
+const emptySpace = null;           // Null
+const currentJob = undefined;      // Undefined
+const id = Symbol("id");           // Symbol
+
+console.log(typeof score);         // "number"
+console.log(typeof name);          // "string"
+console.log(typeof currentJob);    // "undefined"`}
+  </pre>
+
+                    {/* Сноска об ошибке typeof для null */}
+                    <div style={{
+                        borderLeft: '4px solid #f59e0b',
+                        backgroundColor: '#fef3c7',
+                        padding: '12px 16px',
+                        borderRadius: '0 6px 6px 0',
+                        fontSize: '14px',
+                        color: '#78350f',
+                        lineHeight: '1.5'
+                    }}>
+                        ⚠️ <strong>Официальный баг языка:</strong> Вызов <code style={{ fontFamily: 'monospace' }}>typeof null</code> возвращает строковое значение <code style={{ fontFamily: 'monospace' }}>"object"</code> [1, 7]. Это признанная историческая ошибка в архитектуре JavaScript, которую нельзя исправить, чтобы не сломать миллионы старых сайтов [7]. На самом деле <code style={{ fontFamily: 'monospace' }}>null</code> — это самостоятельный примитив [1, 5].
+                    </div>
+                </div>
+
 
             </main>
         </div>
