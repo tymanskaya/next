@@ -4247,6 +4247,144 @@ console.log(user[id1]);          // 9988`}
                                         }}>
                                             🚨 <strong>Ловушка JSON:</strong> При попытке превратить объект в строку через метод <code style={{ fontFamily: 'monospace' }}>JSON.stringify(user)</code>, все свойства, ключами которых являются символы, будут автоматически проигнорированы и полностью удалены из итоговой строки.
                                         </div>
+                                        <div style={{
+                                            backgroundColor: '#ffffff',
+                                            borderRadius: '8px',
+                                            border: '1px solid #e2e8f0',
+                                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                            padding: '24px sm:32px',
+                                            width: '100%',
+                                            boxSizing: 'border-box',
+                                            fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                            color: '#334155',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            marginTop: '32px'
+                                        }}>
+                                            {/* Верхняя синяя полоса карточки */}
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                right: 0,
+                                                height: '4px',
+                                                backgroundColor: '#2563eb'
+                                            }} />
+
+                                            {/* Заголовок */}
+                                            <h2 style={{
+                                                fontSize: '20px',
+                                                fontWeight: '700',
+                                                color: '#1e3a8a',
+                                                margin: '0 0 12px 0'
+                                            }}>
+                                                8-й тип данных: Объекты (Reference Types)
+                                            </h2>
+
+                                            <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                                                В отличие от примитивов, которые хранят лишь одно простое значение, <strong>Объект (Object)</strong> представляет собой сложную структуру данных. Он используется для хранения коллекций значений и более сложных сущностей. Массивы (<code style={{ fontFamily: 'monospace' }}>Array</code>), функции (<code style={{ fontFamily: 'monospace' }}>Function</code>) и даты (<code style={{ fontFamily: 'monospace' }}>Date</code>) — всё это под капотом является объектами.
+                                            </p>
+
+                                            {/* Главная ментальная модель (голубой блок) */}
+                                            <div style={{
+                                                backgroundColor: '#eff6ff',
+                                                border: '1px solid #bfdbfe',
+                                                padding: '16px',
+                                                borderRadius: '6px',
+                                                marginBottom: '24px',
+                                                fontSize: '14px',
+                                                lineHeight: '1.6',
+                                                color: '#1e40af'
+                                            }}>
+                                                <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                                    🧠 Ссылочный тип данных (Reference) под капотом:
+                                                </div>
+                                                <div style={{ marginBottom: '6px' }}>
+                                                    <strong>Хранение в Куче (Heap):</strong> Примитивы занимают фиксированное место в быстрой памяти (Стек). Объекты могут динамически расти, поэтому они сохраняются в большой памяти (Куча), а в переменной лежит лишь <strong>«адрес ячейки»</strong> (ссылка).
+                                                </div>
+                                                <div>
+                                                    <strong>Эффект близнецов:</strong> Если вы скопируете переменную с объектом в другую переменную (<code style={{ fontFamily: 'monospace' }}>const b = a</code>), вы скопируете только этот адрес. Обе переменные будут управлять <strong>одним и тем же физическим объектом</strong>.
+                                                </div>
+                                            </div>
+
+                                            {/* Текст перед кодом */}
+                                            <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                                Примеры работы со ссылками и сравнением:
+                                            </div>
+
+                                            {/* Серая плашка для кода */}
+                                            <pre style={{
+                                                backgroundColor: '#f8fafc',
+                                                border: '1px solid #e2e8f0',
+                                                borderRadius: '6px',
+                                                padding: '16px',
+                                                overflowX: 'auto',
+                                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                                fontSize: '14px',
+                                                color: '#0f172a',
+                                                margin: '0 0 20px 0',
+                                                whiteSpace: 'pre',
+                                                lineHeight: '1.5'
+                                            }}>
+{`// 1. Создание объекта и мутация по ссылке
+const user1 = { name: "Alex" };
+const user2 = user1; // Копируем адрес, а не сам объект!
+
+user2.name = "Ivan";
+console.log(user1.name); // "Ivan" (Исходный объект изменился!)
+
+// 2. Парадокс сравнения
+const itemA = { code: 123 };
+const itemB = { code: 123 };
+
+console.log(itemA === itemB); // false! (Объекты идентичны, но адреса в памяти разные)
+console.log(user1 === user2); // true!  (Переменные указывают на один и тот же адрес)`}
+  </pre>
+
+                                            {/* Как правильно копировать объекты (Поверхностное копирование) */}
+                                            <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: '24px 0 12px 0' }}>
+                                                🔄 Как сделать независимую копию (Клонирование)
+                                            </h3>
+                                            <p style={{ fontSize: '15px', color: '#475569', margin: '0 0 12px 0', lineHeight: '1.6' }}>
+                                                Чтобы разорвать связь между переменными, нужно создать новый физический объект и перенести туда свойства старого. Для этого используют **Spread-оператор (`...`)** или метод **`Object.assign()`**:
+                                            </p>
+
+                                            <pre style={{
+                                                backgroundColor: '#f8fafc',
+                                                border: '1px solid #e2e8f0',
+                                                borderRadius: '6px',
+                                                padding: '16px',
+                                                overflowX: 'auto',
+                                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                                fontSize: '14px',
+                                                color: '#0f172a',
+                                                margin: '0 0 20px 0',
+                                                whiteSpace: 'pre',
+                                                lineHeight: '1.5'
+                                            }}>
+{`const original = { role: "Admin", active: true };
+
+// Создаем чистый объект и "распаковываем" туда свойства оригинала
+const clone = { ...original }; 
+
+clone.active = false;
+console.log(original.active); // true (Оригинал защищен, связь разорвана!)`}
+  </pre>
+
+                                            {/* Важное предупреждение (Красная сноска внизу — ловушка глубокого копирования) */}
+                                            <div style={{
+                                                borderLeft: '4px solid #ef4444',
+                                                backgroundColor: '#fef2f2',
+                                                padding: '12px 16px',
+                                                borderRadius: '0 6px 6px 0',
+                                                fontSize: '14px',
+                                                color: '#991b1b',
+                                                lineHeight: '1.5'
+                                            }}>
+                                                🚨 <strong>Ловушка поверхностного копирования (Shallow Copy):</strong> Помните, что спред-оператор <code style={{ fontFamily: 'monospace' }}>...</code> копирует автономно только первый уровень свойств. Если внутри объекта лежит другой вложенный объект (например, <code style={{ fontFamily: 'monospace' }}>{`info: { age: 25 }`}</code>), то его адрес скопируется по старинке — по ссылке. Для полноценного глубокого копирования используют современный метод <code style={{ fontFamily: 'monospace', color: '#2563eb' }}>structuredClone(original)</code>.
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                 </div>
