@@ -3692,6 +3692,133 @@ console.log(5n / 2n);           // 2n (а не 2.5!)`}
                             }}>
                                 ⚖️ <strong>Сравнение с Number:</strong> Сравнение через нестрогое равенство работает: <code style={{ fontFamily: 'monospace' }}>2n == 2</code> вернет <code style={{ fontFamily: 'monospace' }}>true</code>. Однако строгое равенство учитывает разные типы данных, поэтому <code style={{ fontFamily: 'monospace' }}>2n === 2</code> вернет <code style={{ fontFamily: 'monospace' }}>false</code>.
                             </div>
+                            <div style={{
+                                backgroundColor: '#ffffff',
+                                borderRadius: '8px',
+                                border: '1px solid #e2e8f0',
+                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                padding: '24px sm:32px',
+                                width: '100%',
+                                boxSizing: 'border-box',
+                                fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                color: '#334155',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                marginTop: '32px'
+                            }}>
+                                {/* Верхняя синяя полоса карточки */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: '4px',
+                                    backgroundColor: '#2563eb'
+                                }} />
+
+                                {/* Заголовок */}
+                                <h2 style={{
+                                    fontSize: '20px',
+                                    fontWeight: '700',
+                                    color: '#1e3a8a',
+                                    margin: '0 0 12px 0'
+                                }}>
+                                    Тип данных String (Строки)
+                                </h2>
+
+                                <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                                    <strong>Тип String</strong> используется для представления текстовой информации. Любая строка — это неизменяемый (immutable) упорядоченный массив символов, где каждый символ имеет свой индекс, начиная с нуля.
+                                </p>
+
+                                {/* Главная ментальная модель (голубой блок) */}
+                                <div style={{
+                                    backgroundColor: '#eff6ff',
+                                    border: '1px solid #bfdbfe',
+                                    padding: '16px',
+                                    borderRadius: '6px',
+                                    marginBottom: '24px',
+                                    fontSize: '14px',
+                                    lineHeight: '1.6',
+                                    color: '#1e40af'
+                                }}>
+                                    <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                        🧠 Три вида кавычек на пальцах:
+                                    </div>
+                                    <div style={{ marginBottom: '6px' }}>
+                                        <strong>Одинарные (' ') и Двойные (" "):</strong> Абсолютно равноправны. Разница лишь в удобстве: если внутри текста нужны двойные кавычки, саму строку лучше обернуть в одинарные (<code style={{ fontFamily: 'monospace' }}>'Он сказал "Привет"'</code>), чтобы не заниматься экранированием.
+                                    </div>
+                                    <div>
+                                        <strong>Косые/Шаблонные кавычки (\` \`):</strong> Обладают суперсилами. Позволяют делать <strong>интерполяцию</strong> — вставлять выражения и переменные прямо внутрь строки через конструкцию <code style={{ fontFamily: 'monospace', color: '#be123c' }}>{`\${переменная}`}</code>, а также переносить текст на новую строку без спецсимволов.
+                                    </div>
+                                </div>
+
+                                {/* Текст перед кодом */}
+                                <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                    Примеры объявления строк и интерполяции:
+                                </div>
+
+                                {/* Серая плашка для кода */}
+                                <pre style={{
+                                    backgroundColor: '#f8fafc',
+                                    border: '1px solid #e2e8f0',
+                                    borderRadius: '6px',
+                                    padding: '16px',
+                                    overflowX: 'auto',
+                                    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                    fontSize: '14px',
+                                    color: '#0f172a',
+                                    margin: '0 0 20px 0',
+                                    whiteSpace: 'pre',
+                                    lineHeight: '1.5'
+                                }}>
+{`// 1. Обычные строки
+const single = 'Простые кавычки';
+const double = "Тоже простые";
+
+// Экранирование обратным слэшем (если кавычки совпадают)
+const quote = 'It\\'s JavaScript'; 
+
+// 2. Шаблонные строки (Template Literals)
+const language = "JS";
+const multiline = \`Строка 1
+Строка 2 (перенос без \\n)\`;
+
+// Интерполяция выражений:
+const info = \`Я учу \${language}, мне \${20 + 5} лет\`;
+console.log(info); // "Я учу JS, мне 25 лет"
+
+// Доступ к символам по индексу (только для чтения!)
+console.log(language[0]); // "J"`}
+  </pre>
+
+                                {/* Важное предупреждение (Красная сноска внизу) */}
+                                <div style={{
+                                    borderLeft: '4px solid #ef4444',
+                                    backgroundColor: '#fef2f2',
+                                    padding: '12px 16px',
+                                    borderRadius: '0 6px 6px 0',
+                                    fontSize: '14px',
+                                    color: '#991b1b',
+                                    lineHeight: '1.5',
+                                    marginBottom: '20px'
+                                }}>
+                                    🚨 <strong>Ловушка неизменяемости (Immutability):</strong> Строки в JavaScript нельзя изменить «на месте». Код вида <code style={{ fontFamily: 'monospace' }}>let str = "Hi"; str[0] = "G";</code> отработает без ошибок (или упадет в strict mode), но строка останется прежней: <code style={{ fontFamily: 'monospace' }}>"Hi"</code>. Чтобы изменить строку, её нужно перезаписать целиком: <code style={{ fontFamily: 'monospace' }}>str = "Gi";</code>.
+                                </div>
+
+                                {/* Полезное свойство length */}
+                                <div style={{
+                                    borderLeft: '4px solid #10b981',
+                                    backgroundColor: '#f0fdf4',
+                                    padding: '12px 16px',
+                                    borderRadius: '0 6px 6px 0',
+                                    fontSize: '14px',
+                                    color: '#065f46',
+                                    lineHeight: '1.5'
+                                }}>
+                                    📏 <strong>Длина строки:</strong> Свойство <code style={{ fontFamily: 'monospace' }}>.length</code> возвращает количество символов в строке: <code style={{ fontFamily: 'monospace' }}>"Привет".length</code> вернет <code style={{ fontFamily: 'monospace' }}>6</code>. Помните, что это свойство, а не метод, поэтому круглые скобки в конце ставить не нужно.
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
