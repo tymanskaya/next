@@ -4119,6 +4119,136 @@ console.log(undefined + 5);      // NaN (undefined превратился в NaN
                                     }}>
                                         🚨 <strong>Помните про typeof null:</strong> Исторический баг <code style={{ fontFamily: 'monospace' }}>typeof null === "object"</code> часто заставляет новичков думать, что null передается по ссылке. Это не так. `Null` — стопроцентный примитив, который копируется по значению и не имеет никаких свойств.
                                     </div>
+                                    <div style={{
+                                        backgroundColor: '#ffffff',
+                                        borderRadius: '8px',
+                                        border: '1px solid #e2e8f0',
+                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                        padding: '24px sm:32px',
+                                        width: '100%',
+                                        boxSizing: 'border-box',
+                                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                        color: '#334155',
+                                        position: 'relative',
+                                        overflow: 'hidden',
+                                        marginTop: '32px'
+                                    }}>
+                                        {/* Верхняя синяя полоса карточки */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            height: '4px',
+                                            backgroundColor: '#2563eb'
+                                        }} />
+
+                                        {/* Заголовок */}
+                                        <h2 style={{
+                                            fontSize: '20px',
+                                            fontWeight: '700',
+                                            color: '#1e3a8a',
+                                            margin: '0 0 12px 0'
+                                        }}>
+                                            Тип данных Symbol (Символы)
+                                        </h2>
+
+                                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                                            <strong>Тип Symbol</strong> — это примитивный тип данных (появился в ES6), который используется для создания <strong>абсолютно уникальных идентификаторов</strong> [1, 3]. Основная цель символов — позволить разработчикам создавать скрытые, защищенные свойства объектов, которые никто случайно не перезапишет [3].
+                                        </p>
+
+                                        {/* Главная ментальная модель (голубой блок) */}
+                                        <div style={{
+                                            backgroundColor: '#eff6ff',
+                                            border: '1px solid #bfdbfe',
+                                            padding: '16px',
+                                            borderRadius: '6px',
+                                            marginBottom: '24px',
+                                            fontSize: '14px',
+                                            lineHeight: '1.6',
+                                            color: '#1e40af'
+                                        }}>
+                                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                                🧠 Две главные суперсилы символов:
+                                            </div>
+                                            <div style={{ marginBottom: '6px' }}>
+                                                <strong>Гарантия уникальности:</strong> Каждый созданный символ уникален, даже если у них одинаковые текстовые описания [3]. Выражение <code style={{ fontFamily: 'monospace' }}>Symbol("id") === Symbol("id")</code> всегда вернет <code style={{ fontFamily: 'monospace' }}>false</code> [3].
+                                            </div>
+                                            <div>
+                                                <strong>Скрытые свойства:</strong> Ключи объекта, объявленные через символы, не пролезают в стандартные циклы вроде <code style={{ fontFamily: 'monospace' }}>for...in</code> и скрыты от методов вроде <code style={{ fontFamily: 'monospace' }}>Object.keys()</code> [3]. Это защищает системные данные от случайного изменения другими скриптами [3].
+                                            </div>
+                                        </div>
+
+                                        {/* Текст перед кодом */}
+                                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                            Примеры создания и защиты свойств:
+                                        </div>
+
+                                        {/* Серая плашка для кода */}
+                                        <pre style={{
+                                            backgroundColor: '#f8fafc',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '6px',
+                                            padding: '16px',
+                                            overflowX: 'auto',
+                                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                            fontSize: '14px',
+                                            color: '#0f172a',
+                                            margin: '0 0 20px 0',
+                                            whiteSpace: 'pre',
+                                            lineHeight: '1.5'
+                                        }}>
+{`// 1. Создание символа (Конструктор new использовать ЗАПРЕЩЕНО!)
+const id1 = Symbol("userId");
+const id2 = Symbol("userId");
+
+console.log(typeof id1);         // "symbol"
+console.log(id1 === id2);        // false! (Они абсолютно уникальны)
+
+// 2. Использование символа в качестве скрытого ключа объекта
+const user = {
+  name: "Alex",
+  age: 25,
+  [id1]: 9988 // Записываем значение по уникальному ключу-символу
+};
+
+// 3. Попытка перебора через обычный цикл for...in
+for (const key in user) {
+  console.log(key);              // Выведет только "name" и "age"
+}                                // Ключ Symbol("userId") полностью СКРЫТ!
+
+// 4. Прямой доступ по символу по-прежнему работает:
+console.log(user[id1]);          // 9988`}
+  </pre>
+
+                                        {/* Как всё-таки прочитать символы */}
+                                        <div style={{
+                                            borderLeft: '4px solid #f59e0b',
+                                            backgroundColor: '#fef3c7',
+                                            padding: '12px 16px',
+                                            borderRadius: '0 6px 6px 0',
+                                            fontSize: '14px',
+                                            color: '#78350f',
+                                            lineHeight: '1.5',
+                                            marginBottom: '20px'
+                                        }}>
+                                            🔓 <strong>Как их прочитать:</strong> Символы скрыты от обычных переборов, но они не являются полноценным средством безопасности. Если сторонней библиотеке очень нужно вытащить все символы из объекта, она может сделать это через специальный встроенный метод: <code style={{ fontFamily: 'monospace' }}>Object.getOwnPropertySymbols(user)</code> [3].
+                                        </div>
+
+                                        {/* Важное предупреждение (Красная сноска внизу) */}
+                                        <div style={{
+                                            borderLeft: '4px solid #ef4444',
+                                            backgroundColor: '#fef2f2',
+                                            padding: '12px 16px',
+                                            borderRadius: '0 6px 6px 0',
+                                            fontSize: '14px',
+                                            color: '#991b1b',
+                                            lineHeight: '1.5'
+                                        }}>
+                                            🚨 <strong>Ловушка JSON:</strong> При попытке превратить объект в строку через метод <code style={{ fontFamily: 'monospace' }}>JSON.stringify(user)</code>, все свойства, ключами которых являются символы, будут автоматически проигнорированы и полностью удалены из итоговой строки.
+                                        </div>
+                                    </div>
+
                                 </div>
 
 
