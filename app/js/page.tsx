@@ -3948,6 +3948,47 @@ console.log(!!0);               // false`}
                                     }}>
                                         🚨 <strong>Главная ловушка для новичков:</strong> Пустой массив <code style={{ fontFamily: 'monospace' }}>[]</code> и пустой объект <code style={{ fontFamily: 'monospace' }}>{`{}`}</code> — это <strong>Truthy значения</strong>! Выражения <code style={{ fontFamily: 'monospace' }}>Boolean([])</code> и <code style={{ fontFamily: 'monospace' }}>Boolean({`{}`})</code> вернут <code style={{ fontFamily: 'monospace', fontWeight: '700' }}>true</code>. В JavaScript абсолютно любые объекты считаются правдивыми, даже если в них нет ни одного элемента.
                                     </div>
+                                    <div style={{ marginTop: '24px', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif' }}>
+                                        <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: '0 0 8px 0' }}>
+                                            🤔 Почему [] и {'{}'} — это Truthy-значения?
+                                        </h3>
+
+                                        <p style={{ fontSize: '15px', color: '#475569', margin: '0 0 16px 0', lineHeight: '1.6' }}>
+                                            В спецификации ECMAScript заложено строгое правило: <strong>любой объект (включая массивы) всегда приводится к <code style={{ fontFamily: 'monospace', color: '#16a34a' }}>true</code></strong>. Движок проверяет только тип данных, но никогда не заглядывает внутрь структуры, чтобы проверить её наполненность.
+                                        </p>
+
+                                        {/* Код с примерами проверок */}
+                                        <pre style={{
+                                            backgroundColor: '#f8fafc',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '6px',
+                                            padding: '16px',
+                                            overflowX: 'auto',
+                                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                            fontSize: '14px',
+                                            color: '#0f172a',
+                                            margin: '0 0 20px 0',
+                                            whiteSpace: 'pre',
+                                            lineHeight: '1.5'
+                                        }}>
+{`// Ловушка: типы данных возвращают true
+console.log(Boolean([])); // true
+console.log(Boolean({})); // true
+
+// Как правильно проверять на пустоту в реальном UI:
+const arr = [];
+const obj = {};
+
+if (arr.length > 0) {
+  // Код выполнится только если массив НЕ пустой
+}
+
+if (Object.keys(obj).length > 0) {
+  // Код выполнится только если в объекте есть ключи
+}`}
+  </pre>
+                                    </div>
+
                                 </div>
 
                             </div>
