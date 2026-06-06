@@ -3817,6 +3817,139 @@ console.log(language[0]); // "J"`}
                                 }}>
                                     📏 <strong>Длина строки:</strong> Свойство <code style={{ fontFamily: 'monospace' }}>.length</code> возвращает количество символов в строке: <code style={{ fontFamily: 'monospace' }}>"Привет".length</code> вернет <code style={{ fontFamily: 'monospace' }}>6</code>. Помните, что это свойство, а не метод, поэтому круглые скобки в конце ставить не нужно.
                                 </div>
+                                <div style={{
+                                    backgroundColor: '#ffffff',
+                                    borderRadius: '8px',
+                                    border: '1px solid #e2e8f0',
+                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                    padding: '24px sm:32px',
+                                    width: '100%',
+                                    boxSizing: 'border-box',
+                                    fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                    color: '#334155',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    marginTop: '32px'
+                                }}>
+                                    {/* Верхняя синяя полоса карточки */}
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        height: '4px',
+                                        backgroundColor: '#2563eb'
+                                    }} />
+
+                                    {/* Заголовок */}
+                                    <h2 style={{
+                                        fontSize: '20px',
+                                        fontWeight: '700',
+                                        color: '#1e3a8a',
+                                        margin: '0 0 12px 0'
+                                    }}>
+                                        Тип данных Boolean (Логический тип)
+                                    </h2>
+
+                                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                                        <strong>Тип Boolean</strong> представляет логическую сущность и содержит всего два значения: <code style={{ fontFamily: 'monospace' }}>true</code> (истина) и <code style={{ fontFamily: 'monospace' }}>false</code> (ложь). Обычно этот тип используется для проверки условий в операторах сравнения и циклах.
+                                    </p>
+
+                                    {/* Главная ментальная модель (голубой блок) */}
+                                    <div style={{
+                                        backgroundColor: '#eff6ff',
+                                        border: '1px solid #bfdbfe',
+                                        padding: '16px',
+                                        borderRadius: '6px',
+                                        marginBottom: '24px',
+                                        fontSize: '14px',
+                                        lineHeight: '1.6',
+                                        color: '#1e40af'
+                                    }}>
+                                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                            🧠 Концепция Truthy и Falsy (Правдивые и Ложные значения):
+                                        </div>
+                                        <p style={{ margin: '0 0 8px 0' }}>
+                                            В JavaScript любое значение другого типа (число, строка, объект) можно принудительно или автоматически превратить в логический тип — например, внутри условия <code style={{ fontFamily: 'monospace' }}>if (выражение)</code>.
+                                        </p>
+                                        <div style={{ marginBottom: '6px' }}>
+                                            <strong>Falsy (Ложные):</strong> Существует строго ограниченный список значений, которые при превращении в Boolean всегда дают <code style={{ fontFamily: 'monospace', color: '#be123c' }}>false</code>.
+                                        </div>
+                                        <div>
+                                            <strong>Truthy (Правдивые):</strong> Всё остальное, что не входит в список Falsy, автоматически превращается в <code style={{ fontFamily: 'monospace', color: '#16a34a' }}>true</code> (включая любые объекты, массивы и непустые строки).
+                                        </div>
+                                    </div>
+
+                                    {/* Сводный блок Falsy значений */}
+                                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                        Полный список Falsy-значений (приводятся к false):
+                                    </div>
+
+                                    <div style={{ overflowX: 'auto', marginBottom: '24px' }}>
+                                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px', textAlign: 'left' }}>
+                                            <thead>
+                                            <tr style={{ color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>
+                                                <th style={{ padding: '8px 12px' }}>Значение</th>
+                                                <th style={{ padding: '8px 12px' }}>Описание</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr style={{ borderBottom: '1px solid #f1f5f9' }}><td style={{ padding: '8px 12px', fontFamily: 'monospace', fontWeight: '600' }}>false</td><td style={{ padding: '8px 12px' }}>Сам логический тип ложь</td></tr>
+                                            <tr style={{ borderBottom: '1px solid #f1f5f9' }}><td style={{ padding: '8px 12px', fontFamily: 'monospace', fontWeight: '600' }}>0, -0, 0n</td><td style={{ padding: '8px 12px' }}>Число ноль (включая отрицательный и BigInt)</td></tr>
+                                            <tr style={{ borderBottom: '1px solid #f1f5f9' }}><td style={{ padding: '8px 12px', fontFamily: 'monospace', fontWeight: '600' }}>"", '', ``</td><td style={{ padding: '8px 12px' }}>Абсолютно пустая строка (любой кавычки)</td></tr>
+                                            <tr style={{ borderBottom: '1px solid #f1f5f9' }}><td style={{ padding: '8px 12px', fontFamily: 'monospace', fontWeight: '600' }}>null</td><td style={{ padding: '8px 12px' }}>Намеренное отсутствие значения</td></tr>
+                                            <tr style={{ borderBottom: '1px solid #f1f5f9' }}><td style={{ padding: '8px 12px', fontFamily: 'monospace', fontWeight: '600' }}>undefined</td><td style={{ padding: '8px 12px' }}>Неприсвоенное значение</td></tr>
+                                            <tr style={{ borderBottom: '1px solid #f1f5f9' }}><td style={{ padding: '8px 12px', fontFamily: 'monospace', fontWeight: '600' }}>NaN</td><td style={{ padding: '8px 12px' }}>Результат математической ошибки (Not a Number)</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {/* Текст перед кодом */}
+                                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                        Примеры логического приведения и проверок:
+                                    </div>
+
+                                    {/* Серая плашка для кода */}
+                                    <pre style={{
+                                        backgroundColor: '#f8fafc',
+                                        border: '1px solid #e2e8f0',
+                                        borderRadius: '6px',
+                                        padding: '16px',
+                                        overflowX: 'auto',
+                                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                        fontSize: '14px',
+                                        color: '#0f172a',
+                                        margin: '0 0 20px 0',
+                                        whiteSpace: 'pre',
+                                        lineHeight: '1.5'
+                                    }}>
+{`const isLogged = true;
+console.log(typeof isLogged); // "boolean"
+
+// ⚡ Два способа явного приведения к Boolean:
+// Способ А: Функция Boolean()
+console.log(Boolean("Привет")); // true (строка не пустая)
+console.log(Boolean(""));       // false (строка пустая)
+
+// Способ Б: Двойное отрицание !! (Самый частый в реальном коде)
+console.log(!!"Текст");         // true
+console.log(!!0);               // false`}
+  </pre>
+
+                                    {/* Важное предупреждение (Красная сноска внизу — ловушка на собеседованиях) */}
+                                    <div style={{
+                                        borderLeft: '4px solid #ef4444',
+                                        backgroundColor: '#fef2f2',
+                                        padding: '12px 16px',
+                                        borderRadius: '0 6px 6px 0',
+                                        fontSize: '14px',
+                                        color: '#991b1b',
+                                        lineHeight: '1.5'
+                                    }}>
+                                        🚨 <strong>Главная ловушка для новичков:</strong> Пустой массив <code style={{ fontFamily: 'monospace' }}>[]</code> и пустой объект <code style={{ fontFamily: 'monospace' }}>{`{}`}</code> — это <strong>Truthy значения</strong>! Выражения <code style={{ fontFamily: 'monospace' }}>Boolean([])</code> и <code style={{ fontFamily: 'monospace' }}>Boolean({`{}`})</code> вернут <code style={{ fontFamily: 'monospace', fontWeight: '700' }}>true</code>. В JavaScript абсолютно любые объекты считаются правдивыми, даже если в них нет ни одного элемента.
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
