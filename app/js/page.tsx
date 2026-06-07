@@ -4501,6 +4501,93 @@ for (const [key, value] of Object.entries(user)) {
                                                 }}>
                                                     💡 <strong>Преимущество перед for...in:</strong> Методы <code style={{ fontFamily: 'monospace' }}>Object.keys / values / entries</code> собирают свойства <strong>только самого объекта</strong>. Они автоматически игнорируют любые чужие свойства, унаследованные из цепочки прототипов (<code style={{ fontFamily: 'monospace' }}>__proto__</code>), избавляя вас от необходимости писать ручные проверки через <code style={{ fontFamily: 'monospace' }}>hasOwnProperty()</code>.
                                                 </div>
+                                                <div style={{
+                                                    backgroundColor: '#ffffff',
+                                                    borderRadius: '8px',
+                                                    border: '1px solid #e2e8f0',
+                                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                                    padding: '24px sm:32px',
+                                                    width: '100%',
+                                                    boxSizing: 'border-box',
+                                                    fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                                    color: '#334155',
+                                                    position: 'relative',
+                                                    overflow: 'hidden',
+                                                    marginTop: '32px'
+                                                }}>
+                                                    {/* Верхняя синяя полоса карточки */}
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        left: 0,
+                                                        right: 0,
+                                                        height: '4px',
+                                                        backgroundColor: '#2563eb'
+                                                    }} />
+
+                                                    {/* Заголовок */}
+                                                    <h2 style={{
+                                                        fontSize: '20px',
+                                                        fontWeight: '700',
+                                                        color: '#1e3a8a',
+                                                        margin: '0 0 12px 0'
+                                                    }}>
+                                                        Проблема typeof с объектами и правильная проверка массивов
+                                                    </h2>
+
+                                                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                                                        Оператор <code style={{ fontFamily: 'monospace', fontWeight: '700' }}>typeof</code> отлично определяет примитивы, но ломается на сложных структурах данных. В JavaScript массивы, функции и даже <code style={{ fontFamily: 'monospace' }}>null</code> при вызове этого оператора возвращают один и тот же тип, что делает невозможным стандартную проверку.
+                                                    </p>
+
+                                                    {/* Текст перед кодом */}
+                                                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                                        Парадоксы оператора typeof и решение через Array.isArray():
+                                                    </div>
+
+                                                    {/* Серая плашка для кода */}
+                                                    <pre style={{
+                                                        backgroundColor: '#f8fafc',
+                                                        border: '1px solid #e2e8f0',
+                                                        borderRadius: '6px',
+                                                        padding: '16px',
+                                                        overflowX: 'auto',
+                                                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                                        fontSize: '14px',
+                                                        color: '#0f172a',
+                                                        margin: '0 0 20px 0',
+                                                        whiteSpace: 'pre',
+                                                        lineHeight: '1.5'
+                                                    }}>
+{`// ⚠️ Проблема: всё является объектом для typeof
+console.log(typeof {});           // 'object'
+console.log(typeof []);           // 'object'  ← массив тоже объект!
+console.log(typeof function(){}); // 'function' (но структурно это тоже объект)
+console.log(typeof null);         // 'object'  ← признанный баг JS
+
+// 🟢 Решение: точная проверка, что перед нами именно массив
+console.log(Array.isArray([]));   // true ✅
+console.log(Array.isArray({}));   // false ✅`}
+  </pre>
+
+                                                    {/* Ментальный блок с объяснением для функций */}
+                                                    <div style={{
+                                                        backgroundColor: '#eff6ff',
+                                                        border: '1px solid #bfdbfe',
+                                                        padding: '16px',
+                                                        borderRadius: '6px',
+                                                        fontSize: '14px',
+                                                        lineHeight: '1.6',
+                                                        color: '#1e40af'
+                                                    }}>
+                                                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                                                            🧠 Почему функции возвращают 'function'?
+                                                        </div>
+                                                        <div>
+                                                            Хотя функции в JavaScript являются подтипом объектов (вы можете динамически добавлять им свойства и методы), создатели языка специально сделали так, чтобы <code style={{ fontFamily: 'monospace' }}>typeof function(){}</code> возвращал строку <code style={{ fontFamily: 'monospace' }}>"function"</code>. Это позволяет разработчикам легко отличать исполняемый код (колбэки) от обычных объектов и массивов.
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
 
                                         </div>
