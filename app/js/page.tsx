@@ -4383,6 +4383,126 @@ console.log(original.active); // true (Оригинал защищен, связ
                                             }}>
                                                 🚨 <strong>Ловушка поверхностного копирования (Shallow Copy):</strong> Помните, что спред-оператор <code style={{ fontFamily: 'monospace' }}>...</code> копирует автономно только первый уровень свойств. Если внутри объекта лежит другой вложенный объект (например, <code style={{ fontFamily: 'monospace' }}>{`info: { age: 25 }`}</code>), то его адрес скопируется по старинке — по ссылке. Для полноценного глубокого копирования используют современный метод <code style={{ fontFamily: 'monospace', color: '#2563eb' }}>structuredClone(original)</code>.
                                             </div>
+                                            <div style={{
+                                                backgroundColor: '#ffffff',
+                                                borderRadius: '8px',
+                                                border: '1px solid #e2e8f0',
+                                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                                padding: '24px sm:32px',
+                                                width: '100%',
+                                                boxSizing: 'border-box',
+                                                fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                                color: '#334155',
+                                                position: 'relative',
+                                                overflow: 'hidden',
+                                                marginTop: '32px'
+                                            }}>
+                                                {/* Upper yellow border line */}
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    height: '4px',
+                                                    backgroundColor: '#facc15'
+                                                }} />
+
+                                                {/* Header */}
+                                                <h2 style={{
+                                                    fontSize: '20px',
+                                                    fontWeight: '700',
+                                                    color: '#b45309',
+                                                    margin: '0 0 12px 0'
+                                                }}>
+                                                    Альтернативные методы перебора объектов
+                                                </h2>
+
+                                                <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                                                    Хотя цикл <code style={{ fontFamily: 'monospace' }}>for...in</code> является классическим способом обхода объектов, в современной разработке чаще используют методы встроенного класса <code style={{ fontFamily: 'monospace', fontWeight: '700' }}>Object</code>. Они преобразуют данные объекта в массивы, что позволяет комбинировать их с циклом <code style={{ fontFamily: 'monospace' }}>for...of</code> и деструктуризацией.
+                                                </p>
+
+                                                {/* Ментальная модель (Желтый блок) */}
+                                                <div style={{
+                                                    backgroundColor: '#fefce8',
+                                                    border: '1px solid #fef08a',
+                                                    padding: '16px',
+                                                    borderRadius: '6px',
+                                                    marginBottom: '24px',
+                                                    fontSize: '14px',
+                                                    lineHeight: '1.6',
+                                                    color: '#713f12'
+                                                }}>
+                                                    <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                                        ✍️ Три главных инструмента трансформации:
+                                                    </div>
+                                                    <div style={{ marginBottom: '6px' }}>
+                                                        <strong>Object.keys(obj):</strong> Собирает все ключи (имена свойств) объекта в обычный одномерный массив строк.
+                                                    </div>
+                                                    <div style={{ marginBottom: '6px' }}>
+                                                        <strong>Object.values(obj):</strong> Достает только значения из объекта и возвращает их в виде массива.
+                                                    </div>
+                                                    <div>
+                                                        <strong>Object.entries(obj):</strong> Превращает объект в двумерный массив («массив массивов»), где каждый вложенный элемент — это пара вида <code style={{ fontFamily: 'monospace' }}>[ключ, значение]</code>.
+                                                    </div>
+                                                </div>
+
+                                                {/* Текст перед кодом */}
+                                                <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                                    Практический пример работы с методами Object:
+                                                </div>
+
+                                                {/* Серая плашка для кода */}
+                                                <pre style={{
+                                                    backgroundColor: '#f8fafc',
+                                                    border: '1px solid #e2e8f0',
+                                                    borderRadius: '6px',
+                                                    padding: '16px',
+                                                    overflowX: 'auto',
+                                                    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                                    fontSize: '14px',
+                                                    color: '#0f172a',
+                                                    margin: '0 0 20px 0',
+                                                    whiteSpace: 'pre',
+                                                    lineHeight: '1.5'
+                                                }}>
+{`const user = { name: 'Катя', age: 25, city: 'Минск' };
+
+// 1. Классический for...in — бежит по ключам
+for (const key in user) {
+  console.log(key, user[key]);
+  // 'name' 'Катя', 'age' 25, 'city' 'Минск'
+}
+
+// 2. Object.keys() — получаем массив ключей
+console.log(Object.keys(user));    // ['name', 'age', 'city']
+
+// 3. Object.values() — получаем массив значений
+console.log(Object.values(user));  // ['Катя', 25, 'Минск']
+
+// 4. Object.entries() — массив пар [ключ, значение]
+console.log(Object.entries(user));
+// [['name', 'Катя'], ['age', 25], ['city', 'Минск']]
+
+// 🔥 Удобный паттерн: for...of + entries + деструктуризация
+for (const [key, value] of Object.entries(user)) {
+  console.log(\`\${key}: \${value}\`); // "name: Катя", "age: 25"...
+}`}
+  </pre>
+
+                                                {/* Сине-зеленая плашка о преимуществе */}
+                                                <div style={{
+                                                    borderLeft: '4px solid #0d9488',
+                                                    backgroundColor: '#f0fdfa',
+                                                    padding: '12px 16px',
+                                                    borderRadius: '0 6px 6px 0',
+                                                    fontSize: '14px',
+                                                    color: '#115e59',
+                                                    lineHeight: '1.5'
+                                                }}>
+                                                    💡 <strong>Преимущество перед for...in:</strong> Методы <code style={{ fontFamily: 'monospace' }}>Object.keys / values / entries</code> собирают свойства <strong>только самого объекта</strong>. Они автоматически игнорируют любые чужие свойства, унаследованные из цепочки прототипов (<code style={{ fontFamily: 'monospace' }}>__proto__</code>), избавляя вас от необходимости писать ручные проверки через <code style={{ fontFamily: 'monospace' }}>hasOwnProperty()</code>.
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                     </div>
