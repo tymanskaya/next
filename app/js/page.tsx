@@ -4586,6 +4586,135 @@ console.log(Array.isArray({}));   // false ✅`}
                                                             Хотя функции в JavaScript являются подтипом объектов (вы можете динамически добавлять им свойства и методы), создатели языка специально сделали так, чтобы <code style={{ fontFamily: 'monospace' }}>typeof function(){}</code> возвращал строку <code style={{ fontFamily: 'monospace' }}>"function"</code>. Это позволяет разработчикам легко отличать исполняемый код (колбэки) от обычных объектов и массивов.
                                                         </div>
                                                     </div>
+                                                    <div style={{
+                                                        backgroundColor: '#ffffff',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid #e2e8f0',
+                                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                                        padding: '24px sm:32px',
+                                                        width: '100%',
+                                                        boxSizing: 'border-box',
+                                                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                                        color: '#334155',
+                                                        position: 'relative',
+                                                        overflow: 'hidden',
+                                                        marginTop: '32px'
+                                                    }}>
+                                                        {/* Верхняя синяя полоса карточки */}
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            top: 0,
+                                                            left: 0,
+                                                            right: 0,
+                                                            height: '4px',
+                                                            backgroundColor: '#2563eb'
+                                                        }} />
+
+                                                        {/* Заголовок */}
+                                                        <h2 style={{
+                                                            fontSize: '20px',
+                                                            fontWeight: '700',
+                                                            color: '#1e3a8a',
+                                                            margin: '0 0 12px 0'
+                                                        }}>
+                                                            Приведение типов в JavaScript (Type Coercion)
+                                                        </h2>
+
+                                                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                                                            Поскольку JavaScript является языком с <strong>динамической и слабой типизацией</strong>, он умеет автоматически преобразовывать значения из одного типа в другой прямо во время выполнения операций. Такое скрытое автоматическое преобразование называется <strong>неявным приведением типов</strong> (Implicit Coercion).
+                                                        </p>
+
+                                                        {/* Главная ментальная модель (голубой блок) */}
+                                                        <div style={{
+                                                            backgroundColor: '#eff6ff',
+                                                            border: '1px solid #bfdbfe',
+                                                            padding: '16px',
+                                                            borderRadius: '6px',
+                                                            marginBottom: '24px',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.6',
+                                                            color: '#1e40af'
+                                                        }}>
+                                                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                                                🧠 Три главных направления приведения типов:
+                                                            </div>
+                                                            <div style={{ marginBottom: '6px' }}>
+                                                                <strong>Строковое (ToString):</strong> Происходит, когда один из операндов является строкой и используется оператор сложения <code style={{ fontFamily: 'monospace' }}>+</code>. Сложение превращается в <strong>конкатенацию</strong> (склеивание текста).
+                                                            </div>
+                                                            <div style={{ marginBottom: '6px' }}>
+                                                                <strong>Численное (ToNumber):</strong> Происходит при математических операциях сравнения (<code style={{ fontFamily: 'monospace' }}>{`>`, `<`, `>=`, `<=`}` tracking-wider)</code>, вычитания <code style={{ fontFamily: 'monospace' }}>-</code>, умножения <code style={{ fontFamily: 'monospace' }}>*</code> и деления <code style={{ fontFamily: 'monospace' }}>/</code>.
+                                                            </div>
+                                                            <div>
+                                                                <strong>Логическое (ToBoolean):</strong> Происходит в логических контекстах (например, в условиях <code style={{ fontFamily: 'monospace' }}>if (...)</code>, циклах или при использовании логических операторов <code style={{ fontFamily: 'monospace' }}>||</code> и <code style={{ fontFamily: 'monospace' }}>&&</code>).
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Текст перед кодом */}
+                                                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                                            Примеры неявного приведения и парадоксы на собеседованиях:
+                                                        </div>
+
+                                                        {/* Серая плашка для кода */}
+                                                        <pre style={{
+                                                            backgroundColor: '#f8fafc',
+                                                            border: '1px solid #e2e8f0',
+                                                            borderRadius: '6px',
+                                                            padding: '16px',
+                                                            overflowX: 'auto',
+                                                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                                            fontSize: '14px',
+                                                            color: '#0f172a',
+                                                            margin: '0 0 20px 0',
+                                                            whiteSpace: 'pre',
+                                                            lineHeight: '1.5'
+                                                        }}>
+{`// 1. Магия оператора плюс (+) — строка всегда побеждает
+console.log(5 + "5");         // "55" (Число 5 применилось к строке и склеилось)
+console.log("5" + 2 + 3);     // "523" (Идет слева направо: "5" + 2 = "52", затем + 3)
+console.log(2 + 3 + "5");     // "55"  (Сначала математика 2+3=5, затем склеивание с "5")
+
+// 2. Другие математические операторы приводят строго к ЧИСЛУ
+console.log("5" - 2);         // 3  (Строка "5" успешно стала числом 5)
+console.log("5" * "2");       // 10 (Обе строки превратились в числа)
+console.log("текст" - 2);     // NaN (Строку "текст" нельзя преобразовать в число)
+
+// 3. Логическое приведение примитивов и объектов
+console.log(Boolean(""));     // false (Пустая строка — Falsy)
+console.log(Boolean([]));     // true  (Массив — это объект, любой объект — Truthy!)
+
+// 4. Поведение унарного плюса
+console.log(+"10");           // 10 (Унарный плюс быстро приводит к числу)
+console.log(+true);           // 1  (Булево true приводится к числу 1)`}
+  </pre>
+
+                                                        {/* Важное предупреждение (Красная сноска внизу — жесткое правило на собеседованиях) */}
+                                                        <div style={{
+                                                            borderLeft: '4px solid #ef4444',
+                                                            backgroundColor: '#fef2f2',
+                                                            padding: '12px 16px',
+                                                            borderRadius: '0 6px 6px 0',
+                                                            fontSize: '14px',
+                                                            color: '#991b1b',
+                                                            lineHeight: '1.5',
+                                                            marginBottom: '20px'
+                                                        }}>
+                                                            🚨 <strong>Золотое правило: Используйте === вместо ==.</strong> Нестрогое равенство <code style={{ fontFamily: 'monospace' }}>==</code> пытается неявно привести типы операндов перед сравнением, что рождает дикие парадоксы: <code style={{ fontFamily: 'monospace' }}>[] == false</code> вернет <code style={{ fontFamily: 'monospace' }}>true</code>. Строгое равенство <code style={{ fontFamily: 'monospace' }}>===</code> не занимается приведением типов и сразу возвращает <code style={{ fontFamily: 'monospace' }}>false</code>, если типы данных различаются. Это защищает ваш код от багов.
+                                                        </div>
+
+                                                        {/* Явное приведение типов */}
+                                                        <div style={{
+                                                            borderLeft: '4px solid #10b981',
+                                                            backgroundColor: '#f0fdf4',
+                                                            padding: '12px 16px',
+                                                            borderRadius: '0 6px 6px 0',
+                                                            fontSize: '14px',
+                                                            color: '#065f46',
+                                                            lineHeight: '1.5'
+                                                        }}>
+                                                            💡 <strong>Явное приведение (Explicit Coercion):</strong> Чтобы ваш код оставался читаемым для команды, заменяйте неявную магию на явные вызовы встроенных функций-конструкторов: <code style={{ fontFamily: 'monospace' }}>Number("123")</code>, <code style={{ fontFamily: 'monospace' }}>String(42)</code>, или <code style={{ fontFamily: 'monospace' }}>Boolean(value)</code>.
+                                                        </div>
+                                                    </div>
+
                                                 </div>
 
                                             </div>
