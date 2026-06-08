@@ -89,6 +89,9 @@ export default function JavaScriptOOP() {
                     <a href="#dataTypes" onClick={(e) => handleScroll(e, 'dataTypes')} style={anchorLinkStyle}>
                         📦 Типы данных подробно
                     </a>
+                    <a href="#closures" onClick={(e) => handleScroll(e, 'closures')} style={anchorLinkStyle}>
+                        🧬 Замыкания и Области видимости
+                    </a>
 
                 </div>
             </aside>
@@ -489,23 +492,31 @@ console.log(myArray.__proto__ === Array.prototype); // true
                             fontFamily: 'monospace',
                             fontSize: '0.93em'
                         }}>
-                            <div style={{color: '#cf1322'}}>// 1. Function — это функция, поэтому её прототипом является
-                                Function.prototype
-                            </div>
-                            <div>console.log(Function.__proto__ === Function.prototype); <span
-                                style={{color: '#389e0d', fontWeight: 'bold'}}>// true</span></div>
+                            <div>
+                                <div style={{color: '#cf1322'}}>
+                                    1. Function — это функция, поэтому её прототипом является Function.prototype
+                                </div>
+                                <div>
+                                    console.log(Function.__proto__ === Function.prototype);{' '}
+                                    <span style={{color: '#389e0d', fontWeight: 'bold'}}>true</span>
+                                </div>
 
-                            <div style={{color: '#cf1322', marginTop: '10px'}}>// 2. Сам прототип функции — это объект,
-                                поэтому он наследуется от Object
-                            </div>
-                            <div>console.log(Function.prototype.__proto__ === Object.prototype); <span
-                                style={{color: '#389e0d', fontWeight: 'bold'}}>// true</span></div>
+                                <div style={{color: '#cf1322', marginTop: '10px'}}>
+                                    2. Сам прототип функции — это объект, поэтому он наследуется от Object
+                                </div>
+                                <div>
+                                    console.log(Function.prototype.__proto__ === Object.prototype);{' '}
+                                    <span style={{color: '#389e0d', fontWeight: 'bold'}}>true</span>
+                                </div>
 
-                            <div style={{color: '#cf1322', marginTop: '10px'}}>// 3. А сам конструктор Object — это
-                                функция, поэтому он наследуется от Function!
+                                <div style={{color: '#cf1322', marginTop: '10px'}}>
+                                    3. А сам конструктор Object — это функция, поэтому он наследуется от Function!
+                                </div>
+                                <div>
+                                    console.log(Object.__proto__ === Function.prototype);{' '}
+                                    <span style={{color: '#389e0d', fontWeight: 'bold'}}>true</span>
+                                </div>
                             </div>
-                            <div>console.log(Object.__proto__ === Function.prototype); <span
-                                style={{color: '#389e0d', fontWeight: 'bold'}}>// true</span></div>
                         </div>
 
                         <p style={{marginTop: '15px', fontSize: '0.95em', color: '#555'}}>
@@ -672,8 +683,7 @@ console.log(cleanObj.toString()); // ❌ TypeError: cleanObj.toString is not a f
                                         <h4 style={{margin: '0 0 5px 0', color: '#cf1322'}}>🛡️ 1. Уязвимость Prototype
                                             Pollution (Взлом прототипа)</h4>
                                         <p style={{margin: 0, fontSize: '0.93em', lineHeight: '1.5'}}>
-                                            Если злоумышленник передаст строку <code
-                                            style={codeInlineStyle}>"__proto__"</code> через форму или API, а ваш код
+                                            Если злоумышленник передаст строку <code style={codeInlineStyle}>{'"__proto__"'}</code> через форму или API, а ваш код
                                             тупо скопирует её в объект, хакер сможет внедриться в базовый <code
                                             style={codeInlineStyle}>Object.prototype</code>. После этого <b>все объекты
                                             приложения во всей памяти сервера</b> изменят свое поведение.
@@ -692,7 +702,7 @@ console.log(cleanObj.toString()); // ❌ TypeError: cleanObj.toString is not a f
                                         <p style={{margin: 0, fontSize: '0.93em', lineHeight: '1.5'}}>
                                             Прямая мутация прототипа через <code style={codeInlineStyle}>obj.__proto__ =
                                             ...</code> мгновенно уничтожает внутренние оптимизации движка V8 (скрытые
-                                            классы). Движок "выбрасывает" скомпилированный быстрый код и переключает
+                                            классы). Движок выбрасывает скомпилированный быстрый код и переключает
                                             работу с объектом в режим медленного словаря. Скорость падает до 50 раз!
                                         </p>
                                     </div>
@@ -855,12 +865,12 @@ const user = new User("Анна");`}
                                 засрет глобальный контекст). Если вызвать класс без <code
                                 style={codeInlineStyle}>new</code>, JavaScript выбросит ошибку: <code
                                 style={{...codeInlineStyle, color: '#cf1322'}}>TypeError: Class constructor cannot be
-                                invoked without 'new'</code>.
+                                invoked without new</code>.
                             </li>
                             <li>
                                 <b>Строгий режим автоматически:</b> Весь код внутри конструкции <code
                                 style={codeInlineStyle}>class</code> автоматически выполняется в строгом режиме (<code
-                                style={codeInlineStyle}>'use strict'</code>). Это защищает от случайного замусоривания
+                                style={codeInlineStyle}>&#39;use strict&rsquo;</code>). Это защищает от случайного замусоривания
                                 глобального объекта <code style={codeInlineStyle}>window</code>.
 
                                 {/* Пример кода, наглядно показывающий поведение this */}
@@ -1307,7 +1317,7 @@ class BadCar extends Vehicle {
                                     класса)</h4>
                                 <p style={{margin: 0, fontSize: '0.93em', lineHeight: '1.5', color: '#434343'}}>
                                     Поля, объявленные прямо в теле класса (например, <code style={codeInlineStyle}>role
-                                    = "Developer"</code>), физически копируются в каждый создаваемый объект. У объектов
+                                    = Developer</code>), физически копируются в каждый создаваемый объект. У объектов
                                     будут абсолютно независимые копии этих переменных. Поля с решеткой <code
                                     style={codeInlineStyle}>#</code> инкапсулируются внутри класса и полностью защищены
                                     от чтения снаружи.
@@ -2719,7 +2729,7 @@ console.log("Доступ успешно предоставлен!");`}
                                 ✍️ Главная ментальная модель:
                             </div>
                             <div style={{ marginBottom: '6px' }}>
-                                <strong>Прямой доступ к элементу:</strong> Цикл сам заходит в коллекцию и на каждом шаге достает готовое <strong>значение</strong> (например, саму строку <code style={{ fontFamily: 'monospace', color: '#be123c' }}>"React"</code>), а не его порядковый номер.
+                                <strong>Прямой доступ к элементу:</strong> Цикл сам заходит в коллекцию и на каждом шаге достает готовое <strong>значение</strong> (например, саму строку <code style={{ fontFamily: 'monospace', color: '#be123c' }}>React</code>), а не его порядковый номер.
                             </div>
                             <div>
                                 <strong>Итератор под капотом:</strong> Цикл работает только с теми структурами, у которых есть скрытый метод <code style={{ fontFamily: 'monospace', color: '#be123c' }}>[Symbol.iterator]</code>. Он последовательно запрашивает элементы, пока они не закончатся.
