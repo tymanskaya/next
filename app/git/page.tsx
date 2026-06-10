@@ -279,7 +279,7 @@ export default function Page() {
                                     <code style={{ backgroundColor: '#f5f5f5', padding: '4px 8px', borderRadius: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>git add .</code>
                                 </li>
                                 <li>Фиксируем изменения локально: <br/>
-                                    <code style={{ backgroundColor: '#f5f5f5', padding: '4px 8px', borderRadius: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>git commit -m "feat: твое сообщение"</code>
+                                    <code style={{ backgroundColor: '#f5f5f5', padding: '4px 8px', borderRadius: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>{`git commit -m "feat: твое сообщение"`}</code>
                                 </li>
                                 <li>Отправляем код на GitHub: <br/>
                                     <code style={{ backgroundColor: '#f5f5f5', padding: '4px 8px', borderRadius: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>git push</code>
@@ -389,8 +389,7 @@ export default function Page() {
                                 </li>
                                 <li>Сделай самый первый (инициализирующий) коммит:
                                     <code style={{ display: 'block', backgroundColor: '#fff', padding: '6px 12px', borderRadius: '4px', marginTop: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>
-                                        git commit -m "Initial commit"
-                                    </code>
+                                        {`git commit -m "Initial commit"`}</code>
                                 </li>
                                 <li>Привяжи удаленный репозиторий с GitHub к локальной папке:
                                     <code style={{ display: 'block', backgroundColor: '#fff', padding: '6px 12px', borderRadius: '4px', marginTop: '4px', color: '#c41d7f', fontFamily: 'monospace' }}>
@@ -411,7 +410,8 @@ export default function Page() {
                             <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 <li>В верхнем меню WebStorm выбери пункт: <b>VCS &gt; Enable Version Control Integration</b>.</li>
                                 <li>В выпадающем списке выбери <b>Git</b> и нажми <b>OK</b> (вся верстка в проекте станет красной &mdash; это нормально, файлы еще не добавлены).</li>
-                                <li>Открой вкладку <b>Commit</b> слева, выдели галочками все файлы, напиши сообщение коммита (например, <i>"init"</i>) и нажми стрелочку рядом с кнопкой Commit &rarr; выбери <b>Commit and Push</b>.</li>
+                                <li>Открой вкладку <b>Commit</b> слева, выдели галочками все файлы, напиши сообщение коммита (например, <i>{`"init"`}</i>
+                                    ) и нажми стрелочку рядом с кнопкой Commit &rarr; выбери <b>Commit and Push</b>.</li>
                                 <li>В появившемся окне нажмите на синий текст <b>Define remote</b> и вставь туда URL пустого репозитория, созданного на GitHub.</li>
                                 <li>Нажми кнопку <b>Push</b>.</li>
                             </ol>
@@ -483,7 +483,7 @@ export default function Page() {
                         <p><b>edit commit message (Изменение сообщения коммита) :</b></p>
                         <ul style={{ margin: 0, paddingLeft: '20px' }}>
                             <li style={{ marginBottom: '10px' }}>
-                                <code style={{ backgroundColor: '#f0f0f0', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git commit --amend -m "Новое правильное сообщение"</code> — исправить сообщение последнего коммита
+                                <code style={{ backgroundColor: '#f0f0f0', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>{`git commit --amend -m "Новое правильное сообщение"`}</code> — исправить сообщение последнего коммита
                             </li>
                             <li style={{ marginBottom: '10px' }}>
                                 <code style={{ backgroundColor: '#f0f0f0', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git rebase -i HEAD~[число]</code> — исправить старые коммиты (выбрать reword).
@@ -538,12 +538,12 @@ export default function Page() {
                     <p><b>Удаление коммитов из удаленного репозитория:</b></p>
                     <ol style={{ paddingLeft: '20px', margin: '10px 0' }}>
                         <li>Сначала делаем локальный откат: <code style={{ backgroundColor: '#fff', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git reset --hard HEAD~1</code></li>
-                        <li>Затем "силой" обновляем сервер: <code style={{ backgroundColor: '#fff', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git push origin main --force</code></li>
+                        <li>{`Затем "силой"`} обновляем сервер: <code style={{ backgroundColor: '#fff', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git push origin main --force</code></li>
                     </ol>
                     <p><b>Удаление без потери кода (Soft Reset):</b></p>
                     <ol style={{ paddingLeft: '20px', margin: '10px 0' }}>
                         <li>Сначала делаем локальный откат: <code style={{ backgroundColor: '#fff', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git reset --soft HEAD~1</code></li>
-                        <li>Затем "силой" обновляем сервер: <code style={{ backgroundColor: '#fff', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git push origin main --force</code></li>
+                        <li>{`Затем "силой"`} обновляем сервер: <code style={{ backgroundColor: '#fff', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace', color: '#c41d7f' }}>git push origin main --force</code></li>
                     </ol>
                     <p style={{ color: '#cf1322', fontWeight: 'bold', marginTop: '10px' }}>⚠️ ВНИМАНИЕ: Команда --force перезаписывает историю. Используйте её только если работаете в ветке в одиночку!</p>
                 </div>
@@ -766,9 +766,10 @@ export default function Page() {
                             <div style={{ marginTop: '5px', fontSize: '0.9em', color: '#666' }}>
                                 <p>💡 <i>В коде конфликт выглядит так:</i></p>
                                 <code style={{ display: 'block', backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px', color: '#333' }}>
-                                    /////// main (Ваш код) <br/>
+                                    {`/////// main (Ваш код)`} <br/>
                                     ======= <br/>
-                                    /////// dev (Код из другой ветки)
+                                    {`/////// dev (Код из другой ветки)`}
+
                                 </code>
                             </div>
                         </div>
