@@ -5816,6 +5816,149 @@ loadData
                         </div>
                     </div>
 
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя индиго-полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }} />
+
+                        {/* Заголовок */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}>
+                            Подробная спецификация методов обработки Промисов
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            Методы <code style={{ fontFamily: 'monospace' }}>.then()</code>, <code style={{ fontFamily: 'monospace' }}>.catch()</code> и <code style={{ fontFamily: 'monospace' }}>.finally()</code> называют потребителями промиса. Каждый из них подчиняется строгим правилам автоматического перезапуска цепочки.
+                        </p>
+
+                        {/* Главная ментальная модель (фиолетовый блок) */}
+                        <div style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                🧠 Спецификация поведения под капотом движка JS:
+                            </div>
+
+                            <div style={{ marginBottom: '12px' }}>
+                                <strong>• .then(onFulfilled, onRejected):</strong> Срабатывает в случае резолва промиса и вызывает переданный коллбек, в который поместит результат из функции <code style={{ fontFamily: 'monospace' }}>resolve()</code>.
+                                <div style={{ paddingLeft: '12px', marginTop: '4px', color: '#5b21b6', fontSize: '13px' }}>
+                                    👉 <strong>Скрытая фишка:</strong> Может принимать <em>два</em> коллбека. Второй аргумент делает абсолютно то же самое, что и метод <code style={{ fontFamily: 'monospace' }}>.catch()</code>, отлавливая ошибку текущего промиса.
+                                </div>
+                            </div>
+
+                            <div style={{ marginBottom: '12px' }}>
+                                <strong>• .catch(onRejected):</strong> Срабатывает в случае реджекта промиса и вызывает переданный коллбек, в который поместит ошибку из функции <code style={{ fontFamily: 'monospace' }}>reject()</code>.
+                            </div>
+
+                            <div>
+                                <strong>• .finally(onFinally):</strong> Срабатывает в любом случае (при резолве или реджекте) и вызывает коллбек, в который <strong>ничего не помещает</strong> (нет аргументов).
+                            </div>
+                        </div>
+
+                        {/* Механизм возврата Промисов (Зеленая плашка) */}
+                        <div style={{
+                            borderLeft: '4px solid #10b981',
+                            backgroundColor: '#f0fdf4',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#065f46',
+                            lineHeight: '1.6',
+                            marginBottom: '24px'
+                        }}>
+                            🔄 <strong>Железное правило Chaining (Цепочек):</strong> Абсолютно каждый из этих трех методов после своей отработки <strong>автоматически возвращает новый промис</strong>.
+                            <ul style={{ paddingLeft: '16px', margin: '4px 0 0 0', listStyleType: 'circle' }}>
+                                <li>Этот новый промис автоматически <strong>резолвится</strong>, если внутри коллбека не возникло ошибок и вы не вернули оттуда другой промис вручную.</li>
+                                <li>В случае возникновения ошибки (через <code style={{ fontFamily: 'monospace' }}>throw</code> или баг в коде), возвращаемый промис автоматически <strong>реджектится</strong>.</li>
+                            </ul>
+                        </div>
+
+                        {/* Текст перед кодом */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Пример использования двух коллбеков в .then() и продолжения цепочки после .catch():
+                        </div>
+
+                        {/* Серая плашка для кода */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`const myPromise = new Promise((resolve, reject) => {
+  reject("Упс, сбой системы!");
+});
+
+// 1. Двойной коллбек в .then()
+myPromise.then(
+  (data) => console.log("Успех:", data),
+  (err) => console.log("Поймали ошибку в самом .then():", err) // Сработает этот коллбек
+);
+
+// 2. Доказательство автоматического резолва после .catch()
+const brokenPromise = new Promise((_, reject) => reject("Ошибка"));
+
+brokenPromise
+  .catch((err) => {
+    console.log("Откат ошибки:", err);
+    return "Новые чистые данные"; // Возвращаем обычную строку
+  })
+  .then((data) => {
+    // Этот .then СРАБОТАЕТ, потому что .catch вернул автоматически зарезолвленный промис!
+    console.log("Цепочка спасена:", data); // "Цепочка спасена: Новые чистые данные" ✅
+  });`}
+  </pre>
+
+                        {/* Каверзный нюанс для интервью внизу */}
+                        <div style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}>
+                            🚨 <strong>Тонкая разница для собеседования:</strong> Конструкция <code style={{ fontFamily: 'monospace' }}>.then(success, fail)</code> отличается от <code style={{ fontFamily: 'monospace' }}>.then(success).catch(fail)</code>. Если ошибка произойдет внутри самого коллбека <code style={{ fontFamily: 'monospace' }}>success</code>, то второй аргумент <code style={{ fontFamily: 'monospace' }}>fail</code> внутри того же `.then` её <strong>не поймает</strong>. А вот идущий следом метод <code style={{ fontFamily: 'monospace' }}>.catch()</code> перехватит её без проблем.
+                        </div>
+                    </div>
 
                     {/* Статические методы (Интервью-база) */}
                     <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: '24px 0 12px 0' }}>
