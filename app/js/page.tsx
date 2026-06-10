@@ -5516,6 +5516,140 @@ console.log(age);        // ReferenceError: age is not defined ❌`}
                             📌 <strong>Важное правило:</strong> Состояние меняется только <strong>один раз</strong> и навсегда. Если промис перешел в статус <em>fulfilled</em>, он больше никогда не сможет стать <em>rejected</em>.
                         </div>
                     </div>
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя индиго-полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }} />
+
+                        {/* Заголовок */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}>
+                            Функция-исполнитель в Промисе (Executor)
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            Конструктор <code style={{ fontFamily: 'monospace' }}>new Promise()</code> принимает в качестве единственного аргумента функцию-колбэк. Эта функция запускается движком JavaScript автоматически и управляет запуском асинхронной задачи.
+                        </p>
+
+                        {/* Главная ментальная модель (фиолетовый блок) */}
+                        <div style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                🧠 Три главных правила функции-исполнителя:
+                            </div>
+                            <div style={{ marginBottom: '6px' }}>
+                                <strong>1. Абсолютная синхронность:</strong> Код внутри этой функции выполняется <strong>мгновенно и синхронно</strong> прямо в текущем потоке! Асинхронным промис становится только тогда, когда внутри этой функции вызываются Web API (например, <code style={{ fontFamily: 'monospace' }}>fetch</code> или <code style={{ fontFamily: 'monospace' }}>setTimeout</code>).
+                            </div>
+                            <div style={{ marginBottom: '6px' }}>
+                                <strong>2. Два встроенных рычага управления:</strong> Сам движок JS автоматически передаёт в вашу функцию два аргумента-колбэка: <code style={{ fontFamily: 'monospace', color: '#16a34a', fontWeight: '700' }}>resolve</code> (вызывать при успехе) и <code style={{ fontFamily: 'monospace', color: '#dc2626', fontWeight: '700' }}>reject</code> (вызывать при ошибке).
+                            </div>
+                            <div>
+                                <strong>3. Одноразовый переключатель:</strong> Исполнитель должен вызвать только <strong>один</strong> из двух рычагов и только <strong>один раз</strong>. Все последующие вызовы <code style={{ fontFamily: 'monospace' }}>resolve()</code> или <code style={{ fontFamily: 'monospace' }}>reject()</code> внутри функции будут намертво проигнорированы движком.
+                            </div>
+                        </div>
+
+                        {/* Текст перед кодом */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Доказательство синхронности и правила вызовов:
+                        </div>
+
+                        {/* Серая плашка для кода */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`console.log("1: Старт скрипта");
+
+const myPromise = new Promise((resolve, reject) => {
+  // Код внутри этой функции выполняется СИНХРОННО!
+  console.log("2: Код исполнителя внутри промиса"); 
+  
+  resolve("Данные"); // Сменили состояние на fulfilled
+  
+  reject("Ошибка");  // Игнорируется! Состояние нельзя изменить дважды.
+  console.log("3: Код после resolve (тоже выполнится)");
+});
+
+myPromise.then(res => console.log("4: .then поймал:", res));
+
+console.log("5: Конец скрипта");
+
+// 📊 ТОЧНЫЙ ПОРЯДОК ВЫВОДА В КОНСОЛЬ:
+// 1: Старт скрипта
+// 2: Код исполнителя внутри промиса
+// 3: Код после resolve (тоже выполнится)
+// 5: Конец скрипта
+// 4: .then поймал: Данные (Ушло в микрозадачи Event Loop)`}
+  </pre>
+
+                        {/* Важное предупреждение (Красная сноска внизу — неявный try...catch) */}
+                        <div style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5',
+                            marginBottom: '20px'
+                        }}>
+                            🚨 <strong>Автоматический встроенный try...catch:</strong> Вокруг функции-исполнителя движком JavaScript невидимо обёрнута конструкция перехвата ошибок. Если внутри этого кода случится непредвиденная ошибка (например, опечатка в переменной), промис не обрушит приложение, а автоматически перейдёт в состояние <code style={{ fontFamily: 'monospace' }}>rejected</code>, будто вы вручную вызвали <code style={{ fontFamily: 'monospace' }}>reject(error)</code>.
+                        </div>
+
+                        {/* Ограничение return */}
+                        <div style={{
+                            borderLeft: '4px solid #f59e0b',
+                            backgroundColor: '#fef3c7',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#78350f',
+                            lineHeight: '1.5'
+                        }}>
+                            🛑 <strong>Бесполезность return:</strong> Возвращать значение через оператор <code style={{ fontFamily: 'monospace' }}>{`return "успех"`}</code>
+                            из функции-исполнителя абсолютно бессмысленно. Движок полностью игнорирует результат работы этой функции. Единственный способ передать что-то во внешний мир — вызвать <code style={{ fontFamily: 'monospace' }}>resolve()</code>.
+                        </div>
+                    </div>
 
                     {/* Текст перед кодом */}
                     <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
@@ -5565,6 +5699,123 @@ checkAvailability
     console.log("Операция завершена"); // Отработает ВСЕГДА (и при успехе, и при ошибке)
   });`}
   </pre>
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя индиго-полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }} />
+
+                        {/* Заголовок */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}>
+                            Методы обработки Промисов (.then, .catch, .finally)
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            Объект промиса является связующим звеном между асинхронным кодом и кодом, который ждет его результат. Для того чтобы получить данные, которыми зарезолвился промис, или ошибку, из-за которой он зареджектился, используются специальные методы-потребители.
+                        </p>
+
+                        {/* Главная ментальная модель (фиолетовый блок) */}
+                        <div style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                ✍️ Разбор анатомии трех методов:
+                            </div>
+                            <div style={{ marginBottom: '6px' }}>
+                                <strong>.then(onFulfilled, onRejected):</strong> Самый важный метод. Принимает колбэк, который автоматически запускается, когда промис переходит в состояние успешного выполнения (<code style={{ fontFamily: 'monospace' }}>fulfilled</code>), и получает переданный результат.
+                            </div>
+                            <div style={{ marginBottom: '6px' }}>
+                                <strong>.catch(onRejected):</strong> Используется исключительно для обработки ошибок. Он мгновенно срабатывает, если промис упал в статус <code style={{ fontFamily: 'monospace' }}>rejected</code> или внутри исполнителя произошла непредвиденная ошибка компиляции.
+                            </div>
+                            <div>
+                                <strong>.finally(onFinally):</strong> Колбэк запускается в самый последний момент, когда промис завершен. Он не знает, был ли запрос успешным или ошибочным — у него нет аргументов. Нужен для очистки «мусора»: отключения индикаторов загрузки (лоадеров), закрытия модальных окон или сброса форм.
+                            </div>
+                        </div>
+
+                        {/* Текст перед кодом */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Пример чейнинга (построения цепочек вызовов):
+                        </div>
+
+                        {/* Серая плашка для кода */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`const loadData = new Promise((resolve, reject) => {
+  setTimeout(() => resolve({ id: 1, name: "Катя" }), 1000);
+});
+
+loadData
+  .then((user) => {
+    console.log("Данные получены:", user); // { id: 1, name: "Катя" }
+    // 🔥 Любой return внутри .then автоматически заворачивается в НОВЫЙ промис
+    return user.name; 
+  })
+  .then((name) => {
+    console.log("Имя из цепочки:", name);  // "Катя"
+  })
+  .catch((error) => {
+    console.error("Поймали ошибку:", error); // Сюда прилетит любой сбой из цепочки выше
+  })
+  .finally(() => {
+    console.log("Потоковая очистка ресурсов"); // Отработает при любом исходе
+  });`}
+  </pre>
+
+                        {/* Важное предупреждение для Next.js */}
+                        <div style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}>
+                            🚨 <strong>Ловушка сквозной ошибки:</strong> Если ошибка произошла на самом первом этапе, а метод <code style={{ fontFamily: 'monospace' }}>.catch()</code> стоит в самом низу длинной цепочки из пяти <code style={{ fontFamily: 'monospace' }}>.then()</code> — JavaScript не упадет. Ошибка будет прокидываться сквозь все <code style={{ fontFamily: 'monospace' }}>.then()</code>, пропуская их выполнение, пока не доберется до ближайшего обработчика ошибок.
+                        </div>
+                    </div>
+
 
                     {/* Статические методы (Интервью-база) */}
                     <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: '24px 0 12px 0' }}>
