@@ -92,6 +92,10 @@ export default function JavaScriptOOP() {
                     <a href="#closures" onClick={(e) => handleScroll(e, 'closures')} style={anchorLinkStyle}>
                         🧬 Замыкания и Области видимости
                     </a>
+                    <a href="#promises" onClick={(e) => handleScroll(e, 'promises')} style={anchorLinkStyle}>
+                        ⏳ Промисы от А до Я
+                    </a>
+
 
                 </div>
             </aside>
@@ -5447,6 +5451,158 @@ console.log(age);        // ReferenceError: age is not defined ❌`}
                     </div>
 
                 </div>
+
+                <div id="promises" style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '8px',
+                    border: '1px solid #e2e8f0',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                    padding: '24px sm:32px',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                    color: '#334155',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    marginTop: '32px'
+                }}>
+                    {/* Верхняя индиго-полоса карточки */}
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '4px',
+                        backgroundColor: '#6366f1'
+                    }} />
+
+                    {/* Заголовок */}
+                    <h2 style={{
+                        fontSize: '20px',
+                        fontWeight: '700',
+                        color: '#4338ca',
+                        margin: '0 0 12px 0'
+                    }}>
+                        Глубокий разбор объектов Promise (Промисы)
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        <strong>Promise (Промис)</strong> — это специальный объект в JavaScript, который служит «контейнером» для результата асинхронной операции, который пока еще неизвестен, но будет получен в будущем. Промис избавляет от ада колбэков (Callback Hell), позволяя выстраивать удобные цепочки вызовов.
+                    </p>
+
+                    {/* Главная ментальная модель (фиолетовый блок) */}
+                    <div style={{
+                        backgroundColor: '#f5f3ff',
+                        border: '1px solid #ddd6fe',
+                        padding: '16px',
+                        borderRadius: '6px',
+                        marginBottom: '24px',
+                        fontSize: '14px',
+                        lineHeight: '1.6',
+                        color: '#4c1d95'
+                    }}>
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            ⏳ Ментальная модель: Три состояния и два колбэка
+                        </div>
+                        <div style={{ marginBottom: '8px' }}>
+                            Промис создается через конструктор <code style={{ fontFamily: 'monospace' }}>new Promise((resolve, reject) =&gt; {`{...}`})</code> и всегда находится в одном из 3-х состояний:
+                        </div>
+                        <ul style={{ paddingLeft: '16px', margin: '0 0 12px 0', listStyleType: 'disc' }}>
+                            <li style={{ marginBottom: '4px' }}><strong>Pending (Ожидание):</strong> Начальное состояние. Асинхронное действие еще не завершилось (например, запрос к API летит по сети).</li>
+                            <li style={{ marginBottom: '4px' }}><strong>Fulfilled (Выполнено успешно):</strong> Операция завершена успешно. Вызывается функция <code style={{ fontFamily: 'monospace', color: '#16a34a', fontWeight: '700' }}>resolve(value)</code>.</li>
+                            <li><strong>Rejected (Выполнено с ошибкой):</strong> Произошел сбой. Вызывается функция <code style={{ fontFamily: 'monospace', color: '#dc2626', fontWeight: '700' }}>reject(error)</code>.</li>
+                        </ul>
+                        <div>
+                            📌 <strong>Важное правило:</strong> Состояние меняется только <strong>один раз</strong> и навсегда. Если промис перешел в статус <em>fulfilled</em>, он больше никогда не сможет стать <em>rejected</em>.
+                        </div>
+                    </div>
+
+                    {/* Текст перед кодом */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Создание промиса и обработка через .then / .catch / .finally:
+                    </div>
+
+                    {/* Серая плашка для кода */}
+                    <pre style={{
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '6px',
+                        padding: '16px',
+                        overflowX: 'auto',
+                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                        fontSize: '14px',
+                        color: '#0f172a',
+                        margin: '0 0 20px 0',
+                        whiteSpace: 'pre',
+                        lineHeight: '1.5'
+                    }}>
+{`// 1. Создаем промис (обертку над асинхронным таймером)
+const checkAvailability = new Promise((resolve, reject) => {
+  const isAvailable = true; // Имитация условия
+
+  setTimeout(() => {
+    if (isAvailable) {
+      resolve("Товар на складе!"); // Успех -> передаем данные наружу
+    } else {
+      reject("Товара нет в наличии"); // Сбой -> передаем ошибку
+    }
+  }, 1000);
+});
+
+// 2. Потребляем результат (Consumer методы)
+checkAvailability
+  .then((data) => {
+    console.log("Успех:", data); // Отработает, если вызвался resolve()
+    return "Следующий шаг";      // chain-эффект: возвращенное значение летит в следующий .then
+  })
+  .then((nextData) => {
+    console.log(nextData);      // "Следующий шаг"
+  })
+  .catch((error) => {
+    console.error("Ошибка:", error); // Отработает, если вызвался reject()
+  })
+  .finally(() => {
+    console.log("Операция завершена"); // Отработает ВСЕГДА (и при успехе, и при ошибке)
+  });`}
+  </pre>
+
+                    {/* Статические методы (Интервью-база) */}
+                    <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: '24px 0 12px 0' }}>
+                        🚀 Статические методы класса Promise (Комбинаторы)
+                    </h3>
+                    <p style={{ fontSize: '15px', color: '#475569', margin: '0 0 12px 0', lineHeight: '1.6' }}>
+                        Когда нужно управлять сразу несколькими асинхронными запросами одновременно, используются встроенные статические методы:
+                    </p>
+
+                    <ul style={{ listStyle: 'none', paddingLeft: 0, margin: '0 0 24px 0', fontSize: '14px', lineHeight: '1.6' }}>
+                        <li style={{ display: 'flex', alignItems: 'start', gap: '8px', marginBottom: '10px' }}>
+                            <span style={{ color: '#6366f1', flexShrink: 0 }}>▪</span>
+                            <div><strong>Promise.all([p1, p2, p3]):</strong> Ждет выполнения <strong>всех</strong> промисов. Возвращает массив результатов. Если хотя бы один промис упадет в <code style={{ fontFamily: 'monospace' }}>reject</code>, весь метод мгновенно падает с этой ошибкой, игнорируя остальные успешные запросы.</div>
+                        </li>
+                        <li style={{ display: 'flex', alignItems: 'start', gap: '8px', marginBottom: '10px' }}>
+                            <span style={{ color: '#6366f1', flexShrink: 0 }}>▪</span>
+                            <div><strong>Promise.allSettled([p1, p2, p3]):</strong> Появился в ES2020. Безопасная альтернатива. Ждет завершения всех промисов (неважно, успешно или с ошибкой) и возвращает массив объектов со статусами <code style={{ fontFamily: 'monospace' }}>{`{ status: "fulfilled", value: ... }`}</code> или <code style={{ fontFamily: 'monospace' }}>{`{ status: "rejected", reason: ... }`}</code>.</div>
+                        </li>
+                        <li style={{ display: 'flex', alignItems: 'start', gap: '8px', marginBottom: '10px' }}>
+                            <span style={{ color: '#6366f1', flexShrink: 0 }}>▪</span>
+                            <div><strong>Promise.race([p1, p2, p3]):</strong> Устраивает «гонку». Возвращает результат того промиса, который выполнился (или упал) <strong>быстрее всех</strong>. Результаты остальных просто игнорируются.</div>
+                        </li>
+                    </ul>
+
+                    {/* Важное предупреждение для Next.js */}
+                    <div style={{
+                        borderLeft: '4px solid #ef4444',
+                        backgroundColor: '#fef2f2',
+                        padding: '12px 16px',
+                        borderRadius: '0 6px 6px 0',
+                        fontSize: '14px',
+                        color: '#991b1b',
+                        lineHeight: '1.5'
+                    }}>
+                        🚨 <strong>Ловушка синхронного конструктора:</strong> Тело самого конструктора <code style={{ fontFamily: 'monospace' }}>new Promise((resolve, reject) =&gt; {`{...}`})</code> выполняется **синхронно и мгновенно** в момент создания! Асинхронными являются исключительно его методы-обработчики (<code style={{ fontFamily: 'monospace' }}>.then</code>, <code style={{ fontFamily: 'monospace' }}>.catch</code>), которые отправляют колбэки в очередь микрозадач Event Loop.
+                    </div>
+                </div>
+
 
             </main>
         </div>
