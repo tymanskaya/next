@@ -6388,6 +6388,49 @@ modernWay();`}
                             </ul>
                         </div>
                     </div>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                        gap: '16px',
+                        marginBottom: '24px',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif'
+                    }}>
+
+                        {/* Карточка Стека (LIFO) */}
+                        <div style={{
+                            padding: '16px',
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            borderLeft: '4px solid #3b82f6' // Синий акцент для стека
+                        }}>
+    <span style={{ fontWeight: '700', color: '#1e3a8a', display: 'block', marginBottom: '6px' }}>
+      📥 Стек вызовов (Call Stack) — Принцип LIFO
+    </span>
+                            <span style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', display: 'block' }}>
+      <strong>LIFO</strong> (Last In, First Out — «Последним пришёл, первым ушёл»).
+      Представьте стопку тарелок: вы кладёте новые функции наверх стека, а движок JavaScript всегда забирает и выполняет ту функцию, которая оказалась на самом верху.
+    </span>
+                        </div>
+
+                        {/* Карточка Очереди (FIFO) */}
+                        <div style={{
+                            padding: '16px',
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            borderLeft: '4px solid #10b981' // Зеленый акцент для очереди
+                        }}>
+    <span style={{ fontWeight: '700', color: '#065f46', display: 'block', marginBottom: '6px' }}>
+      ⏳ Очереди задач (Tasks) — Принцип FIFO
+    </span>
+                            <span style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', display: 'block' }}>
+      <strong>FIFO</strong> (First In, First Out — «Первым пришёл, первым ушёл»).
+      Работает как обычная очередь в магазине: задачи (микро или макро) встают строго друг за другом. Та задача, которая попала в очередь раньше всех, первой отправится на выполнение в Стек.
+    </span>
+                        </div>
+
+                    </div>
 
                     {/* Текст перед кодом */}
                     <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
@@ -6443,6 +6486,114 @@ console.log("Синхронно 2");
                         lineHeight: '1.5'
                     }}>
                         🚨 <strong>Опасность зависания (Бесконечные микрозадачи):</strong> Если создать рекурсивную функцию, которая бесконечно добавляет задачи в очередь микрозадач (например, через бесконечные промисы или <code style={{ fontFamily: 'monospace' }}>queueMicrotask</code>), Event Loop <strong>намертво зависнет</strong>. Он никогда не перейдет к этапу рендеринга интерфейса или макрозадачам. Браузер перестанет реагировать на клики, а вкладка заблокируется. Бесконечный <code style={{ fontFamily: 'monospace' }}>setTimeout</code>, напротив, интерфейс не вешает, так как между макрозадачами браузер успевает делать рендеринг.
+                    </div>
+                </div>
+                <div style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '8px',
+                    border: '1px solid #e2e8f0',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                    padding: '24px sm:32px',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                    color: '#334155',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    marginTop: '32px'
+                }}>
+                    {/* Верхняя индиго-полоса карточки */}
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '4px',
+                        backgroundColor: '#6366f1'
+                    }} />
+
+                    {/* Заголовок */}
+                    <h2 style={{
+                        fontSize: '20px',
+                        fontWeight: '700',
+                        color: '#4338ca',
+                        margin: '0 0 12px 0'
+                    }}>
+                        Очередь рендеринга и защита от голодания макрозадач
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        Очередь рендеринга (включающая колбэки <code style={{ fontFamily: 'monospace' }}>requestAnimationFrame</code>) подчиняется уникальному правилу безопасности, которое кардинально отличает её от бесконечной очереди микрозадач. Это защищает браузер от зависания при сложных анимациях.
+                    </p>
+
+                    {/* Главная ментальная модель (фиолетовый блок) */}
+                    <div style={{
+                        backgroundColor: '#f5f3ff',
+                        border: '1px solid #ddd6fe',
+                        padding: '16px',
+                        borderRadius: '6px',
+                        marginBottom: '24px',
+                        fontSize: '14px',
+                        lineHeight: '1.6',
+                        color: '#4c1d95'
+                    }}>
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Фиксация снимка (Snapshot Mechanism) под капотом:
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>Запись на старте:</strong> Когда Event Loop переходит к этапу обновления экрана, он делает «снимок» очереди рендеринга и строго запоминает, сколько тасок в ней находилось на момент старта.
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>Игнорирование новых поступлений:</strong> Будет выполнено только это фиксированное количество задач. Если одна из анимационных тасок внутри себя порождает новый вызов <code style={{ fontFamily: 'monospace' }}>requestAnimationFrame</code>, этот новый запрос не встанет в текущий поток, а перенесется на следующий цикл (кадр).
+                        </div>
+                        <div>
+                            <strong>Передача хода:</strong> Как только зафиксированные таски рендеринга выполнены, Event Loop обязан передать управление очереди макрозадач и выполнить одну из них, даже если в очередь рендеринга продолжают лавиной сыпаться новые запросы.
+                        </div>
+                    </div>
+
+                    {/* Текст перед кодом */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Разница в поведении рекурсивных промисов и рекурсивных анимаций:
+                    </div>
+
+                    {/* Серая плашка для кода */}
+                    <pre style={{
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '6px',
+                        padding: '16px',
+                        overflowX: 'auto',
+                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                        fontSize: '14px',
+                        color: '#0f172a',
+                        margin: '0 0 20px 0',
+                        whiteSpace: 'pre',
+                        lineHeight: '1.5'
+                    }}>
+{`// ❌ А. Рекурсия в микрозадачах — НАМЕРТВО повесит вкладку браузера
+function infiniteMicro() {
+  Promise.resolve().then(infiniteMicro); // Очередь микрозадач никогда не опустеет
+}
+
+// 🟢 Б. Рекурсия в рендеринге — РАБОТАЕТ БЕЗОПАСНО и плавно
+function smoothAnimation() {
+  // Новые вызовы фиксируются и переносятся на следующий кадр (через ~16мс)
+  requestAnimationFrame(smoothAnimation); 
+}
+// Event Loop будет успевать выполнять макрозадачи и клики пользователя между кадрами`}
+  </pre>
+
+                    {/* Итоговый вывод */}
+                    <div style={{
+                        borderLeft: '4px solid #10b981',
+                        backgroundColor: '#f0fdf4',
+                        padding: '12px 16px',
+                        borderRadius: '0 6px 6px 0',
+                        fontSize: '14px',
+                        color: '#065f46',
+                        lineHeight: '1.5'
+                    }}>
+                        💡 <strong>Зачем это сделано:</strong> Если бы очередь рендеринга работала как микрозадачи (выполняя всё до победного конца, включая новые входящие), тяжелая JS-анимация полностью лишила бы процессорного времени обычные таймеры <code style={{ fontFamily: 'monospace' }}>setTimeout</code> и обработчики кликов. Механизм фиксации снимка гарантирует справедливое распределение ресурсов.
                     </div>
                 </div>
 
