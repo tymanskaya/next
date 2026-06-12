@@ -98,6 +98,9 @@ export default function JavaScriptOOP() {
                     <a href="#asyncAwait" onClick={(e) => handleScroll(e, 'asyncAwait')} style={anchorLinkStyle}>
                         ⏳ Синтаксический сахар async/await
                     </a>
+                    <a href="#eventLoop" onClick={(e) => handleScroll(e, 'eventLoop')} style={anchorLinkStyle}>
+                        ⏳ Event Loop и Очереди задач
+                    </a>
 
 
 
@@ -6288,6 +6291,158 @@ modernWay();`}
                         lineHeight: '1.5'
                     }}>
                         💡 <strong>Обработка ошибок через try...catch:</strong> В мире <code style={{ fontFamily: 'monospace' }}>async/await</code> больше не нужен метод <code style={{ fontFamily: 'monospace' }}>.catch()</code>. Для перехвата ошибок используется стандартная синхронная конструкция <code style={{ fontFamily: 'monospace', fontWeight: '700' }}>try / catch</code>. Оборачивайте асинхронные блоки кода в неё всегда, чтобы забытый упавший запрос к серверу не приводил к критической ошибке приложения.
+                    </div>
+                </div>
+                <div id="eventLoop" style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '8px',
+                    border: '1px solid #e2e8f0',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                    padding: '24px sm:32px',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                    color: '#334155',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    marginTop: '32px'
+                }}>
+                    {/* Верхняя индиго-полоса карточки */}
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '4px',
+                        backgroundColor: '#6366f1'
+                    }} />
+
+                    {/* Заголовок */}
+                    <h2 style={{
+                        fontSize: '20px',
+                        fontWeight: '700',
+                        color: '#4338ca',
+                        margin: '0 0 12px 0'
+                    }}>
+                        Механизм Event Loop: Микрозадачи и Макрозадачи
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        Поскольку JavaScript является однопоточным языком, он может выполнять только одну задачу в один момент времени. <strong>Event Loop (Цикл событий)</strong> — это бесконечный цикл внутри движка, который координирует выполнение кода, распределяя асинхронные операции по разным очередям в зависимости от их приоритета.
+                    </p>
+
+                    {/* Главная ментальная модель (фиолетовый блок) */}
+                    <div style={{
+                        backgroundColor: '#f5f3ff',
+                        border: '1px solid #ddd6fe',
+                        padding: '16px',
+                        borderRadius: '6px',
+                        marginBottom: '24px',
+                        fontSize: '14px',
+                        lineHeight: '1.6',
+                        color: '#4c1d95'
+                    }}>
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🔄 Строгий алгоритм работы Event Loop (Приоритеты):
+                        </div>
+                        <div style={{ marginBottom: '8px' }}>
+                            Каждый «оборот» цикла событий подчиняется железному порядку выполнения:
+                        </div>
+                        <ul style={{ paddingLeft: '16px', margin: '0 0 12px 0', listStyleType: 'decimal' }}>
+                            <li style={{ marginBottom: '6px' }}><strong>Выполнение Call Stack (Синхронный код):</strong> Движок полностью опустошает стек вызовов. Синхронный код всегда выполняется первым.</li>
+                            <li style={{ marginBottom: '6px' }}><strong>Выполнение ВСЕХ Микрозадач:</strong> Как только стек опустел, Event Loop заглядывает в очередь микрозадач. Он не сдвинется с места, пока эта очередь не станет абсолютно пустой. Если микрозадача порождает новую микрозадачу, она тоже выполнится в этом же цикле.</li>
+                            <li style={{ marginBottom: '6px' }}><strong>Рендеринг страницы (UI Render):</strong> Браузер обновляет экран и перерисовывает интерфейс (если это необходимо).</li>
+                            <li><strong>Выполнение ОДНОЙ Макрозадачи:</strong> Из очереди макрозадач берется ровно <strong>одна</strong> самая старая задача, отправляется в стек и выполняется. После этого весь цикл (начиная с проверки микрозадач) запускается заново.</li>
+                        </ul>
+                    </div>
+
+                    {/* Разделение по типам задач */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Что к какой очереди относится:
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+                        {/* Микрозадачи */}
+                        <div style={{ padding: '14px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '6px' }}>
+      <span style={{ fontWeight: '700', color: '#166534', display: 'block', marginBottom: '6px' }}>
+        🟢 Очередь Микрозадач (Microtasks)
+      </span>
+                            <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '13px', color: '#14532d', listStyleType: 'circle' }}>
+                                <li>Коллбэки Промисов (<code style={{ fontFamily: 'monospace' }}>.then()</code>, <code style={{ fontFamily: 'monospace' }}>.catch()</code>, <code style={{ fontFamily: 'monospace' }}>.finally()</code>)</li>
+                                <li>Операции <code style={{ fontFamily: 'monospace' }}>await</code> в async-функциях</li>
+                                <li>Специфический метод <code style={{ fontFamily: 'monospace' }}>queueMicrotask()</code></li>
+                                <li><code style={{ fontFamily: 'monospace' }}>MutationObserver</code> (слежка за DOM)</li>
+                            </ul>
+                        </div>
+
+                        {/* Макрозадачи */}
+                        <div style={{ padding: '14px', backgroundColor: '#fff7ed', border: '1px solid #ffedd5', borderRadius: '6px' }}>
+      <span style={{ fontWeight: '700', color: '#9a3412', display: 'block', marginBottom: '6px' }}>
+        🟠 Очередь Макрозадач (Macrotasks)
+      </span>
+                            <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '13px', color: '#7c2d12', listStyleType: 'circle' }}>
+                                <li>Таймеры (<code style={{ fontFamily: 'monospace' }}>setTimeout</code>, <code style={{ fontFamily: 'monospace' }}>setInterval</code>)</li>
+                                <li>Сетевые запросы (<code style={{ fontFamily: 'monospace' }}>fetch</code>, <code style={{ fontFamily: 'monospace' }}>XHR</code>) после получения ответа</li>
+                                <li>События пользователя (клики, ввод текста, скролл)</li>
+                                <li>Рендеринг и парсинг HTML-документов</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* Текст перед кодом */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Классическая задачка на понимание очередей:
+                    </div>
+
+                    {/* Серая плашка для кода */}
+                    <pre style={{
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '6px',
+                        padding: '16px',
+                        overflowX: 'auto',
+                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                        fontSize: '14px',
+                        color: '#0f172a',
+                        margin: '0 0 20px 0',
+                        whiteSpace: 'pre',
+                        lineHeight: '1.5'
+                    }}>
+{`console.log("Синхронно 1");
+
+setTimeout(() => {
+  console.log("Макрозадача (Таймер)");
+}, 0);
+
+Promise.resolve()
+  .then(() => {
+    console.log("Микрозадача 1");
+  })
+  .then(() => {
+    console.log("Микрозадача 2 (Вытечет из первой)");
+  });
+
+console.log("Синхронно 2");
+
+// 📊 ТОЧНЫЙ ПОРЯДОК ВЫВОДА В КОНСОЛЬ:
+// 1. "Синхронно 1"                    (Выполнился сразу в Call Stack)
+// 2. "Синхронно 2"                    (Выполнился сразу в Call Stack)
+// 3. "Микрозадача 1"                  (Очередь микрозадач имеет высший приоритет)
+// 4. "Микрозадача 2 (Вытечет из...)"  (Цепочка .then создала новую микрозадачу в этом же цикле)
+// 5. "Макрозадача (Таймер)"           (Макрозадача ждала, пока очистятся ВСЕ микрозадачи)`}
+  </pre>
+
+                    {/* Важное предупреждение для интервью */}
+                    <div style={{
+                        borderLeft: '4px solid #ef4444',
+                        backgroundColor: '#fef2f2',
+                        padding: '12px 16px',
+                        borderRadius: '0 6px 6px 0',
+                        fontSize: '14px',
+                        color: '#991b1b',
+                        lineHeight: '1.5'
+                    }}>
+                        🚨 <strong>Опасность зависания (Бесконечные микрозадачи):</strong> Если создать рекурсивную функцию, которая бесконечно добавляет задачи в очередь микрозадач (например, через бесконечные промисы или <code style={{ fontFamily: 'monospace' }}>queueMicrotask</code>), Event Loop <strong>намертво зависнет</strong>. Он никогда не перейдет к этапу рендеринга интерфейса или макрозадачам. Браузер перестанет реагировать на клики, а вкладка заблокируется. Бесконечный <code style={{ fontFamily: 'monospace' }}>setTimeout</code>, напротив, интерфейс не вешает, так как между макрозадачами браузер успевает делать рендеринг.
                     </div>
                 </div>
 
