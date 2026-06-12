@@ -95,6 +95,10 @@ export default function JavaScriptOOP() {
                     <a href="#promises" onClick={(e) => handleScroll(e, 'promises')} style={anchorLinkStyle}>
                         ⏳ Промисы от А до Я
                     </a>
+                    <a href="#asyncAwait" onClick={(e) => handleScroll(e, 'asyncAwait')} style={anchorLinkStyle}>
+                        ⏳ Синтаксический сахар async/await
+                    </a>
+
 
 
                 </div>
@@ -5997,6 +6001,137 @@ brokenPromise
                     </div>
                 </div>
 
+                <div id="asyncAwait" style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '8px',
+                    border: '1px solid #e2e8f0',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                    padding: '24px sm:32px',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                    color: '#334155',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    marginTop: '32px'
+                }}>
+                    {/* Верхняя индиго-полоса карточки */}
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '4px',
+                        backgroundColor: '#6366f1'
+                    }} />
+
+                    {/* Заголовок */}
+                    <h2 style={{
+                        fontSize: '20px',
+                        fontWeight: '700',
+                        color: '#4338ca',
+                        margin: '0 0 12px 0'
+                    }}>
+                        Современный асинхронный код: async/await
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        Конструкция <strong>async/await</strong> (появилась в ES2017) — это специальный «синтаксический сахар» над Промисами. Она позволяет писать асинхронный код так, будто он выполняется последовательно и синхронно, полностью избавляя от нагромождения цепочек методов <code style={{ fontFamily: 'monospace' }}>.then()</code> и <code style={{ fontFamily: 'monospace' }}>.catch()</code>.
+                    </p>
+
+                    {/* Главная ментальная модель (фиолетовый блок) */}
+                    <div style={{
+                        backgroundColor: '#f5f3ff',
+                        border: '1px solid #ddd6fe',
+                        padding: '16px',
+                        borderRadius: '6px',
+                        marginBottom: '24px',
+                        fontSize: '14px',
+                        lineHeight: '1.6',
+                        color: '#4c1d95'
+                    }}>
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Ментальная модель работы ключевых слов:
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>Ключевое слово async:</strong> Ставится строго перед объявлением функции. Оно сообщает движку JS две вещи: во-первых, внутри функции разрешено использовать <code style={{ fontFamily: 'monospace' }}>await</code>, а во-вторых — эта функция теперь <strong>всегда принудительно возвращает Промис</strong>.
+                        </div>
+                        <div>
+                            <strong>Ключевое слово await:</strong> Ставится исключительно внутри <code style={{ fontFamily: 'monospace' }}>async</code>-функции перед вызовом промиса. Оно буквально <strong>ставит на паузу</strong> выполнение кода функции до тех пор, пока промис не выполнится. При этом поток самого JavaScript не блокируется — движок просто переключается на другие задачи.
+                        </div>
+                    </div>
+
+                    {/* Текст перед кодом */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Сравнение классических цепочек Промисов и async/await:
+                    </div>
+
+                    {/* Серая плашка для кода */}
+                    <pre style={{
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '6px',
+                        padding: '16px',
+                        overflowX: 'auto',
+                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                        fontSize: '14px',
+                        color: '#0f172a',
+                        margin: '0 0 20px 0',
+                        whiteSpace: 'pre',
+                        lineHeight: '1.5'
+                    }}>
+{`// Имитируем запрос данных о пользователе
+const fetchUser = () => new Promise(res => setTimeout(() => res({ id: 1, name: "Катя" }), 1000));
+
+// ❌ Старый подход через цепочки .then()
+function oldWay() {
+  fetchUser()
+    .then(user => console.log("Old:", user.name))
+    .catch(err => console.error(err));
+}
+
+// 🟢 Современный подход через async/await
+async function modernWay() {
+  try {
+    // Код замрёт на этой строке на 1 секунду, пока fetchUser не вернет результат
+    const user = await fetchUser(); 
+    console.log("Modern:", user.name); // "Modern: Катя"
+  } catch (error) {
+    // Все ошибки (и реджекты промисов, и баги кода) отлавливаются здесь!
+    console.error("Поймали сбой запроса:", error);
+  }
+}
+
+modernWay();`}
+  </pre>
+
+                    {/* Важное предупреждение для интервью */}
+                    <div style={{
+                        borderLeft: '4px solid #ef4444',
+                        backgroundColor: '#fef2f2',
+                        padding: '12px 16px',
+                        borderRadius: '0 6px 6px 0',
+                        fontSize: '14px',
+                        color: '#991b1b',
+                        lineHeight: '1.5',
+                        marginBottom: '20px'
+                    }}>
+                        🚨 <strong>Ловушка неявного Промиса:</strong> Если вы возвращаете из асинхронной функции обычную строку (например, <code style={{ fontFamily: 'monospace' }}>return "Успешно"</code>), движок под капотом автоматически обернёт её в зарезолвленный промис <code style={{ fontFamily: 'monospace' }}>Promise.resolve("Успешно")</code>. Поэтому во внешнем коде вы не сможете прочитать эту строку напрямую — вам придётся либо заавейтить саму функцию (<code style={{ fontFamily: 'monospace' }}>await myAsyncFunc()</code>), либо обработать её через <code style={{ fontFamily: 'monospace' }}>.then()</code>.
+                    </div>
+
+                    {/* Обработка ошибок */}
+                    <div style={{
+                        borderLeft: '4px solid #10b981',
+                        backgroundColor: '#f0fdf4',
+                        padding: '12px 16px',
+                        borderRadius: '0 6px 6px 0',
+                        fontSize: '14px',
+                        color: '#065f46',
+                        lineHeight: '1.5'
+                    }}>
+                        💡 <strong>Обработка ошибок через try...catch:</strong> В мире <code style={{ fontFamily: 'monospace' }}>async/await</code> больше не нужен метод <code style={{ fontFamily: 'monospace' }}>.catch()</code>. Для перехвата ошибок используется стандартная синхронная конструкция <code style={{ fontFamily: 'monospace', fontWeight: '700' }}>try / catch</code>. Оборачивайте асинхронные блоки кода в неё всегда, чтобы забытый упавший запрос к серверу не приводил к критической ошибке приложения.
+                    </div>
+                </div>
 
             </main>
         </div>
