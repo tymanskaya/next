@@ -5949,8 +5949,6 @@ brokenPromise
     console.log("Цепочка спасена:", data); // "Цепочка спасена: Новые чистые данные" ✅
   });`}
   </pre>
-
-                        {/* Каверзный нюанс для интервью внизу */}
                         <div style={{
                             borderLeft: '4px solid #ef4444',
                             backgroundColor: '#fef2f2',
@@ -5962,6 +5960,46 @@ brokenPromise
                         }}>
                             🚨 <strong>Тонкая разница для собеседования:</strong> Конструкция <code style={{ fontFamily: 'monospace' }}>.then(success, fail)</code> отличается от <code style={{ fontFamily: 'monospace' }}>.then(success).catch(fail)</code>. Если ошибка произойдет внутри самого коллбека <code style={{ fontFamily: 'monospace' }}>success</code>, то второй аргумент <code style={{ fontFamily: 'monospace' }}>fail</code> внутри того же `.then` её <strong>не поймает</strong>. А вот идущий следом метод <code style={{ fontFamily: 'monospace' }}>.catch()</code> перехватит её без проблем.
                         </div>
+                        <div style={{ marginTop: '24px', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif' }}>
+                            {/* Подзаголовок в стиле вашего скриншота */}
+                            <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: '0 0 12px 0' }}>
+                                Важные особенности .finally
+                            </h3>
+
+                            {/* Серая плашка для кода со скриншота */}
+                            <pre style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '16px',
+                                overflowX: 'auto',
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '14px',
+                                color: '#0f172a',
+                                margin: '0 0 20px 0',
+                                whiteSpace: 'pre',
+                                lineHeight: '1.5'
+                            }}>
+{`// 1. Не получает аргументов
+Promise.resolve(42)
+  .finally((val) => console.log(val)) // undefined — значение не передаётся в коллбек
+  .then(val => console.log(val))      // 42 — первоначальное значение прошло сквозь finally ✅
+
+// 2. Не может изменить результат (если return — он игнорируется)
+Promise.resolve(42)
+  .finally(() => 'другое значение')   // return полностью игнорируется движком
+  .then(val => console.log(val))      // 42 — цепочка сохранила исходный результат
+
+// 3. Но может прервать цепочку ошибкой
+Promise.resolve(42)
+  .finally(() => { throw new Error('стоп') }) // Выбрасываем критическую ошибку
+  .then(val => console.log(val))      // не выполнится (цепочка прервана)
+  .catch(err => console.log(err.message)) // 'стоп' — ошибка перехвачена здесь`}
+  </pre>
+                        </div>
+
+                        {/* Каверзный нюанс для интервью внизу */}
+
                     </div>
 
                     {/* Статические методы (Интервью-база) */}
@@ -5986,6 +6024,89 @@ brokenPromise
                             <div><strong>Promise.race([p1, p2, p3]):</strong> Устраивает «гонку». Возвращает результат того промиса, который выполнился (или упал) <strong>быстрее всех</strong>. Результаты остальных просто игнорируются.</div>
                         </li>
                     </ul>
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        marginTop: '32px'
+                    }}>
+
+                        {/* Заголовок таблицы в стиле вашего скриншота */}
+                        <h2 style={{
+                            fontSize: '22px',
+                            fontWeight: '800',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            letterSpacing: '-0.02em'
+                        }}>
+                            Сравнительная таблица методов Promise
+                        </h2>
+
+                        {/* Таблица с адаптивным контейнером */}
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={{
+                                width: '100%',
+                                borderCollapse: 'collapse',
+                                fontSize: '15px',
+                                textAlign: 'left'
+                            }}>
+                                <thead>
+                                <tr style={{ color: '#64748b', fontWeight: '600', borderBottom: '1px solid #e2e8f0' }}>
+                                    <th style={{ padding: '12px 16px', width: '25%' }}>Метод</th>
+                                    <th style={{ padding: '12px 16px', width: '20%' }}>Ждёт</th>
+                                    <th style={{ padding: '12px 16px', width: '25%' }}>Успех</th>
+                                    <th style={{ padding: '12px 16px', width: '30%' }}>Ошибка</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #f1f5f9' }}>
+                                    <td style={{ padding: '14px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>Promise.all</code>
+                                    </td>
+                                    <td style={{ padding: '14px 16px' }}>Все</td>
+                                    <td style={{ padding: '14px 16px' }}>Массив всех значений</td>
+                                    <td style={{ padding: '14px 16px', color: '#64748b' }}>Первая ошибка (остальные теряются)</td>
+                                </tr>
+                                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
+                                    <td style={{ padding: '14px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>Promise.allSettled</code>
+                                    </td>
+                                    <td style={{ padding: '14px 16px' }}>Все</td>
+                                    <td style={{ padding: '14px 16px' }}>
+                                        Массив <code style={{ fontFamily: 'monospace', fontSize: '14px' }}>{`{status, value/reason}`}</code>
+                                    </td>
+                                    <td style={{ padding: '14px 16px', color: '#64748b' }}>Никогда не отклоняется</td>
+                                </tr>
+                                <tr style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #f1f5f9' }}>
+                                    <td style={{ padding: '14px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>Promise.race</code>
+                                    </td>
+                                    <td style={{ padding: '14px 16px' }}>Первый (любой)</td>
+                                    <td style={{ padding: '14px 16px' }}>Значение первого</td>
+                                    <td style={{ padding: '14px 16px', color: '#64748b' }}>Ошибка, если первый упал</td>
+                                </tr>
+                                <tr style={{ backgroundColor: '#f8fafc' }}>
+                                    <td style={{ padding: '14px 16px' }}>
+                                        <code style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: '600', color: '#0f172a' }}>Promise.any</code>
+                                    </td>
+                                    <td style={{ padding: '14px 16px' }}>Первый успешный</td>
+                                    <td style={{ padding: '14px 16px' }}>Значение первого успешного</td>
+                                    <td style={{ padding: '14px 16px', color: '#64748b' }}>
+                                        <code style={{ backgroundColor: '#fee2e2', color: '#991b1b', padding: '2px 4px', borderRadius: '4px', fontFamily: 'monospace' }}>AggregateError</code> если все упали
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
 
                     {/* Важное предупреждение для Next.js */}
                     <div style={{
