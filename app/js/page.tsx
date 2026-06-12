@@ -6181,6 +6181,43 @@ Promise.resolve(42)
                             <strong>Ключевое слово await:</strong> Ставится исключительно внутри <code style={{ fontFamily: 'monospace' }}>async</code>-функции перед вызовом промиса. Оно буквально <strong>ставит на паузу</strong> выполнение кода функции до тех пор, пока промис не выполнится. При этом поток самого JavaScript не блокируется — движок просто переключается на другие задачи.
                         </div>
                     </div>
+                    <div style={{ marginTop: '24px', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif' }}>
+                        {/* Подзаголовок в стиле вашего скриншота */}
+                        <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', margin: '0 0 12px 0' }}>
+                            async функция
+                        </h3>
+
+                        {/* Серая плашка для кода со скриншота */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 16px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`async function fetchMovie() {
+  return 42;
+}
+
+// 🔄 Эквивалентно:
+function fetchMovie() {
+  return Promise.resolve(42);
+}
+
+fetchMovie().then(console.log); // 42`}
+  </pre>
+
+                        {/* Ключевое правило снизу плашки */}
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.5', margin: '12px 0 20px 0' }}>
+                            📌 <strong>Ключевое правило:</strong> <code style={{ backgroundColor: '#f1f5f9', padding: '2px 4px', borderRadius: '4px', fontFamily: 'monospace' }}>async</code> функция всегда возвращает Promise, даже если ты возвращаешь обычное значение.
+                        </p>
+                    </div>
 
                     {/* Текст перед кодом */}
                     <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
