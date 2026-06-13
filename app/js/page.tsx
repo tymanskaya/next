@@ -101,6 +101,9 @@ export default function JavaScriptOOP() {
                     <a href="#eventLoop" onClick={(e) => handleScroll(e, 'eventLoop')} style={anchorLinkStyle}>
                         ⏳ Event Loop и Очереди задач
                     </a>
+                    <a href="#jsDate" onClick={(e) => handleScroll(e, 'jsDate')} style={anchorLinkStyle}>
+                        📅 Работа с датами (Date)
+                    </a>
 
 
 
@@ -6277,7 +6280,8 @@ modernWay();`}
                         lineHeight: '1.5',
                         marginBottom: '20px'
                     }}>
-                        🚨 <strong>Ловушка неявного Промиса:</strong> Если вы возвращаете из асинхронной функции обычную строку (например, <code style={{ fontFamily: 'monospace' }}>return "Успешно"</code>), движок под капотом автоматически обернёт её в зарезолвленный промис <code style={{ fontFamily: 'monospace' }}>Promise.resolve("Успешно")</code>. Поэтому во внешнем коде вы не сможете прочитать эту строку напрямую — вам придётся либо заавейтить саму функцию (<code style={{ fontFamily: 'monospace' }}>await myAsyncFunc()</code>), либо обработать её через <code style={{ fontFamily: 'monospace' }}>.then()</code>.
+                        🚨 <strong>Ловушка неявного Промиса:</strong> Если вы возвращаете из асинхронной функции обычную строку (например, return <code style={{ fontFamily: 'monospace' }}>return &quot;Успешно&quot;</code>
+                        ), движок под капотом автоматически обернёт её в зарезолвленный промис <code style={{ fontFamily: 'monospace' }}>{`Promise.resolve( "Успешно" )`}</code>. Поэтому во внешнем коде вы не сможете прочитать эту строку напрямую — вам придётся либо заавейтить саму функцию (<code style={{ fontFamily: 'monospace' }}>await myAsyncFunc()</code>), либо обработать её через <code style={{ fontFamily: 'monospace' }}>.then()</code>.
                     </div>
 
                     {/* Обработка ошибок */}
@@ -6594,6 +6598,151 @@ function smoothAnimation() {
                         lineHeight: '1.5'
                     }}>
                         💡 <strong>Зачем это сделано:</strong> Если бы очередь рендеринга работала как микрозадачи (выполняя всё до победного конца, включая новые входящие), тяжелая JS-анимация полностью лишила бы процессорного времени обычные таймеры <code style={{ fontFamily: 'monospace' }}>setTimeout</code> и обработчики кликов. Механизм фиксации снимка гарантирует справедливое распределение ресурсов.
+                    </div>
+                </div>
+                <div id="jsDate" style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '8px',
+                    border: '1px solid #e2e8f0',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                    padding: '24px sm:32px',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                    color: '#334155',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    marginTop: '32px'
+                }}>
+                    {/* Верхняя индиго-полоса карточки */}
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '4px',
+                        backgroundColor: '#6366f1'
+                    }} />
+
+                    {/* Заголовок */}
+                    <h2 style={{
+                        fontSize: '20px',
+                        fontWeight: '700',
+                        color: '#4338ca',
+                        margin: '0 0 12px 0'
+                    }}>
+                        Работа с датами: Объект Date
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        Для управления временем в JavaScript используется встроенный объект <strong>Date</strong>. Под капотом он хранит целое число — количество миллисекунд, прошедших с 1 января 1970 года UTC+0 (Unix Timestamp Epoch).
+                    </p>
+
+                    {/* Главная ментальная модель (фиолетовый блок) */}
+                    <div style={{
+                        backgroundColor: '#f5f3ff',
+                        border: '1px solid #ddd6fe',
+                        padding: '16px',
+                        borderRadius: '6px',
+                        marginBottom: '24px',
+                        fontSize: '14px',
+                        lineHeight: '1.6',
+                        color: '#4c1d95'
+                    }}>
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Две главные ловушки объекта Date на интервью:
+                        </div>
+                        <div style={{ marginBottom: '8px' }}>
+                            <strong>1. Нумерация месяцев начинается с НУЛЯ:</strong> Январь — это <code style={{ fontFamily: 'monospace' }}>0</code>, Февраль — <code style={{ fontFamily: 'monospace' }}>1</code>, ..., Декабрь — <code style={{ fontFamily: 'monospace' }}>11</code>. Передача числа <code style={{ fontFamily: 'monospace' }}>12</code> в качестве месяца автоматически перенесет дату на январь следующего года.
+                        </div>
+                        <div>
+                            <strong>2. Разница между Днем месяца и Днем недели:</strong> Метод получения числа месяца называется <code style={{ fontFamily: 'monospace' }}>getDate()</code> (возвращает 1-31). А метод <code style={{ fontFamily: 'monospace' }}>getDay()</code> возвращает порядковый номер <strong>дня недели</strong> (от 0 для Воскресенья до 6 для Субботы).
+                        </div>
+                    </div>
+
+                    {/* Группы методов */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Основные методы взаимодействия:
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+                        {/* Получение данных */}
+                        <div style={{ padding: '14px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '6px' }}>
+      <span style={{ fontWeight: '700', color: '#166534', display: 'block', marginBottom: '6px' }}>
+        🟢 Геттеры (Получение)
+      </span>
+                            <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '13px', color: '#14532d', listStyleType: 'circle' }}>
+                                <li><code style={{ fontFamily: 'monospace' }}>getFullYear()</code> — 4 цифры года</li>
+                                <li><code style={{ fontFamily: 'monospace' }}>getMonth()</code> — месяц (<strong>0-11</strong>)</li>
+                                <li><code style={{ fontFamily: 'monospace' }}>getDate()</code> — число месяца (1-31)</li>
+                                <li><code style={{ fontFamily: 'monospace' }}>getHours()</code>, <code style={{ fontFamily: 'monospace' }}>getMinutes()</code>, <code style={{ fontFamily: 'monospace' }}>getSeconds()</code></li>
+                                <li><code style={{ fontFamily: 'monospace' }}>getTime()</code> — таймстамп в мс</li>
+                            </ul>
+                        </div>
+
+                        {/* Установка данных */}
+                        <div style={{ padding: '14px', backgroundColor: '#fff7ed', border: '1px solid #ffedd5', borderRadius: '6px' }}>
+      <span style={{ fontWeight: '700', color: '#9a3412', display: 'block', marginBottom: '6px' }}>
+        🟠 Сеттеры (Установка)
+      </span>
+                            <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '13px', color: '#7c2d12', listStyleType: 'circle' }}>
+                                <li><code style={{ fontFamily: 'monospace' }}>setFullYear(year)</code> — меняет год</li>
+                                <li><code style={{ fontFamily: 'monospace' }}>setMonth(month)</code> — меняет месяц</li>
+                                <li><code style={{ fontFamily: 'monospace' }}>setDate(day)</code> — меняет число месяца</li>
+                                <li><code style={{ fontFamily: 'monospace' }}>setHours()</code>, <code style={{ fontFamily: 'monospace' }}>setMinutes()</code>, <code style={{ fontFamily: 'monospace' }}>setSeconds()</code></li>
+                                <li><code style={{ fontFamily: 'monospace' }}>setTime(milliseconds)</code> — меняет всю дату</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* Текст перед кодом */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Практический пример создания, чтения и модификации даты:
+                    </div>
+
+                    {/* Серая плашка для кода */}
+                    <pre style={{
+                        backgroundColor: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '6px',
+                        padding: '16px',
+                        overflowX: 'auto',
+                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                        fontSize: '14px',
+                        color: '#0f172a',
+                        margin: '0 0 20px 0',
+                        whiteSpace: 'pre',
+                        lineHeight: '1.5'
+                    }}>
+{`// 1. Создание даты (Задаем: 2026 год, Март (индекс 2), 15 число)
+const myDate = new Date(2026, 2, 15, 14, 30); 
+
+// 2. Получение компонентов даты (Геттеры)
+console.log(myDate.getFullYear()); // 2026
+console.log(myDate.getMonth());    // 2
+console.log(myDate.getDate());     // 15 (Число месяца)
+console.log(myDate.getDay());      // 0 (15 марта 2026 — это воскресенье!)
+
+// 3. Изменение даты через Сеттеры
+myDate.setFullYear(2027);
+myDate.setDate(20);
+console.log(myDate.toDateString()); // "Sun Mar 20 2027"
+
+// 💡 Быстрое получение текущего таймстампа без создания объекта:
+const timestamp = Date.now(); // Количество мс прямо сейчас`}
+  </pre>
+
+                    {/* Автоисправление дат */}
+                    <div style={{
+                        borderLeft: '4px solid #3b82f6',
+                        backgroundColor: '#eff6ff',
+                        padding: '12px 16px',
+                        borderRadius: '0 6px 6px 0',
+                        fontSize: '14px',
+                        color: '#1e3a8a',
+                        lineHeight: '1.5'
+                    }}>
+                        🔥 <strong>Суперсила Date (Автоисправление):</strong> Если вы передадите в сеттер значение, выходящее за рамки диапазона, объект самостоятельно пересчитает дату. Например, выражение <code style={{ fontFamily: 'monospace' }}>const d = new Date(2026, 0, 32)</code> автоматически превратится в <strong>1 февраля 2026 года</strong>. Это свойство делает объект Date идеальным инструментом для математических операций со временем (например, чтобы прибавить к дате 5 дней, достаточно сделать: <code style={{ fontFamily: 'monospace' }}>date.setDate(date.getDate() + 5)</code>).
                     </div>
                 </div>
 
