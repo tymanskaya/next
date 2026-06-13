@@ -6744,6 +6744,161 @@ const timestamp = Date.now(); // Количество мс прямо сейча
                     }}>
                         🔥 <strong>Суперсила Date (Автоисправление):</strong> Если вы передадите в сеттер значение, выходящее за рамки диапазона, объект самостоятельно пересчитает дату. Например, выражение <code style={{ fontFamily: 'monospace' }}>const d = new Date(2026, 0, 32)</code> автоматически превратится в <strong>1 февраля 2026 года</strong>. Это свойство делает объект Date идеальным инструментом для математических операций со временем (например, чтобы прибавить к дате 5 дней, достаточно сделать: <code style={{ fontFamily: 'monospace' }}>date.setDate(date.getDate() + 5)</code>).
                     </div>
+                    <div id="intlDateTime" style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя индиго-полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }} />
+
+                        {/* Заголовок */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}>
+                            Интернационализация: Intl.DateTimeFormat
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            Объект <strong>Intl.DateTimeFormat</strong> — это мощный встроенный инструмент JavaScript, предназначенный для языково-зависимого форматирования даты и времени. Он автоматически учитывает культурные особенности разных стран: порядок отображения дня/месяца, использование 12- или 24-часового формата и названия месяцев на нужных языках.
+                        </p>
+
+                        {/* Главная ментальная модель (фиолетовый блок) */}
+                        <div style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                🧠 Двухэтапная ментальная модель работы Intl:
+                            </div>
+                            <div style={{ marginBottom: '6px' }}>
+                                <strong>Этап 1 (Создание форматтера):</strong> Сначала вы инициализируете экземпляр с помощью <code style={{ fontFamily: 'monospace' }}>new Intl.DateTimeFormat(locale, options)</code>. На этом шаге движок настраивает правила отображения на основе переданной языковой локали и конфигурации конфигурационных опций.
+                            </div>
+                            <div>
+                                <strong>Этап 2 (Форматирование):</strong> Вы вызываете метод <code style={{ fontFamily: 'monospace' }}>format(date)</code> у созданного форматтера. Это чистая операция: исходный объект <code style={{ fontFamily: 'monospace' }}>Date</code> никак не меняется, а вы получаете готовую локализованную строку.
+                            </div>
+                        </div>
+
+                        {/* Основные конфигурационные опции */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Популярные настройки параметров (options):
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+                            {/* Стили отображения текста */}
+                            <div style={{ padding: '14px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '6px' }}>
+      <span style={{ fontWeight: '700', color: '#166534', display: 'block', marginBottom: '6px' }}>
+        🔤 Текстовые компоненты
+      </span>
+                                <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '13px', color: '#14532d', listStyleType: 'circle' }}>
+                                    <li><code style={{ fontFamily: 'monospace' }}>weekday</code> — день недели (<code style={{ fontFamily: 'monospace' }}>'long'</code>, <code style={{ fontFamily: 'monospace' }}>'short'</code>, <code style={{ fontFamily: 'monospace' }}>'narrow'</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>month</code> — название месяца (<code style={{ fontFamily: 'monospace' }}>'long'</code>, <code style={{ fontFamily: 'monospace' }}>'short'</code>, <code style={{ fontFamily: 'monospace' }}>'numeric'</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>era</code> — отображение эры (<code style={{ fontFamily: 'monospace' }}>'long'</code>, <code style={{ fontFamily: 'monospace' }}>'short'</code>)</li>
+                                </ul>
+                            </div>
+
+                            {/* Стили отображения чисел */}
+                            <div style={{ padding: '14px', backgroundColor: '#fff7ed', border: '1px solid #ffedd5', borderRadius: '6px' }}>
+      <span style={{ fontWeight: '700', color: '#9a3412', display: 'block', marginBottom: '6px' }}>
+        🔢 Числовые компоненты
+      </span>
+                                <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '13px', color: '#7c2d12', listStyleType: 'circle' }}>
+                                    <li><code style={{ fontFamily: 'monospace' }}>year</code>, <code style={{ fontFamily: 'monospace' }}>day</code> — (<code style={{ fontFamily: 'monospace' }}>'numeric'</code>, <code style={{ fontFamily: 'monospace' }}>'2-digit'</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>hour</code>, <code style={{ fontFamily: 'monospace' }}>minute</code>, <code style={{ fontFamily: 'monospace' }}>second</code> — компоненты времени</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>hour12</code> — переключатель 12-часового формата (<code style={{ fontFamily: 'monospace' }}>true / false</code>)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        {/* Текст перед кодом */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Практический пример локализации под разные страны:
+                        </div>
+
+                        {/* Серая плашка для кода */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`const date = new Date(2026, 5, 13, 14, 0); // 13 июня 2026 года
+
+// 1. Базовые примеры для разных локалей
+const formatterRU = new Intl.DateTimeFormat('ru-RU');
+console.log(formatterRU.format(date)); // "13.06.2026"
+
+const formatterUS = new Intl.DateTimeFormat('en-US');
+console.log(formatterUS.format(date)); // "6/13/2026" (В США месяц идёт первым)
+
+// 2. Глубокая кастомизация с опциями
+const options = {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit'
+};
+
+const fullRU = new Intl.DateTimeFormat('ru-RU', options);
+console.log(fullRU.format(date)); 
+// "суббота, 13 июня 2026 г., 14:00"
+
+const fullUS = new Intl.DateTimeFormat('en-US', options);
+console.log(fullUS.format(date)); 
+// "Saturday, June 13, 2026 at 2:00 PM" (Автоматически применился PM формат)
+
+// 💡 Лайфхак: Автоматическое определение локали пользователя системы
+const userFormatter = new Intl.DateTimeFormat(navigator.language);`}
+  </pre>
+
+                        {/* Важное предупреждение для интервью */}
+                        <div style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}>
+                            🚨 <strong>Ловушка производительности (Performance Trap):</strong> Создание нового экземпляра <code style={{ fontFamily: 'monospace' }}>new Intl.DateTimeFormat()</code> — это ресурсозатратная операция для процессора. Если вам нужно отформатировать большой массив из 1000 дат (например, в таблице данных), <strong>никогда не создавайте форматтер внутри цикла</strong>. Инициализируйте один глобальный форматтер заранее за пределами цикла и вызывайте внутри только его метод <code style={{ fontFamily: 'monospace' }}>.format()</code>. Это ускорит рендеринг списков в разы!
+                        </div>
+                    </div>
+
                 </div>
 
             </main>
