@@ -1,5 +1,5 @@
 'use client'; // Строго обязательно для Next.js, чтобы работали события клика и скролла
-
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 
 // Общие стили для переиспользования
@@ -104,7 +104,9 @@ export default function JavaScriptOOP() {
                     <a href="#jsDate" onClick={(e) => handleScroll(e, 'jsDate')} style={anchorLinkStyle}>
                         📅 Работа с датами (Date)
                     </a>
-
+                    <a href="#advancedRecursion" onClick={(e) => handleScroll(e, 'advancedRecursion')} style={anchorLinkStyle}>
+                        🚀 Рекурсия на собеседованиях
+                    </a>
 
 
                 </div>
@@ -6816,9 +6818,10 @@ const timestamp = Date.now(); // Количество мс прямо сейча
         🔤 Текстовые компоненты
       </span>
                                 <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '13px', color: '#14532d', listStyleType: 'circle' }}>
-                                    <li><code style={{ fontFamily: 'monospace' }}>weekday</code> — день недели (<code style={{ fontFamily: 'monospace' }}>'long'</code>, <code style={{ fontFamily: 'monospace' }}>'short'</code>, <code style={{ fontFamily: 'monospace' }}>'narrow'</code>)</li>
-                                    <li><code style={{ fontFamily: 'monospace' }}>month</code> — название месяца (<code style={{ fontFamily: 'monospace' }}>'long'</code>, <code style={{ fontFamily: 'monospace' }}>'short'</code>, <code style={{ fontFamily: 'monospace' }}>'numeric'</code>)</li>
-                                    <li><code style={{ fontFamily: 'monospace' }}>era</code> — отображение эры (<code style={{ fontFamily: 'monospace' }}>'long'</code>, <code style={{ fontFamily: 'monospace' }}>'short'</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>weekday</code> — день недели (<code style={{ fontFamily: 'monospace' }}>&apos;long&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;short&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;narrow&apos;</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>month</code> — название месяца (<code style={{ fontFamily: 'monospace' }}>&apos;long&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;short&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;numeric&apos;</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>era</code> — отображение эры (<code style={{ fontFamily: 'monospace' }}>&apos;long&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;short&apos;</code>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -6828,7 +6831,7 @@ const timestamp = Date.now(); // Количество мс прямо сейча
         🔢 Числовые компоненты
       </span>
                                 <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '13px', color: '#7c2d12', listStyleType: 'circle' }}>
-                                    <li><code style={{ fontFamily: 'monospace' }}>year</code>, <code style={{ fontFamily: 'monospace' }}>day</code> — (<code style={{ fontFamily: 'monospace' }}>'numeric'</code>, <code style={{ fontFamily: 'monospace' }}>'2-digit'</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>year</code>, <code style={{ fontFamily: 'monospace' }}>day</code> — (<code style={{ fontFamily: 'monospace' }}>&apos;numeric&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;2-digit&apos;</code>)</li>
                                     <li><code style={{ fontFamily: 'monospace' }}>hour</code>, <code style={{ fontFamily: 'monospace' }}>minute</code>, <code style={{ fontFamily: 'monospace' }}>second</code> — компоненты времени</li>
                                     <li><code style={{ fontFamily: 'monospace' }}>hour12</code> — переключатель 12-часового формата (<code style={{ fontFamily: 'monospace' }}>true / false</code>)</li>
                                 </ul>
@@ -6897,6 +6900,270 @@ const userFormatter = new Intl.DateTimeFormat(navigator.language);`}
                         }}>
                             🚨 <strong>Ловушка производительности (Performance Trap):</strong> Создание нового экземпляра <code style={{ fontFamily: 'monospace' }}>new Intl.DateTimeFormat()</code> — это ресурсозатратная операция для процессора. Если вам нужно отформатировать большой массив из 1000 дат (например, в таблице данных), <strong>никогда не создавайте форматтер внутри цикла</strong>. Инициализируйте один глобальный форматтер заранее за пределами цикла и вызывайте внутри только его метод <code style={{ fontFamily: 'monospace' }}>.format()</code>. Это ускорит рендеринг списков в разы!
                         </div>
+                    </div>
+
+                </div>
+                {/* Блок "Простыми словами" для интеграции внутрь карточки #jsRecursion */}
+                <div id='advancedRecursion' style={{
+                    backgroundColor: '#f8fafc',
+                    border: '1px solid #e2e8f0',
+                    padding: '16px',
+                    borderRadius: '6px',
+                    marginBottom: '24px',
+                    fontSize: '14px',
+                    lineHeight: '1.6',
+                    color: '#334155'
+                }}>
+                    <div style={{ fontWeight: '700', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                        📦 Рекурсия простыми словами (Метафора с коробками):
+                    </div>
+                    <p style={{ margin: '0 0 10px 0' }}>
+                        Представьте, что вы потеряли банковскую карту. Она лежит в маленьком кошельке, который спрятан внутри коробки. А эта коробка — внутри другой, ещё большей коробки. У вас есть два пути поиска:
+                    </p>
+                    <ul style={{ paddingLeft: '16px', margin: '0 0 12px 0', listStyleType: 'disc' }}>
+                        <li style={{ marginBottom: '6px' }}>
+                            <strong>Обычный цикл (Итерация):</strong> Вы берёте коробку, открываете, выкладываете содержимое на стол. Берете следующую, открываете, выкладываете. Повторяете это действие по кругу, пока не увидите кошелек.
+                        </li>
+                        <li>
+                            <strong>Рекурсия:</strong> Вы пишете всего одно правило для одной коробки: <em>«Открыть текущую коробку. Если внутри кошелек — забрать карту (<strong>базис/выход</strong>). Если внутри коробка — запустить это же правило для неё (<strong>рекурсивный шаг</strong>)»</em>. Функция начнет "нырять" сама в себя.
+                        </li>
+                    </ul>
+                    <div style={{ fontStyle: 'italic', color: '#64748b', borderTop: '1px dashed #e2e8f0', paddingTop: '8px' }}>
+                        📌 <strong>Главное правило:</strong> Каждая следующая коробка обязана быть меньше предыдущей (аргументы должны уменьшаться), иначе вы будете открывать их бесконечно и сойдете с ума (ошибка <strong>Stack Overflow</strong>).
+                    </div>
+                    <div id="advancedRecursion" style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя индиго-полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }} />
+
+                        {/* Заголовок */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}>
+                            Рекурсия на собеседовании: Execution Context, Память и Обход деревьев
+                        </h2>
+
+                        {/* Глубокая теория для интервью (фиолетовый блок) */}
+                        <div style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                🧠 Что происходит в памяти под капотом (Сравнение с циклом):
+                            </div>
+                            <div style={{ marginBottom: '8px' }}>
+                                При обычном цикле <code style={{ fontFamily: 'monospace' }}>while/for</code> тратится фиксированное количество памяти — **O(1)** по памяти, так как переменные счетчика просто перезаписываются в одном контексте.
+                            </div>
+                            <div style={{ marginBottom: '8px' }}>
+                                При рекурсии каждый шаг создает новый **Контекст Выполнения (Execution Context)**. В него упаковываются аргументы, локальные переменные и адрес возврата. Все эти контексты одновременно лежат в Call Stack.
+                            </div>
+                            <div>
+                                Следовательно, рекурсия всегда потребляет память пропорционально глубине вызовов — **O(n) по памяти**. Это главный технический аргумент на интервью, почему рекурсию иногда заменяют циклами.
+                            </div>
+                        </div>
+
+                        {/* Вопрос про оптимизацию хвостовой рекурсии */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '8px' }}>
+                            Каверзный вопрос: Есть ли в JS хвостовая оптимизация (Tail Call Optimization)?
+                        </div>
+                        <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', margin: '0 0 20px 0' }}>
+                            **Ответ:** Спецификация ES6 (ES2015) обязывает движки оптимизировать «хвостовую рекурсию» (когда рекурсивный вызов является самым последним действием в функции, и движку не нужно хранить предыдущий контекст, чтобы что-то довычислить). Однако на практике **Tail Call Optimization реализована только в движке JavaScriptCore (Safari)**. Движок V8 (Chrome, Node.js, Edge) от неё отказался из-за сложности отладки стека ошибок. Поэтому в большинстве сред выполнения хвостовая рекурсия всё равно переполнит стек.
+                        </p>
+
+                        {/* Главная практическая задача на интервью */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Реальный кейс: Рекурсивный обход дерева (например, подсчет зарплат отделов)
+                        </div>
+
+                        {/* Серая плашка для кода */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`// Структура данных компании с разной вложенностью отделов
+const company = {
+  sales: [{ name: 'Иван', salary: 1000 }, { name: 'Алиса', salary: 1600 }],
+  development: {
+    web: [{ name: 'Петр', salary: 2000 }, { name: 'Анна', salary: 2500 }],
+    internals: [{ name: 'Олег', salary: 1300 }]
+  }
+};
+
+// Функция считает сумму всех зарплат, независимо от глубины вложенности структуры
+function sumSalaries(department) {
+  // Базис рекурсии: если это массив, то перед нами готовый список сотрудников
+  if (Array.isArray(department)) {
+    return department.reduce((prev, current) => prev + current.salary, 0);
+  }
+
+  // Шаг рекурсии: если это объект, значит внутри есть подотделы. Проходим по ним.
+  let sum = 0;
+  for (let subdep of Object.values(department)) {
+    sum += sumSalaries(subdep); // Рекурсивный вызов для каждого подотдела
+  }
+  return sum;
+}
+
+console.log(sumSalaries(company)); // 8400`}
+  </pre>
+
+                        {/* Чек-лист для ответа на интервью */}
+                        <div style={{
+                            borderLeft: '4px solid #10b981',
+                            backgroundColor: '#f0fdf4',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#065f46',
+                            lineHeight: '1.5'
+                        }}>
+                            💡 <strong>План идеального ответа про рекурсию на интервью:</strong>
+                            <ul style={{ paddingLeft: '16px', margin: '6px 0 0 0', listStyleType: 'decimal' }}>
+                                <li style={{ marginBottom: '4px' }}>Дать определение (вызов самой себя) и назвать две части (базис и шаг).</li>
+                                <li style={{ marginBottom: '4px' }}>Объяснить плату за память: каждый вызов — это новый **Execution Context** в **Call Stack**, поэтому сложность по памяти **O(n)**.</li>
+                                <li style={{ marginBottom: '4px' }}>Упомянуть ошибку **Stack Overflow** (RangeError) и лимит стека (около 10 000 вызовов).</li>
+                                <li>Привести пример, когда рекурсия незаменима — обход древовидных структур данных (DOM, вложенные меню, файловые системы), где глубина заранее неизвестна.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="recursionAnatomy" style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}>
+                        {/* Верхняя индиго-полоса карточки */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }} />
+
+                        {/* Заголовок */}
+                        <h2 style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}>
+                            Анатомия рекурсии: Логические компоненты и Системный механизм
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            На техническом уровне любая рекурсивная конструкция состоит из <strong>двух обязательных логических частей</strong>, написанных разработчиком, и <strong>одного системного механизма</strong>, за счет которого код выполняется внутри движка JavaScript [].
+                        </p>
+
+                        {/* Главная ментальная модель (фиолетовый блок) */}
+                        <div style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}>
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+                                🧱 Из чего состоит рекурсивная функция:
+                            </div>
+
+                            <div style={{ marginBottom: '12px' }}>
+                                <strong>1. Базис рекурсии (Base Case) — «Точка выхода»:</strong>
+                                Условие, при котором функция прекращает вызывать саму себя и сразу возвращает готовое значение []. Это главный «стоп-кран» программы. Если его забыть, функция переполнит стек вызовов и скрипт упадет с ошибкой <code style={{ fontFamily: 'monospace' }}>Stack Overflow</code> [].
+                            </div>
+
+                            <div style={{ marginBottom: '12px' }}>
+                                <strong>2. Шаг рекурсии (Recursive Step) — «Ветвление»:</strong>
+                                Часть кода, где функция вызывает саму себя, передавая в вызов измененные (уменьшенные) данные []. Главное правило: с каждым новым шагом аргументы <em>обязаны приближаться к точке выхода</em> [].
+                            </div>
+
+                            <div>
+                                <strong>3. Контекст выполнения (Execution Context) — «Память движка»:</strong>
+                                Системная часть выполнения на уровне процессора []. При каждом рекурсивном вызове движок JavaScript «замораживает» текущее состояние функции (локальные переменные) и кладет его на вершину <strong>Call Stack</strong> []. Когда самый глубокий вызов добирается до базиса [], стек разворачивается обратно по принципу <strong>LIFO</strong> [, ].
+                            </div>
+                        </div>
+
+                        {/* Текст перед кодом */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Визуализация элементов анатомии на примере вычисления суммы чисел:
+                        </div>
+
+                        {/* Серая плашка для кода */}
+                        <pre style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}>
+{`function sumTo(n) {
+  // 1. БАЗИС РЕКУРСИИ (Условие выхода) ✅
+  if (n === 1) { 
+    return 1; 
+  }
+
+  // 2. ШАГ РЕКУРСИИ ((n - 1) уменьшается и приближается к единице) 🔄
+  // 3. КОНТЕКСТ ВЫПОЛНЕНИЯ: Движок заморозит текущее 'n' и сохранит в Call Stack 📥
+  return n + sumTo(n - 1); 
+}
+
+console.log(sumTo(3)); // Выведет 6 (3 + 2 + 1)`}
+  </pre>
                     </div>
 
                 </div>
