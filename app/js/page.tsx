@@ -1,5 +1,5 @@
 'use client'; // Строго обязательно для Next.js, чтобы работали события клика и скролла
-
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 
 // Общие стили для переиспользования
@@ -104,7 +104,9 @@ export default function JavaScriptOOP() {
                     <a href="#jsDate" onClick={(e) => handleScroll(e, 'jsDate')} style={anchorLinkStyle}>
                         📅 Работа с датами (Date)
                     </a>
-
+                    <a href="#advancedRecursion" onClick={(e) => handleScroll(e, 'advancedRecursion')} style={anchorLinkStyle}>
+                        🚀 Рекурсия на собеседованиях
+                    </a>
 
 
                 </div>
@@ -6816,9 +6818,10 @@ const timestamp = Date.now(); // Количество мс прямо сейча
         🔤 Текстовые компоненты
       </span>
                                 <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '13px', color: '#14532d', listStyleType: 'circle' }}>
-                                    <li><code style={{ fontFamily: 'monospace' }}>weekday</code> — день недели (<code style={{ fontFamily: 'monospace' }}>'long'</code>, <code style={{ fontFamily: 'monospace' }}>'short'</code>, <code style={{ fontFamily: 'monospace' }}>'narrow'</code>)</li>
-                                    <li><code style={{ fontFamily: 'monospace' }}>month</code> — название месяца (<code style={{ fontFamily: 'monospace' }}>'long'</code>, <code style={{ fontFamily: 'monospace' }}>'short'</code>, <code style={{ fontFamily: 'monospace' }}>'numeric'</code>)</li>
-                                    <li><code style={{ fontFamily: 'monospace' }}>era</code> — отображение эры (<code style={{ fontFamily: 'monospace' }}>'long'</code>, <code style={{ fontFamily: 'monospace' }}>'short'</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>weekday</code> — день недели (<code style={{ fontFamily: 'monospace' }}>&apos;long&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;short&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;narrow&apos;</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>month</code> — название месяца (<code style={{ fontFamily: 'monospace' }}>&apos;long&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;short&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;numeric&apos;</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>era</code> — отображение эры (<code style={{ fontFamily: 'monospace' }}>&apos;long&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;short&apos;</code>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -6828,7 +6831,7 @@ const timestamp = Date.now(); // Количество мс прямо сейча
         🔢 Числовые компоненты
       </span>
                                 <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '13px', color: '#7c2d12', listStyleType: 'circle' }}>
-                                    <li><code style={{ fontFamily: 'monospace' }}>year</code>, <code style={{ fontFamily: 'monospace' }}>day</code> — (<code style={{ fontFamily: 'monospace' }}>'numeric'</code>, <code style={{ fontFamily: 'monospace' }}>'2-digit'</code>)</li>
+                                    <li><code style={{ fontFamily: 'monospace' }}>year</code>, <code style={{ fontFamily: 'monospace' }}>day</code> — (<code style={{ fontFamily: 'monospace' }}>&apos;numeric&apos;</code>, <code style={{ fontFamily: 'monospace' }}>&apos;2-digit&apos;</code>)</li>
                                     <li><code style={{ fontFamily: 'monospace' }}>hour</code>, <code style={{ fontFamily: 'monospace' }}>minute</code>, <code style={{ fontFamily: 'monospace' }}>second</code> — компоненты времени</li>
                                     <li><code style={{ fontFamily: 'monospace' }}>hour12</code> — переключатель 12-часового формата (<code style={{ fontFamily: 'monospace' }}>true / false</code>)</li>
                                 </ul>
@@ -6899,6 +6902,35 @@ const userFormatter = new Intl.DateTimeFormat(navigator.language);`}
                         </div>
                     </div>
 
+                </div>
+                {/* Блок "Простыми словами" для интеграции внутрь карточки #jsRecursion */}
+                <div idd='advancedRecursion' style={{
+                    backgroundColor: '#f8fafc',
+                    border: '1px solid #e2e8f0',
+                    padding: '16px',
+                    borderRadius: '6px',
+                    marginBottom: '24px',
+                    fontSize: '14px',
+                    lineHeight: '1.6',
+                    color: '#334155'
+                }}>
+                    <div style={{ fontWeight: '700', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                        📦 Рекурсия простыми словами (Метафора с коробками):
+                    </div>
+                    <p style={{ margin: '0 0 10px 0' }}>
+                        Представьте, что вы потеряли банковскую карту. Она лежит в маленьком кошельке, который спрятан внутри коробки. А эта коробка — внутри другой, ещё большей коробки. У вас есть два пути поиска:
+                    </p>
+                    <ul style={{ paddingLeft: '16px', margin: '0 0 12px 0', listStyleType: 'disc' }}>
+                        <li style={{ marginBottom: '6px' }}>
+                            <strong>Обычный цикл (Итерация):</strong> Вы берёте коробку, открываете, выкладываете содержимое на стол. Берете следующую, открываете, выкладываете. Повторяете это действие по кругу, пока не увидите кошелек.
+                        </li>
+                        <li>
+                            <strong>Рекурсия:</strong> Вы пишете всего одно правило для одной коробки: <em>«Открыть текущую коробку. Если внутри кошелек — забрать карту (<strong>базис/выход</strong>). Если внутри коробка — запустить это же правило для неё (<strong>рекурсивный шаг</strong>)»</em>. Функция начнет "нырять" сама в себя.
+                        </li>
+                    </ul>
+                    <div style={{ fontStyle: 'italic', color: '#64748b', borderTop: '1px dashed #e2e8f0', paddingTop: '8px' }}>
+                        📌 <strong>Главное правило:</strong> Каждая следующая коробка обязана быть меньше предыдущей (аргументы должны уменьшаться), иначе вы будете открывать их бесконечно и сойдете с ума (ошибка <strong>Stack Overflow</strong>).
+                    </div>
                 </div>
 
             </main>
