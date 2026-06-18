@@ -1234,7 +1234,7 @@ const sidebarTitleStyle = {
     margin: '0 0 10px 10px'
 };
 
- const anchorLinkStyle = {
+const anchorLinkStyle = {
     display: 'block',
     padding: '8px 15px',
     color: '#57606a',
@@ -1266,5 +1266,3 @@ const codeBlockStyle = {
     margin: '8px 0 0 0',
     whiteSpace: 'pre-wrap'
 };
-
-

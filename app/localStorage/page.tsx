@@ -114,6 +114,9 @@ export default function WebStorageCheatSheet() {
                     <button onClick={() => router.push('/hooks')} style={getSidebarLinkStyle(pathname === '/hooks')}>
                         ⚛️ React Hooks
                     </button>
+                    <button onClick={() => router.push('/react')} style={getSidebarLinkStyle(pathname === '/react')}>
+                        ⚛️ React
+                    </button>
                     <button onClick={() => router.push('/js')} style={getSidebarLinkStyle(pathname === '/js')}>
                         ⚛️ JavaScript
                     </button>

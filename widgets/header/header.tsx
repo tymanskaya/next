@@ -55,6 +55,14 @@ export const Header = () => {
                 </li>
                 <li>
                     <button
+                        onClick={() => router.push("/react")}
+                        className={`${styles.link} ${isActive("/react") ? styles.active : ""}`}
+                    >
+                        React
+                    </button>
+                </li>
+                <li>
+                    <button
                         onClick={() => router.push("/js")}
                         className={`${styles.link} ${isActive("/js") ? styles.active : ""}`}
                     >
