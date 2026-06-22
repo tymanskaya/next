@@ -343,29 +343,7 @@ export default function ReactHooksCheatSheet() {
                                         marginTop: '32px'
                                     }}
                                 >
-                                    {/* Upper Indigo Card Bar */}
-                                    <div
-                                        style={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
-                                            right: 0,
-                                            height: '4px',
-                                            backgroundColor: '#6366f1'
-                                        }}
-                                    />
 
-                                    {/* Title */}
-                                    <h2
-                                        style={{
-                                            fontSize: '20px',
-                                            fontWeight: '700',
-                                            color: '#4338ca',
-                                            margin: '0 0 12px 0'
-                                        }}
-                                    >
-                                        L — Liskov Substitution Principle (Принцип подстановки Барбары Лисков)
-                                    </h2>
 
                                     <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
                                         Суть принципа формулируется просто: <strong>классы-наследники должны иметь возможность заменять свои базовые классы без изменения правильности работы программы</strong>. Если у вас есть функция, которая принимает базовый класс, вы должны иметь возможность передать туда любого его наследника, и программа не должна упасть или повести себя непредсказуемо.
@@ -463,18 +441,170 @@ function makeFlyingBirdFly(flyingBird) {
 
                                     {/* Interview Tips */}
                                     <div
+                                        id="liskovRectangleTrap"
                                         style={{
-                                            borderLeft: '4px solid #10b981',
-                                            backgroundColor: '#f0fdf4',
-                                            padding: '12px 16px',
-                                            borderRadius: '0 6px 6px 0',
-                                            fontSize: '14px',
-                                            color: '#065f46',
-                                            lineHeight: '1.5'
+                                            backgroundColor: '#ffffff',
+                                            borderRadius: '8px',
+                                            border: '1px solid #e2e8f0',
+                                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                            padding: '24px sm:32px',
+                                            width: '100%',
+                                            boxSizing: 'border-box',
+                                            fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                            color: '#334155',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            marginTop: '32px'
                                         }}
                                     >
-                                        💡 <strong>Популярная ловушка на собеседовании (Квадрат и Прямоугольник):</strong> Интервьюеры часто предлагают унаследовать <code style={{ fontFamily: 'monospace' }}>Square</code> от <code style={{ fontFamily: 'monospace' }}>Rectangle</code>. Это грубейшее нарушение LSP! У прямоугольника можно менять ширину и высоту независимо. Если у Квадрата при изменении ширины начнет автоматически меняться высота — это сломает логику функций, работающих с базовым прямоугольником. <strong>Вывод:</strong> математические связи (квадрат — это прямоугольник) не всегда переносятся на связи в ООП-проектировании.
+                                        {/* Upper Indigo Card Bar */}
+                                        <div
+                                            style={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                right: 0,
+                                                height: '4px',
+                                                backgroundColor: '#6366f1'
+                                            }}
+                                        />
+
+                                        {/* Title */}
+                                        <h2
+                                            style={{
+                                                fontSize: '20px',
+                                                fontWeight: '700',
+                                                color: '#4338ca',
+                                                margin: '0 0 12px 0'
+                                            }}
+                                        >
+                                            Разбор ловушки LSP: Почему Квадрат — это НЕ Прямоугольник в ООП
+                                        </h2>
+
+                                        {/* Простыми словами (Фиолетовый блок) */}
+                                        <div
+                                            style={{
+                                                backgroundColor: '#f5f3ff',
+                                                border: '1px solid #ddd6fe',
+                                                padding: '16px',
+                                                borderRadius: '6px',
+                                                marginBottom: '24px',
+                                                fontSize: '14px',
+                                                lineHeight: '1.6',
+                                                color: '#4c1d95'
+                                            }}
+                                        >
+                                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                                🧠 Ментальная модель (Объяснение на пальцах):
+                                            </div>
+                                            <div style={{ marginBottom: '8px' }}>
+                                                В геометрии нас учили: <em>«Квадрат — это частный случай прямоугольника, у которого все стороны равны»</em>. Из-за этого у разработчиков возникает соблазн написать код: <code style={{ fontFamily: 'monospace' }}>class Square extends Rectangle</code>.
+                                            </div>
+                                            <div style={{ marginBottom: '8px' }}>
+                                                Но в ООП важно не то, кем объект <strong>является</strong>, а то, как он себя <strong>ведет</strong> (его поведение и контракты).
+                                            </div>
+                                            <div>
+                                                У Прямоугольника есть поведение: <em>«Я могу изменить ширину, при этом моя высота останется прежней»</em>. Если мы унаследуем Квадрат, нам придется при изменении ширины принудительно менять и высоту (чтобы он оставался квадратом). Тем самым мы <strong>ломаем поведение родителя</strong>, нарушая принцип Барбары Лисков.
+                                            </div>
+                                        </div>
+
+                                        {/* Text Before Code */}
+                                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                            Пример катастрофы в коде при нарушении LSP:
+                                        </div>
+
+                                        {/* Code Block */}
+                                        <pre
+                                            style={{
+                                                backgroundColor: '#f8fafc',
+                                                border: '1px solid #e2e8f0',
+                                                borderRadius: '6px',
+                                                padding: '16px',
+                                                overflowX: 'auto',
+                                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                                fontSize: '14px',
+                                                color: '#0f172a',
+                                                margin: '0 0 20px 0',
+                                                whiteSpace: 'pre',
+                                                lineHeight: '1.5'
+                                            }}
+                                        >
+{`// Базовый класс Прямоугольника
+class Rectangle {
+    constructor(width, height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    setWidth(w) { this.width = w; }
+    setHeight(h) { this.height = h; }
+    getArea() { return this.width * this.height; }
+}
+
+// ❌ Нарушение LSP: Наследуем Квадрат от Прямоугольника
+class Square extends Rectangle {
+    // Вынуждены переопределять сеттеры, чтобы сохранять геометрию квадрата
+    setWidth(w) {
+        this.width = w;
+        this.height = w; // Сеттер ширины неожиданно меняет высоту!
+    }
+    setHeight(h) {
+        this.width = h; // Сеттер высоты неожиданно меняет ширину!
+        this.height = h;
+    }
+}
+
+// Посторонняя функция в приложении, которая работает с прямоугольниками
+function increaseWidthAndCheck(rectangle) {
+    rectangle.setWidth(10); // Меняем ширину на 10
+    rectangle.setHeight(5);  // Меняем высоту на 5
+
+    // Логика функции железобетонно ожидает: площадь = 10 * 5 = 50
+    if (rectangle.getArea() === 50) {
+        console.log("🔥 Все работает отлично!");
+    } else {
+        // Если передать Square, его площадь будет 5 * 5 = 25!
+        console.error("💥 БАГ! Программа сломалась, хотя мы передали наследника!");
+    }
+}
+
+increaseWidthAndCheck(new Rectangle(2, 3)); // Выведет: "Все работает отлично!"
+increaseWidthAndCheck(new Square(2, 2));    // Выведет: "БАГ! Программа сломалась..."`}
+    </pre>
+
+                                        {/* How to fix */}
+                                        <div
+                                            style={{
+                                                borderLeft: '4px solid #10b981',
+                                                backgroundColor: '#f0fdf4',
+                                                padding: '12px 16px',
+                                                borderRadius: '0 6px 6px 0',
+                                                fontSize: '14px',
+                                                color: '#065f46',
+                                                lineHeight: '1.5',
+                                                marginBottom: '20px'
+                                            }}
+                                        >
+                                            💡 <strong>Как это исправить правильно?</strong> Квадрат и Прямоугольник не должны наследовать друг друга. Они должны быть независимыми классами, которые, например, реализуют общий интерфейс или абстрактный класс <code style={{ fontFamily: 'monospace' }}>Shape</code> (Фигура) с единственным методом <code style={{ fontFamily: 'monospace' }}>getArea()</code>. Тогда у Квадрата вообще не будет методов <code style={{ fontFamily: 'monospace' }}>setWidth</code> и <code style={{ fontFamily: 'monospace' }}>setHeight</code>, и никто случайно не сломает логику программы.
+                                        </div>
+
+                                        {/* Interview Advice */}
+                                        <div
+                                            style={{
+                                                borderLeft: '4px solid #3b82f6',
+                                                backgroundColor: '#eff6ff',
+                                                padding: '12px 16px',
+                                                borderRadius: '0 6px 6px 0',
+                                                fontSize: '14px',
+                                                color: '#1e3a8a',
+                                                lineHeight: '1.5'
+                                            }}
+                                        >
+                                            🎯 <strong>Формулировка для собеседования:</strong> Если на интервью вас спросят про эту ловушку, скажите одну ключевую фразу:
+                                            <em> «Наследование в ООП — это не связь свойств объектов в реальном мире, это совместимость их поведения. Поскольку поведение изменяемого Квадрата несовместимо с поведением изменяемого Прямоугольника, наследование между ними нарушает контракт базового класса и ломает принцип LSP».</em>
+                                        </div>
                                     </div>
+
                                 </div>
 
                             </div>
