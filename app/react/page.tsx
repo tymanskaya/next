@@ -750,9 +750,161 @@ class CorrectThermostat extends Switchable {
                             {/* D */}
                             <div style={{ paddingLeft: '12px', borderLeft: '3px solid #6366f1' }}>
                                 <strong style={{ color: '#3730a3', fontSize: '15px' }}>D — Dependency Inversion Principle (Принцип инверсии зависимостей)</strong>
-                                <p style={{ margin: '4px 0 0 0', color: '#475569' }}>
-                                    Модули верхних уровней не должны зависеть от модулей нижних уровней. Оба типа модулей должны зависеть от абстракций. Абстракции не должны зависеть от деталей, а детали должны зависеть от абстракций. Этот принцип реализуется через механизмы <strong>Dependency Injection (DI)</strong>.
-                                </p>
+                                <div
+                                    id="dependencyInversion"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        borderRadius: '8px',
+                                        border: '1px solid #e2e8f0',
+                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                        padding: '24px sm:32px',
+                                        width: '100%',
+                                        boxSizing: 'border-box',
+                                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                        color: '#334155',
+                                        position: 'relative',
+                                        overflow: 'hidden',
+                                        marginTop: '32px'
+                                    }}
+                                >
+                                    {/* Upper Indigo Card Bar */}
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            height: '4px',
+                                        }}
+                                    />
+
+
+                                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                                        Этот принцип формулируется двумя жесткими правилами:
+                                        1. <strong>Модули верхнего уровня не должны зависеть от модулей нижнего уровня. Оба должны зависеть от абстракций.</strong>
+                                        2. <strong>Абстракции не должны зависеть от деталей. Детали должны зависеть от абстракций.</strong>
+                                    </p>
+
+                                    {/* Mental Model (Violet Box) */}
+                                    <div
+                                        style={{
+                                            backgroundColor: '#f5f3ff',
+                                            border: '1px solid #ddd6fe',
+                                            padding: '16px',
+                                            borderRadius: '6px',
+                                            marginBottom: '24px',
+                                            fontSize: '14px',
+                                            lineHeight: '1.6',
+                                            color: '#4c1d95'
+                                        }}
+                                    >
+                                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                            🧠 Ментальная модель (Розетка и Электроприборы):
+                                        </div>
+                                        <div style={{ marginBottom: '6px' }}>
+                                            Представьте, что провода от вашего телевизора намертво припаяны прямо к стене дома. Если вы захотите заменить телевизор на тостер, вам придется вызывать электрика, штробить стены и переделывать всю проводку. Это жесткая зависимость верхнего уровня от нижнего.
+                                        </div>
+                                        <div>
+                                            Чтобы этого избежать, люди придумали абстракцию — <strong>розетку (интерфейс)</strong>. Стене (высокий уровень) все равно, что в нее вставят. Тостеру и телевизору (детали) тоже все равно, как генерируется электричество. Оба они зависят только от формы вилки и розеточного стандарта.
+                                        </div>
+                                    </div>
+
+                                    {/* Text Before Code */}
+                                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                        Пример нарушения и исправления DIP (Внедрение зависимости через конструктор):
+                                    </div>
+
+                                    {/* Code Block (Formatted & Cleaned) */}
+                                    <pre
+                                        style={{
+                                            backgroundColor: '#f8fafc',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '6px',
+                                            padding: '16px',
+                                            overflowX: 'auto',
+                                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                            fontSize: '14px',
+                                            color: '#0f172a',
+                                            margin: '0 0 20px 0',
+                                            whiteSpace: 'pre',
+                                            lineHeight: '1.5'
+                                        }}
+                                    >
+{`// ❌ НАРУШЕНИЕ DIP: Модуль заказа жестко завязан на конкретную базу данных (деталь)
+class AxiosFetch {
+    request(url) { return \`Данные из сети для \${url}\`; }
+}
+
+class OrderManagerError {
+    constructor() {
+        // Ошибка! Класс сам создает экземпляр жесткой зависимости внутри себя.
+        // Если мы захотим заменить Axios на GraphQL или Fetch, придется переписывать этот класс.
+        this.api = new AxiosFetch(); 
+    }
+
+    loadOrder(id) {
+        return this.api.request(\`/orders/\${id}\`);
+    }
+}
+
+
+// 🟢 СОБЛЮДЕНИЕ DIP: Инвертируем управление (IoC) с помощью Dependency Injection (DI)
+// Шаг 1: Создаем "контракты" (в JS это могут быть базовые классы или соглашения о методах)
+class ApiServiceContract {
+    request(url) {}
+}
+
+// Шаг 2: Реализуем детали, которые следуют контракту
+class AxiosService extends ApiServiceContract {
+    request(url) { return \`[Axios] Данные для \${url}\`; }
+}
+
+class GraphQLService extends ApiServiceContract {
+    request(url) { return \`[GraphQL] Данные для \${url}\`; }
+}
+
+// Шаг 3: Модуль верхнего уровня ожидает абстракцию снаружи
+class OrderManager {
+    // Передаем зависимость извне (через аргументы конструктора). Это и есть Dependency Injection!
+    constructor(apiService) {
+        this.api = apiService; 
+    }
+
+    loadOrder(id) {
+        return this.api.request(\`/orders/\${id}\`);
+    }
+}
+
+// Использование: Теперь мы можем безболезненно подменять сервисы на лету!
+const managerWithAxios = new OrderManager(new AxiosService());
+console.log(managerWithAxios.loadOrder(42));
+
+const managerWithGraphQL = new OrderManager(new GraphQLService());
+console.log(managerWithGraphQL.loadOrder(42)); // Код самого OrderManager остался нетронутым!`}
+    </pre>
+
+                                    {/* Interview Tips */}
+                                    <div
+                                        style={{
+                                            borderLeft: '4px solid #10b981',
+                                            backgroundColor: '#f0fdf4',
+                                            padding: '12px 16px',
+                                            borderRadius: '0 6px 6px 0',
+                                            fontSize: '14px',
+                                            color: '#065f46',
+                                            lineHeight: '1.5'
+                                        }}
+                                    >
+                                        💡 <strong>Популярный вопрос: В чем разница между DIP, DI и IoC?</strong>
+                                        На собеседованиях часто просят не путать эти понятия:
+                                        <ul style={{ paddingLeft: '16px', margin: '4px 0 0 0', listStyleType: 'disc' }}>
+                                            <li style={{ marginBottom: '4px' }}><strong>DIP (Принцип)</strong> — это верхнеуровневое архитектурное правило проектирования (зависимость от абстракций, а не деталей).</li>
+                                            <li style={{ marginBottom: '4px' }}><strong>DI (Паттерн)</strong> — это конкретный способ реализации этого правила на практике, когда зависимости передаются («внедряются») объекту извне (через конструктор или пропсы), а не создаются им внутри.</li>
+                                            <li><strong>IoC (Inversion of Control)</strong> — это глобальный подход, когда управление ходом программы передается внешнему фреймворку или контейнеру (например, когда не вы вызываете компоненты, а React сам решает, когда их зарендерить).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
