@@ -76,6 +76,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#solid" style={anchorLinkStyle}>
                         🔹 SOLID
                     </a>
+                    <a href="#virtualDom" style={anchorLinkStyle}>
+                        📦 Virtual DOM & Reconciliation
+                    </a>
 
 
                 </div>
@@ -970,6 +973,128 @@ service.send("Привет!");`}
                         </div>
                     </div>
 
+                    <div
+                        id="virtualDom"
+                        style={{
+                            backgroundColor: '#ffffff',
+                            borderRadius: '8px',
+                            border: '1px solid #e2e8f0',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                            padding: '24px sm:32px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                            color: '#334155',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            marginTop: '32px'
+                        }}
+                    >
+                        {/* Upper Indigo Card Bar */}
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: '4px',
+                                backgroundColor: '#6366f1'
+                            }}
+                        />
+
+                        {/* Title */}
+                        <h2
+                            style={{
+                                fontSize: '20px',
+                                fontWeight: '700',
+                                color: '#4338ca',
+                                margin: '0 0 12px 0'
+                            }}
+                        >
+                            Механизм Virtual DOM и алгоритм Reconciliation
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            <strong>Virtual DOM (Виртуальный DOM)</strong> — это легковесная копия реального DOM-дерева в виде обычных JavaScript-объектов в оперативной памяти. Изменение реального DOM в браузере — крайне «дорогая» операция (вызывает тяжелые процессы <em>Reflow</em> и <em>Repaint</em>). React решает эту проблему, сначала производя все расчеты в памяти.
+                        </p>
+
+                        {/* Mental Model (Violet Box) */}
+                        <div
+                            style={{
+                                backgroundColor: '#f5f3ff',
+                                border: '1px solid #ddd6fe',
+                                padding: '16px',
+                                borderRadius: '6px',
+                                marginBottom: '24px',
+                                fontSize: '14px',
+                                lineHeight: '1.6',
+                                color: '#4c1d95'
+                            }}
+                        >
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                🧠 Пошаговый процесс обновления интерфейса:
+                            </div>
+                            <ol style={{ paddingLeft: '16px', margin: 0, listStyleType: 'decimal' }}>
+                                <li style={{ marginBottom: '4px' }}> При изменении состояния (State) React строит <strong>новое виртуальное дерево</strong> компонентов.</li>
+                                <li style={{ marginBottom: '4px' }}>Запускается процесс <strong>Diffing</strong>: React сравнивает новый снимок Virtual DOM со старым снимком (предыдущим состоянием).</li>
+                                <li style={{ marginBottom: '4px' }}>Алгоритм <strong>Reconciliation (Согласование)</strong> вычисляет минимальный набор изменений, который нужно внести.</li>
+                                <li>Пакет этих изменений атомарно и точечно применяется к реальному браузерному DOM (синхронизация).</li>
+                            </ol>
+                        </div>
+
+                        {/* Text Before Code */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Как JSX превращается в объект Virtual DOM (Концептуальный вид):
+                        </div>
+
+                        {/* Code Block */}
+                        <pre
+                            style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '16px',
+                                overflowX: 'auto',
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '14px',
+                                color: '#0f172a',
+                                margin: '0 0 20px 0',
+                                whiteSpace: 'pre',
+                                lineHeight: '1.5'
+                            }}
+                        >
+{`// 1. Мы пишем привычный JSX код:
+const element = <button className="btn">Кликни меня</button>;
+
+// 2. Сборщик (Babel/SWC) под капотом компилирует его в вызов React.createElement():
+const compiled = React.createElement('button', { className: 'btn' }, 'Кликни меня');
+
+// 3. На выходе получается чистый JS-объект — это и есть узел Virtual DOM:
+{
+    type: 'button',
+    props: {
+        className: 'btn',
+        children: 'Кликни меня'
+    }
+}
+// Сравнить два таких объекта в памяти компьютера — это миллисекунды.`}
+    </pre>
+
+                        {/* Key Attribute Trap */}
+                        <div
+                            style={{
+                                borderLeft: '4px solid #ef4444',
+                                backgroundColor: '#fef2f2',
+                                padding: '12px 16px',
+                                borderRadius: '0 6px 6px 0',
+                                fontSize: '14px',
+                                color: '#991b1b',
+                                lineHeight: '1.5'
+                            }}
+                        >
+                            🚨 <strong>Важнейший вопрос на интервью (Зачем нужен атрибут key?):</strong> При рендеринге списков React требует передавать уникальный <code style={{ fontFamily: 'monospace' }}>key</code> для каждого элемента. Без него при добавлении элемента в начало списка алгоритм Diffing решит, что изменились <em>все</em> элементы ниже, и полностью перерисует их. Стабильный <code style={{ fontFamily: 'monospace' }}>key</code> служит паспортом элемента: по нему React мгновенно понимает, какие элементы просто передвинулись, какие добавились, а какие удалились, сохраняя их внутреннее состояние и DOM-узлы. Использовать случайные числа (Math.random) или индексы массива в качестве key — грубое нарушение, ломающее оптимизацию.
+                        </div>
+                    </div>
 
                 </div>
             </main>
