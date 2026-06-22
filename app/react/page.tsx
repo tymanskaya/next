@@ -615,6 +615,136 @@ increaseWidthAndCheck(new Square(2, 2));    // Выведет: "БАГ! Прог
                                 <p style={{ margin: '4px 0 0 0', color: '#475569' }}>
                                     Клиенты не должны зависеть от методов, которые они не используют. Множество специализированных интерфейсов лучше, чем один универсальный «толстый». В TypeScript вместо создания одного гигантского интерфейса <code style={{ fontFamily: 'monospace' }}>Worker</code> с методами <code style={{ fontFamily: 'monospace' }}>work()</code> и <code style={{ fontFamily: 'monospace' }}>eat()</code>, лучше сделать раздельные интерфейсы <code style={{ fontFamily: 'monospace' }}>Workable</code> и <code style={{ fontFamily: 'monospace' }}>Feedable</code>.
                                 </p>
+                                <div
+                                    id="interfaceSegregation"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        borderRadius: '8px',
+                                        border: '1px solid #e2e8f0',
+                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                        padding: '24px sm:32px',
+                                        width: '100%',
+                                        boxSizing: 'border-box',
+                                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                        color: '#334155',
+                                        position: 'relative',
+                                        overflow: 'hidden',
+                                        marginTop: '32px'
+                                    }}
+                                >
+
+
+
+                                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                                        Главная формулировка принципа: <strong>клиенты не должны зависеть от методов, которые они не используют</strong>. Когда интерфейс (или базовый класс) становится слишком «толстым» и универсальным, содержащиеся в нем методы размывают его зону ответственности, вынуждая подклассы реализовывать пустые функции-заглушки.
+                                    </p>
+
+                                    {/* Mental Model (Violet Box) */}
+                                    <div
+                                        style={{
+                                            backgroundColor: '#f5f3ff',
+                                            border: '1px solid #ddd6fe',
+                                            padding: '16px',
+                                            borderRadius: '6px',
+                                            marginBottom: '24px',
+                                            fontSize: '14px',
+                                            lineHeight: '1.6',
+                                            color: '#4c1d95'
+                                        }}
+                                    >
+                                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                            🧠 Ментальная модель (Дробление вместо универсальности):
+                                        </div>
+                                        <div style={{ marginBottom: '6px' }}>
+                                            Представьте универсальный швейцарский нож, в котором есть пила, ножницы, штопор и фонарик. Если вам в программе нужен просто фонарик, вам приходится носить с собой весь этот тяжелый нож и следить за тем, чтобы лезвия никого не поранили.
+                                        </div>
+                                        <div>
+                                            Принцип ISP утверждает: <strong>много специализированных интерфейсов гораздо лучше, чем один универсальный «комбайн»</strong>. В JavaScript роль интерфейсов выполняют контракты объектов или абстрактные базовые классы.
+                                        </div>
+                                    </div>
+
+                                    {/* Text Before Code */}
+                                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                        Пример нарушения и исправления ISP (на TypeScript/JS абстракциях):
+                                    </div>
+
+                                    {/* Code Block (Formatted & Cleaned) */}
+                                    <pre
+                                        style={{
+                                            backgroundColor: '#f8fafc',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '6px',
+                                            padding: '16px',
+                                            overflowX: 'auto',
+                                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                            fontSize: '14px',
+                                            color: '#0f172a',
+                                            margin: '0 0 20px 0',
+                                            whiteSpace: 'pre',
+                                            lineHeight: '1.5'
+                                        }}
+                                    >
+{`// ❌ НАРУШЕНИЕ ISP: Создан "жирный" интерфейс для умного дома
+// Из-за этого простые устройства вынуждены имитировать ненужное поведение
+class SmartDeviceContract {
+    turnOn() {}
+    turnOff() {}
+    setTemperature(degrees) {} // Нужен только термостатам
+    changeChannel(number) {}    // Нужен только телевизорам
+}
+
+class SimpleLightBulb extends SmartDeviceContract {
+    turnOn() { console.log("Лампочка включена"); }
+    turnOff() { console.log("Лампочка выключена"); }
+    
+    // Вынужденные пустые заглушки из-за жесткого контракта родителя
+    setTemperature() { /* Лампочка не греет, ничего не делаем */ }
+    changeChannel() { /* У лампочки нет каналов */ }
+}
+
+
+// 🟢 СОБЛЮДЕНИЕ ISP: Разделяем один большой контракт на три маленьких
+class Switchable {
+    turnOn() {}
+    turnOff() {}
+}
+
+class TemperatureRegulatable {
+    setTemperature(degrees) {}
+}
+
+class ChannelSwitchable {
+    changeChannel(number) {}
+}
+
+// Теперь каждый класс собирает контракт только из нужных ему частей (миксины или имплементация)
+class CorrectLightBulb extends Switchable {
+    turnOn() { console.log("Лампочка горит"); }
+    turnOff() { console.log("Лампочка погасла"); }
+}
+
+class CorrectThermostat extends Switchable {
+    constructor() { super(); }
+    setTemperature(degrees) { console.log(\`Установлено: \${degrees}°C\`); }
+}`}
+    </pre>
+
+                                    {/* Interview Tips */}
+                                    <div
+                                        style={{
+                                            borderLeft: '4px solid #10b981',
+                                            backgroundColor: '#f0fdf4',
+                                            padding: '12px 16px',
+                                            borderRadius: '0 6px 6px 0',
+                                            fontSize: '14px',
+                                            color: '#065f46',
+                                            lineHeight: '1.5'
+                                        }}
+                                    >
+                                        💡 <strong>Зачем это нужно во фронтенд-разработке?</strong> Соблюдение ISP напрямую влияет на чистоту архитектуры компонентов (например, в React). Если вы передаете в дочерний компонент карточки товара <code style={{ fontFamily: 'monospace' }}>{'<ProductCard />'}</code> весь гигантский объект пользователя <code style={{ fontFamily: 'monospace' }}>user</code> (со всеми его токенами, корзиной и историей заказов) ради одной лишь строки с именем, вы нарушаете ISP. Компонент становится избыточно зависимым. Передавайте только то, что компонент реально использует: <code style={{ fontFamily: 'monospace' }}>{'name={user.name}'}</code>.
+                                    </div>
+                                </div>
+
                             </div>
 
                             {/* D */}
