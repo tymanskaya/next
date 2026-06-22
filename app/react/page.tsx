@@ -326,6 +326,157 @@ export default function ReactHooksCheatSheet() {
                                 <p style={{ margin: '4px 0 0 0', color: '#475569' }}>
                                     Функции, которые используют базовый тип, должны иметь возможность использовать подтипы базового типа, даже не зная об этом. Проще говоря: <em>наследники не должны ломать поведение и логику родителя</em>. Классический пример-ошибка: класс Ostrich (Страус), наследующийся от Bird (Птица), но выбрасывающий ошибку в методе <code style={{ fontFamily: 'monospace' }}>fly()</code>.
                                 </p>
+                                <div
+                                    id="liskovPrinciple"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        borderRadius: '8px',
+                                        border: '1px solid #e2e8f0',
+                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                        padding: '24px sm:32px',
+                                        width: '100%',
+                                        boxSizing: 'border-box',
+                                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                                        color: '#334155',
+                                        position: 'relative',
+                                        overflow: 'hidden',
+                                        marginTop: '32px'
+                                    }}
+                                >
+                                    {/* Upper Indigo Card Bar */}
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            height: '4px',
+                                            backgroundColor: '#6366f1'
+                                        }}
+                                    />
+
+                                    {/* Title */}
+                                    <h2
+                                        style={{
+                                            fontSize: '20px',
+                                            fontWeight: '700',
+                                            color: '#4338ca',
+                                            margin: '0 0 12px 0'
+                                        }}
+                                    >
+                                        L — Liskov Substitution Principle (Принцип подстановки Барбары Лисков)
+                                    </h2>
+
+                                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                                        Суть принципа формулируется просто: <strong>классы-наследники должны иметь возможность заменять свои базовые классы без изменения правильности работы программы</strong>. Если у вас есть функция, которая принимает базовый класс, вы должны иметь возможность передать туда любого его наследника, и программа не должна упасть или повести себя непредсказуемо.
+                                    </p>
+
+                                    {/* Mental Model (Violet Box) */}
+                                    <div
+                                        style={{
+                                            backgroundColor: '#f5f3ff',
+                                            border: '1px solid #ddd6fe',
+                                            padding: '16px',
+                                            borderRadius: '6px',
+                                            marginBottom: '24px',
+                                            fontSize: '14px',
+                                            lineHeight: '1.6',
+                                            color: '#4c1d95'
+                                        }}
+                                    >
+                                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                            🧠 Главное правило LSP: Наследник должен расширять, а не ломать родителя!
+                                        </div>
+                                        <div style={{ marginBottom: '6px' }}>
+                                            Наследование не должно использоваться просто ради того, чтобы «скопировать методы» родительского класса. Наследник обязан строго соблюдать контракт родителя:
+                                        </div>
+                                        <ul style={{ paddingLeft: '16px', margin: 0, listStyleType: 'disc' }}>
+                                            <li style={{ marginBottom: '4px' }}>Нельзя изменять типы возвращаемых значений на несовместимые.</li>
+                                            <li style={{ marginBottom: '4px' }}>Нельзя ужесточать входные параметры (требовать больше, чем родитель).</li>
+                                            <li><strong>Категорически нельзя генерировать исключения (throw Error)</strong> там, где родитель этого не делает.</li>
+                                        </ul>
+                                    </div>
+
+                                    {/* Text Before Code */}
+                                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                                        Классический пример нарушения и исправления (Проблема Птицы и Страуса):
+                                    </div>
+
+                                    {/* Code Block (Formatted & Cleaned) */}
+                                    <pre
+                                        style={{
+                                            backgroundColor: '#f8fafc',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '6px',
+                                            padding: '16px',
+                                            overflowX: 'auto',
+                                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                            fontSize: '14px',
+                                            color: '#0f172a',
+                                            margin: '0 0 20px 0',
+                                            whiteSpace: 'pre',
+                                            lineHeight: '1.5'
+                                        }}
+                                    >
+{`// ❌ НАРУШЕНИЕ LSP: Наследник ломает контракт базового класса
+class Bird {
+    fly() {
+        return "Я лечу!";
+    }
+}
+
+class Ostrich extends Bird {
+    fly() {
+        // Страус не умеет летать! Нам приходится выбрасывать ошибку.
+        // Это ломает код, который ожидает, что ВСЕ птицы умеют летать.
+        throw new Error("Я не умею летать!"); 
+    }
+}
+
+function makeBirdFly(bird) {
+    return bird.fly(); // Если передать Ostrich, приложение аварийно упадет!
+}
+
+
+// 🟢 СОБЛЮДЕНИЕ LSP: Правильное разделение абстракций через интерфейсы/классы
+class RealBird {
+    eat() {
+        return "Кушаю зерно";
+    }
+}
+
+// Выносим способность летать в отдельную категорию
+class FlyingBird extends RealBird {
+    fly() {
+        return "Я лечу!";
+    }
+}
+
+class Duck extends FlyingBird { /* Умеет летать и кушать */ }
+class NewOstrich extends RealBird { /* Умеет только кушать */ }
+
+// Теперь функция работает безопасно, так как принимает только летающих птиц
+function makeFlyingBirdFly(flyingBird) {
+    return flyingBird.fly(); // Сюда физически нельзя передать NewOstrich
+}`}
+    </pre>
+
+                                    {/* Interview Tips */}
+                                    <div
+                                        style={{
+                                            borderLeft: '4px solid #10b981',
+                                            backgroundColor: '#f0fdf4',
+                                            padding: '12px 16px',
+                                            borderRadius: '0 6px 6px 0',
+                                            fontSize: '14px',
+                                            color: '#065f46',
+                                            lineHeight: '1.5'
+                                        }}
+                                    >
+                                        💡 <strong>Популярная ловушка на собеседовании (Квадрат и Прямоугольник):</strong> Интервьюеры часто предлагают унаследовать <code style={{ fontFamily: 'monospace' }}>Square</code> от <code style={{ fontFamily: 'monospace' }}>Rectangle</code>. Это грубейшее нарушение LSP! У прямоугольника можно менять ширину и высоту независимо. Если у Квадрата при изменении ширины начнет автоматически меняться высота — это сломает логику функций, работающих с базовым прямоугольником. <strong>Вывод:</strong> математические связи (квадрат — это прямоугольник) не всегда переносятся на связи в ООП-проектировании.
+                                    </div>
+                                </div>
+
                             </div>
 
                             {/* I */}
