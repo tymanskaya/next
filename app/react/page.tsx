@@ -1250,6 +1250,161 @@ export default function App() {
                             <strong>Ответ:</strong> Через механизм <strong>коллбэков (Callback функции)</strong>. Родитель вместе с обычными данными передает вниз по пропсам функцию-обработчик. Дочерний компонент вызывает эту функцию внутри себя и прокидывает туда аргументы. Таким образом, данные все равно технически не текут наверх — дочерний компонент просто активирует триггер, переданный ему сверху.
                         </div>
                     </div>
+                    <div
+                        id="reactCorePrinciples"
+                        style={{
+                            backgroundColor: '#ffffff',
+                            borderRadius: '8px',
+                            border: '1px solid #e2e8f0',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                            padding: '24px sm:32px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                            color: '#334155',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            marginTop: '32px'
+                        }}
+                    >
+                        {/* Upper Indigo Card Bar */}
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: '4px',
+                                backgroundColor: '#6366f1'
+                            }}
+                        />
+
+                        {/* Title */}
+                        <h2
+                            style={{
+                                fontSize: '22px',
+                                fontWeight: '800',
+                                color: '#0f172a',
+                                margin: '0 0 6px 0',
+                                letterSpacing: '-0.02em'
+                            }}
+                        >
+                            Спецификация фундаментальных принципов React
+                        </h2>
+                        <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px 0', fontWeight: '500' }}>
+                            Архитектурный фундамент построения предсказуемых и масштабируемых интерфейсов
+                        </p>
+
+                        {/* Блоки принципов */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', fontSize: '14px', lineHeight: '1.6' }}>
+
+                            {/* 1. Декларативный подход */}
+                            <div style={{ padding: '16px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+                                <strong style={{ color: '#0f172a', fontSize: '15px', display: 'block', marginBottom: '4px' }}>
+                                    📢 Декларативный подход (Declarative UI)
+                                </strong>
+                                Разработчик описывает финальный вид интерфейса в зависимости от текущего состояния, а не диктует браузеру пошаговые инструкции по изменению DOM-дерева. React самостоятельно вычисляет разницу и берет на себя всю рутину по обновлению экрана.
+                            </div>
+
+                            {/* 2. Компонентная архитектура */}
+                            <div style={{ padding: '16px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+                                <strong style={{ color: '#0f172a', fontSize: '15px', display: 'block', marginBottom: '4px' }}>
+                                    📦 Компонентная архитектура (Component-Driven)
+                                </strong>
+                                Весь интерфейс приложения декомпозируется (разбивается) на независимые, изолированные и переиспользуемые кусочки кода — компоненты. Каждый компонент инкапсулирует свою логику, состояние и JSX-разметку, а также может быть вложен в другие компоненты.
+                            </div>
+
+                            {/* 3. Однонаправленный поток данных */}
+                            <div style={{ padding: '16px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+                                <strong style={{ color: '#0f172a', fontSize: '15px', display: 'block', marginBottom: '4px' }}>
+                                    ⏳ Однонаправленный поток данных (One-Way Data Flow)
+                                </strong>
+                                Данные в приложении строго циркулируют <strong>сверху вниз</strong>: от родительских компонентов к дочерним посредством неизменяемых свойств (<code style={{ fontFamily: 'monospace' }}>props</code>). Это исключает появление перекрестных багов мутации и существенно упрощает отладку и трассировку состояния.
+                            </div>
+
+                            {/* 4. Виртуальный DOM */}
+                            <div style={{ padding: '16px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+                                <strong style={{ color: '#0f172a', fontSize: '15px', display: 'block', marginBottom: '4px' }}>
+                                    🧠 Виртуальный DOM (Virtual DOM & Diffing)
+                                </strong>
+                                React содержит в оперативной памяти легковесную копию реального DOM в виде JS-объектов. При изменении данных генерируется новое виртуальное дерево, алгоритм сравнивает его с предыдущим снимком и точечно обновляет в реальном DOM только изменившиеся узлы, оптимизируя производительность рендеринга.
+                            </div>
+
+                            {/* 5. Props vs State */}
+                            <div style={{ padding: '16px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+                                <strong style={{ color: '#0f172a', fontSize: '15px', display: 'block', marginBottom: '4px' }}>
+                                    ⚙️ Разделение ответственности: Props и State
+                                </strong>
+                                <ul style={{ paddingLeft: '16px', margin: 0, listStyleType: 'disc' }}>
+                                    <li><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>props</code> — внешние входные конфигурационные данные компонента, передаваемые родителем. Они строго <strong>иммутабельны</strong> (доступны только для чтения).</li>
+                                    <li><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>state</code> — внутренняя локальная память компонента. Данные стейта реактивны, могут изменяться внутри компонента и напрямую управляют его жизненным циклом.</li>
+                                </ul>
+                            </div>
+
+                            {/* 6. Реактивность */}
+                            <div style={{ padding: '16px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+                                <strong style={{ color: '#0f172a', fontSize: '15px', display: 'block', marginBottom: '4px' }}>
+                                    ⚡ Реактивность (Reactive Updates)
+                                </strong>
+                                Прямая связь между данными и экраном. Любое санкционированное изменение локального состояния компонента автоматического инициирует повторный вызов функции компонента (рендер) и обновление соответствующего пользовательского интерфейса.
+                            </div>
+
+                            {/* 7. Композиция вместо наследования */}
+                            <div style={{ padding: '16px', backgroundColor: '#f5f3ff', border: '1px solid #ddd6fe', borderRadius: '6px', color: '#4c1d95' }}>
+                                <strong style={{ color: '#4c1d95', fontSize: '15px', display: 'block', marginBottom: '4px' }}>
+                                    🧩 Композиция вместо наследования (Composition over Inheritance)
+                                </strong>
+                                React полностью отказывается от классического ООП-наследования классов для расширения UI. Вместо создания цепочек наследования сложные компоненты конструируются путем комбинирования и вложения более простых компонентов, в том числе используя пропс-контейнер <code style={{ fontFamily: 'monospace' }}>children</code>.
+                            </div>
+
+                        </div>
+
+                        {/* Серая плашка с кодом, демонстрирующим Композицию и Props */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', margin: '24px 0 12px 0' }}>
+                            Пример реализации принципа Композиции (вложение через children):
+                        </div>
+                        <pre
+                            style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '16px',
+                                overflowX: 'auto',
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '14px',
+                                color: '#0f172a',
+                                margin: '0 0 20px 0',
+                                whiteSpace: 'pre',
+                                lineHeight: '1.5'
+                            }}
+                        >
+{`import React from 'react';
+
+// Универсальный переиспользуемый компонент карточки (Композиция)
+// Принимает props.children для встраивания любой разметки внутрь
+function Card({ title, children }) {
+    return (
+        <div style={{ border: '1px solid #e2e8f0', padding: '16px', borderRadius: '8px' }}>
+            <h3 style={{ margin: '0 0 12px 0', color: '#0f172a' }}>{title}</h3>
+            {/* Сюда внедрится всё, что мы передадим между тегами <Card> */}
+            <div>{children}</div>
+        </div>
+    );
+}
+
+export default function Profile() {
+    return (
+        // Конструируем сложный UI из простых блоков без наследования классов!
+        <Card title="Профиль пользователя">
+            <p>Имя: Екатерина</p>
+            <button style={{ backgroundColor: '#06b6d4', color: '#fff' }}>
+                Редактировать
+            </button>
+        </Card>
+    );
+}`}
+    </pre>
+                    </div>
 
                 </div>
             </main>
