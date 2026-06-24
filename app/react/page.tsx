@@ -79,6 +79,10 @@ export default function ReactHooksCheatSheet() {
                     <a href="#virtualDom" style={anchorLinkStyle}>
                         📦 Virtual DOM & Reconciliation
                     </a>
+                    <a href="#reactPrinciples" style={anchorLinkStyle}>
+                        ⚛️ Фундаментальные принципы React
+                    </a>
+
 
 
                 </div>
@@ -1093,6 +1097,157 @@ const compiled = React.createElement('button', { className: 'btn' }, 'Кликн
                             }}
                         >
                             🚨 <strong>Важнейший вопрос на интервью (Зачем нужен атрибут key?):</strong> При рендеринге списков React требует передавать уникальный <code style={{ fontFamily: 'monospace' }}>key</code> для каждого элемента. Без него при добавлении элемента в начало списка алгоритм Diffing решит, что изменились <em>все</em> элементы ниже, и полностью перерисует их. Стабильный <code style={{ fontFamily: 'monospace' }}>key</code> служит паспортом элемента: по нему React мгновенно понимает, какие элементы просто передвинулись, какие добавились, а какие удалились, сохраняя их внутреннее состояние и DOM-узлы. Использовать случайные числа (Math.random) или индексы массива в качестве key — грубое нарушение, ломающее оптимизацию.
+                        </div>
+                    </div>
+                    <div
+                        id="reactPrinciples"
+                        style={{
+                            backgroundColor: '#ffffff',
+                            borderRadius: '8px',
+                            border: '1px solid #e2e8f0',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                            padding: '24px sm:32px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                            color: '#334155',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            marginTop: '32px'
+                        }}
+                    >
+                        {/* Upper Indigo Card Bar */}
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: '4px',
+                                backgroundColor: '#6366f1'
+                            }}
+                        />
+
+                        {/* Title */}
+                        <h2
+                            style={{
+                                fontSize: '20px',
+                                fontWeight: '700',
+                                color: '#4338ca',
+                                margin: '0 0 12px 0'
+                            }}
+                        >
+                            Фундаментальные принципы проектирования React
+                        </h2>
+
+                        <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                            В основе React лежат жесткие архитектурные соглашения, которые делают код предсказуемым, легким в тестировании и масштабировании. Знание этих принципов отличает Junior-кодера от разработчика осознанного уровня.
+                        </p>
+
+                        {/* Mental Model (Violet Box) */}
+                        <div
+                            style={{
+                                backgroundColor: '#f5f3ff',
+                                border: '1px solid #ddd6fe',
+                                padding: '16px',
+                                borderRadius: '6px',
+                                marginBottom: '24px',
+                                fontSize: '14px',
+                                lineHeight: '1.6',
+                                color: '#4c1d95'
+                            }}
+                        >
+                            <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+                                🧠 4 кита философии React:
+                            </div>
+
+                            <div style={{ marginBottom: '12px' }}>
+                                <strong>1. Декларативность (UI как функция от данных):</strong>
+                                Вы не управляете DOM вручную и не пишете инструкции в духе <em>«найди этот класс и добавь тег»</em>. Вы описываете конечный вид интерфейса для конкретного состояния. Математическая формула React выглядит так: <code style={{ fontFamily: 'monospace', fontWeight: '700' }}>UI = f(State)</code>. При изменении состояния функция вызывается заново.
+                            </div>
+
+                            <div style={{ marginBottom: '12px' }}>
+                                <strong>2. Компонентный подход (Component-Driven):</strong>
+                                Интерфейс собирается из изолированных, независимых кубиков (компонентов). Каждый компонент инкапсулирует внутри себя собственную разметку (JSX), стили и логику, что позволяет повторно использовать их по всему проекту.
+                            </div>
+
+                            <div style={{ marginBottom: '12px' }}>
+                                <strong>3. Однонаправленный поток данных (Unidirectional Data Flow):</strong>
+                                Данные в React строго и всегда текут <strong>сверху вниз</strong> — от родительских компонентов к дочерним через пропсы (<code style={{ fontFamily: 'monospace' }}>props</code>). Дочерний компонент никогда не может напрямую изменить данные родителя, что исключает появление хаотичных багов.
+                            </div>
+
+                            <div>
+                                <strong>4. Иммутабельность состояния (Immutability):</strong>
+                                Состояние в React считается священным и неизменяемым. Вы никогда не мутируете стейт напрямую (<code style={{ fontFamily: 'monospace' }}>state.user = 'Bob'</code>). Вместо этого вы всегда создаете <em>абсолютно новую копию данных</em> через специальную функцию-модификатор. Это позволяет React мгновенно фиксировать изменения.
+                            </div>
+                        </div>
+
+                        {/* Text Before Code */}
+                        <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                            Демонстрация принципов (Иммутабельность, Однонаправленный поток, Декларативность) в коде:
+                        </div>
+
+                        {/* Code Block (Formatted & Cleaned) */}
+                        <pre
+                            style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '16px',
+                                overflowX: 'auto',
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '14px',
+                                color: '#0f172a',
+                                margin: '0 0 20px 0',
+                                whiteSpace: 'pre',
+                                lineHeight: '1.5'
+                            }}
+                        >
+{`import React, { useState } from 'react';
+
+// Дочерний компонент: принимает данные СВЕРХУ (Однонаправленный поток)
+// Пропсы для дочернего компонента СТРОГО иммутабельны (только для чтения)
+function WelcomeMessage({ username }) {
+    return <h1 style={{ color: '#4338ca' }}>Привет, {username}!</h1>;
+}
+
+export default function App() {
+    const [user, setUser] = useState({ name: 'Катя', role: 'admin' });
+
+    const handleUpdate = () => {
+        // Соблюдаем ИММУТАБЕЛЬНОСТЬ: не пишем user.name = 'Алексей'!
+        // Создаем абсолютно новый объект через Spread-оператор
+        setUser({
+            ...user,
+            name: 'Алексей'
+        });
+    };
+
+    // ДЕКЛАРАТИВНОСТЬ: мы просто возвращаем разметку на основе текущего стейта user
+    return (
+        <div style={{ padding: '24px' }}>
+            <WelcomeMessage username={user.name} />
+            <button onClick={handleUpdate}>Изменить имя</button>
+        </div>
+    );
+}`}
+    </pre>
+
+                        {/* Interview Tips */}
+                        <div
+                            style={{
+                                borderLeft: '4px solid #10b981',
+                                backgroundColor: '#f0fdf4',
+                                padding: '12px 16px',
+                                borderRadius: '0 6px 6px 0',
+                                fontSize: '14px',
+                                color: '#065f46',
+                                lineHeight: '1.5'
+                            }}
+                        >
+                            💡 <strong>Каверзный вопрос на собеседовании:</strong> Если поток данных однонаправленный, как дочерний компонент может сообщить родителю, что внутри него что-то произошло (например, кликнули кнопку)?
+                            <br />
+                            <strong>Ответ:</strong> Через механизм <strong>коллбэков (Callback функции)</strong>. Родитель вместе с обычными данными передает вниз по пропсам функцию-обработчик. Дочерний компонент вызывает эту функцию внутри себя и прокидывает туда аргументы. Таким образом, данные все равно технически не текут наверх — дочерний компонент просто активирует триггер, переданный ему сверху.
                         </div>
                     </div>
 
