@@ -82,6 +82,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reactPrinciples" style={anchorLinkStyle}>
                         ⚛️ Фундаментальные принципы React
                     </a>
+                    <a href="#reactBatching" style={anchorLinkStyle}>
+                        ⚡ Механизм Батчинга стейта
+                    </a>
 
 
 
@@ -1407,6 +1410,180 @@ export default function Profile() {
                     </div>
 
                 </div>
+                <div
+                    id="reactBatching"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Механизм Батчинга (State Batching) в React
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        <strong>Батчинг (Группировка обновлений)</strong> — это встроенный механизм оптимизации React, при котором несколько вызовов функций изменения состояния (<code style={{ fontFamily: 'monospace' }}>setState</code>) объединяются в один цикл обновления интерфейса. Вместо того чтобы перерисовывать компонент после каждого чиха, React ждет завершения обработчика событий и выполняет всего <strong>один повторный рендер</strong>.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Ментальная модель (Официант в ресторане):
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            Представьте, что вы пришли в ресторан. Если вы скажете официанту: <em>«Я хочу суп»</em>, он не побежит сломя голову на кухню сразу же. Он подождет, пока вы назовете второе блюдо, десерт и напиток. Официант собирает весь ваш заказ (батчит) и делает <strong>один единственный поход на кухню</strong>.
+                        </div>
+                        <div>
+                            Точно так же работает React: он собирает все запросы на изменение стейта внутри функции и обновляет экран один раз в самом конце.
+                        </div>
+                    </div>
+
+                    {/* Evolution of Batching */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Эволюция механизма: Автоматический батчинг в React 18+
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px', fontSize: '13px', lineHeight: '1.5' }}>
+                        {/* React 17 */}
+                        <div style={{ padding: '14px', backgroundColor: '#fff7ed', border: '1px solid #ffedd5', borderRadius: '6px' }}>
+            <span style={{ fontWeight: '700', color: '#9a3412', display: 'block', marginBottom: '4px' }}>
+                ⚠️ Как было в React 17 и раньше
+            </span>
+                            Группировка обновлений работала <strong>только внутри родных обработчиков событий React</strong> (например, клики по кнопкам <code style={{ fontFamily: 'monospace' }}>onClick</code>). Если вы обновляли стейт внутри асинхронного кода (<code style={{ fontFamily: 'monospace' }}>fetch</code>, промисы, таймеры <code style={{ fontFamily: 'monospace' }}>setTimeout</code>), батчинг ломался, и React вызывал рендер на каждое изменение строки за строкой.
+                        </div>
+
+                        {/* React 18+ */}
+                        <div style={{ padding: '14px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '6px' }}>
+            <span style={{ fontWeight: '700', color: '#166534', display: 'block', marginBottom: '4px' }}>
+                🚀 Автоматический батчинг (Automatic Batching)
+            </span>
+                            В современных версиях React абсолютно все обновления состояния группируются автоматически. Независимо от того, где вызван <code style={{ fontFamily: 'monospace' }}>setState</code> — в обычном клике, внутри <code style={{ fontFamily: 'monospace' }}>setTimeout</code>, после сетевого <code style={{ fontFamily: 'monospace' }}>await</code> или в слушателях нативных событий WebSocket — компонент перерисуется ровно один раз.
+                        </div>
+                    </div>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Практическая демонстрация батчинга и асинхронности обновлений:
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import React, { useState } from 'react';
+
+export default function BatchingDemo() {
+    const [count, setCount] = useState(0);
+    const [flag, setFlag] = useState(false);
+
+    console.log("🔄 РЕНДЕР КОМПОНЕНТА СРАБОТАЛ!"); // Мы увидим этот лог только ОДИН раз при клике
+
+    const handleClick = () => {
+        // Запрос 1
+        setCount(c => c + 1);
+        // Запрос 2
+        setFlag(f => !f);
+        
+        // 🚨 ЛОВУШКА ИНТЕРВЬЮ: Что выведет console.log прямо на следующей строке?
+        // Ответ: Изменения еще не применились в реальные переменные! Значение стейта всё еще старое.
+        // Выведет: "Текущий count: 0"
+        console.log("Текущий count:", count); 
+        
+        // Ждем завершения функции handleClick...
+        // React закрывает "пакет" задач и запускает ОДИН повторный рендер для обоих изменений.
+    };
+
+    const handleAsyncClick = () => {
+        fetch('/api/data').then(() => {
+            // В React 18+ здесь сработает Автоматический Батчинг ✅ (1 рендер)
+            // В React 17 здесь произошло бы 2 последовательных рендера ❌
+            setCount(c => c + 1);
+            setFlag(f => !f);
+        });
+    };
+
+    return (
+        <div>
+            <p>Счетчик: {count}</p>
+            <button onClick={handleClick}>Обычный клик</button>
+            <button onClick={handleAsyncClick}>Асинхронный клик</button>
+        </div>
+    );
+}`}
+    </pre>
+
+                    {/* How to bypass batching */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        💡 <strong>Продвинутый уровень (Как принудительно отключить батчинг?):</strong> Если вам критически необходимо немедленно применить изменения к DOM синхронно (например, чтобы высчитать геометрию элемента сразу после изменения стейта), вы можете импортировать и обернуть вызовы в функцию <code style={{ fontFamily: 'monospace' }}>flushSync</code> из пакета <code style={{ fontFamily: 'monospace' }}>'react-dom'</code>:
+                        <code style={{ display: 'block', backgroundColor: '#ffffff', padding: '6px 10px', borderRadius: '4px', marginTop: '8px', fontFamily: 'monospace', border: '1px solid #fee2e2', color: '#0f172a' }}>
+                            {`import { flushSync } from 'react-dom';\n\nflushSync(() => {\n    setCount(count + 1); // Реальный DOM обновится немедленно!\n});`}
+                        </code>
+                        Использовать <code style={{ fontFamily: 'monospace' }}>flushSync</code> рекомендуется крайне редко, так как это бьет по производительности приложения.
+                    </div>
+                </div>
+
             </main>
         </div>
     );
