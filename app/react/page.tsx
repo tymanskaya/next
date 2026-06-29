@@ -96,6 +96,9 @@ export default function ReactHooksCheatSheet() {
                         🛑 Предотвращение DOM-событий
                     </a>
 
+                    <a href="#reactFiber"  style={anchorLinkStyle}>
+                        ⚙️ Архитектурный движок Fiber
+                    </a>
 
                 </div>
             </aside>
@@ -2088,6 +2091,144 @@ export default function EventControl() {
                         }}
                     >
                         🚨 <strong>Важная ловушка на интервью (React-делегирование и nativeEvent):</strong> Помните, что под капотом React вешает обработчики не на сами DOM-элементы, а делегирует их на один корневой узел (<code style={{ fontFamily: 'monospace' }}>#root</code>) []. Поэтому использование <code style={{ fontFamily: 'monospace' }}>event.nativeEvent.stopPropagation()</code> внутри Реакт-компонента работает непредсказуемо и **не остановит** всплытие для других реакт-событий. Всегда используйте стандартный реакт-метод <code style={{ fontFamily: 'monospace' }}>event.stopPropagation()</code>, который гарантированно изолирует виртуальное всплытие.
+                    </div>
+                </div>
+                <div
+                    id="reactFiber"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Архитектурный движок React Fiber
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        <strong>React Fiber</strong> — это полностью переписанное под капотом ядро алгоритма Reconciliation, запущенное начиная с React 16. Главная цель Fiber — обеспечить **плавность интерфейса (60 FPS)** при тяжелых вычислениях, превратив синхронный и монолитный процесс рендеринга в гибкий, разделенный на порции и управляемый поток задач.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Революция Fiber: Тайм-слайсинг против Stack Reconciler
+                        </div>
+                        <div style={{ marginBottom: '8px' }}>
+                            <strong>Как было раньше (Stack Reconciler):</strong> Старый движок сравнивал виртуальные деревья рекурсивно через стек вызовов. Этот процесс нельзя было прервать. Если дерево было огромным, JS «замерзал» на 200мс, полностью блокируя поток: анимации дергались, а клики пользователя игнорировались.
+                        </div>
+                        <div>
+                            <strong>Как стало сейчас (Fiber):</strong> Каждому элементу интерфейса соответствует свой виртуальный **Fiber-узел** — по сути, изолированная рабочая микро-задача (квант работы). Движок использует **Тайм-слайсинг (Time Slicing)**: он рендерит компоненты небольшими порциями в пределах ~5мс, затем делает паузу, отдает управление браузеру для обработки кликов и анимаций, а потом плавно возвращается к рендерингу с того места, где остановился.
+                        </div>
+                    </div>
+
+                    {/* Fiber Node Structure */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Анатомия Fiber-узла (Из каких связей состоит дерево):
+                    </div>
+                    <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', margin: '0 0 16px 0' }}>
+                        В отличие от классического Virtual DOM, где у узла есть массив ссылок на всех детей (<code style={{ fontFamily: 'monospace' }}>children</code>), Fiber представляет собой **односвязный список со сложными перекрестными указателями**, превращающий дерево в граф задач:
+                    </p>
+                    <ul style={{ paddingLeft: '16px', margin: '0 0 20px 0', fontSize: '14px', lineHeight: '1.6', listStyleType: 'disc' }}>
+                        <li style={{ marginBottom: '4px' }}><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>child</code> — указывает строго на <strong>первого (старшего)</strong> дочернего ребенка.</li>
+                        <li style={{ marginBottom: '4px' }}><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>sibling</code> — указывает на <strong>соседний (следующий)</strong> элемент на том же уровне (родного брата/сестру).</li>
+                        <li style={{ marginBottom: '4px' }}><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>return</code> — указывает обратно на <strong>родительский</strong> узел, куда нужно вернуть результат после завершения работы.</li>
+                        <li><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>memoizedState</code> — односвязный список, в котором по порядку хранятся состояния всех хуков этого компонента.</li>
+                    </ul>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Пример структуры связей Fiber-узлов под капотом (Концептуальный вид):
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`// Представим структуру JSX: <Parent> <ChildA /> <ChildB /> </Parent>
+
+// Так эти объекты связаны в памяти через Fiber архитектуру:
+const parentFiber = { type: Parent, child: childAFiber, return: null };
+const childAFiber  = { type: ChildA, child: null, sibling: childBFiber, return: parentFiber };
+const childBFiber  = { type: ChildB, child: null, sibling: null,        return: parentFiber };
+
+// Благодаря связям sibling и return, React может в любой момент прервать 
+// обход дерева, запомнить ссылку на текущий Fiber-объект, а затем 
+// продолжить цикл без использования рекурсивного стека JS!`}
+    </pre>
+
+                    {/* Double Buffering */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #10b981',
+                            backgroundColor: '#f0fdf4',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#065f46',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        💡 <strong>Продвинутый механизм: Двойная буферизация (Double Buffering)</strong>
+                        <br />
+                        Чтобы пользователь никогда не видел промежуточное «полусобранное» состояние интерфейса, Fiber использует технику из игровой индустрии — двойную буферизацию. В памяти одновременно существуют два Fiber-дерева:
+                        <ul style={{ paddingLeft: '16px', margin: '4px 0 0 0', listStyleType: 'circle' }}>
+                            <li style={{ marginBottom: '2px' }}><strong>current:</strong> То дерево, которое прямо сейчас отображается на экране пользователя.</li>
+                            <li><strong>workInProgress:</strong> Тайное альтернативное дерево, которое React прямо сейчас собирает и рассчитывает в фоновом режиме во время фазы рендера.</li>
+                        </ul>
+                        Как только фоновая сборка дерева <code style={{ fontFamily: 'monospace' }}>workInProgress</code> полностью завершена, React в одну синхронную строчку кода на стадии Commit фазы меняет указатель местами, мгновенно делая новое дерево текущим.
                     </div>
                 </div>
 
