@@ -89,6 +89,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reactReconciliation" style={anchorLinkStyle}>
                         📦 Стадии рендеринга и Reconciliation
                     </a>
+                    <a href="#reactPropsEvents" style={anchorLinkStyle}>
+                        ⚙️ Передача Props и событий
+                    </a>
 
 
                 </div>
@@ -1767,6 +1770,171 @@ export default function App() {
                     >
                         🎯 <strong>Формулировка для собеседования:</strong> Если вас просят объяснить разницу между рендером и коммитом, ответьте так:
                         <em> «Рендеринг — это запуск функций компонентов для вычисления нового снимка Virtual DOM. Это фаза расчетов. Коммит — это физическое применение изменений к реальному браузерному DOM-дереву. Рендеринг происходит всегда при изменении стейта, но коммит случится только в том случае, если алгоритм Reconciliation обнаружит фактическую разницу между старым и новым снимком виртуального дерева».</em>
+                    </div>
+                </div>
+                <div
+                    id="reactPropsEvents"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Тонкости работы с Props и обработчиками событий
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        Свойства (<strong>Props</strong>) и события (<strong>Events</strong>) — это главные кровеносные сосуды любого React-приложения, обеспечивающие однонаправленный поток данных и коммуникацию между компонентами. Их некорректная организация — главная причина скрытых багов производительности.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Золотые правила Props и Events на интервью:
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>1. Пропсы строго иммутабельны (Только для чтения):</strong> Компонент никогда не должен пытаться изменить свои входящие <code style={{ fontFamily: 'monospace' }}>props</code> напрямую (например, <code style={{ fontFamily: 'monospace' }}>props.title = "Новый"</code>). За попытку мутации пропсов движок выкинет ошибку, так как это нарушает предсказуемость потока данных.
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>2. Избегайте стрелочных функций в JSX:</strong> Отрендерить инлайн-стрелку вида <code style={{ fontFamily: 'monospace' }}>{'onClick={() => handleClick(id)}'}</code> кажется удобным, но это порождает новую ссылку на функцию при <em>каждом</em> рендере. Если этот пропс передается в дочерний оптимизированный компонент (<code style={{ fontFamily: 'monospace' }}>React.memo</code>), оптимизация полностью ломается.
+                        </div>
+                        <div>
+                            <strong>3. Синтетические события (SyntheticEvent):</strong> Реакт оборачивает нативные браузерные события в свою кроссбраузерную обертку <code style={{ fontFamily: 'monospace' }}>SyntheticEvent</code> ради оптимизации производительности и делегирования событий.
+                        </div>
+                    </div>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Правильные и неправильные способы передачи аргументов в обработчики:
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import React from 'react';
+
+// Дочерний компонент: принимает данные и коллбэк-обработчик клика
+const ListItem = React.memo(({ id, text, onRemove }) => {
+    console.log(\`🔄 Рендер элемента: \${text}\`);
+    return (
+        <li>
+            {text} <button onClick={() => onRemove(id)}>Удалить</button>
+        </li>
+    );
+});
+
+export default function TodoList() {
+    const list = [
+        { id: 1, text: 'Выучить React' },
+        { id: 2, text: 'Пройти собеседование' }
+    ];
+
+    // Базовый обработчик (автоматически получает объект события Event)
+    const handleSimpleClick = (event) => {
+        event.preventDefault();
+        console.log("Кликнули по ссылке:", event.target);
+    };
+
+    // Архитектурно ПРАВИЛЬНЫЙ способ передачи аргументов (Каррирование)
+    // Функция возвращает другую функцию, фиксируя ID в замыкании заранее
+    const handleRemoveCorrect = (id) => (event) => {
+        console.log(\`Удаляем элемент с ID: \${id}\`);
+    };
+
+    return (
+        <div>
+            {/* 🟢 Правильный вызов без аргументов */}
+            <a href="#" onClick={handleSimpleClick}>Простая ссылка</a>
+
+            <ul>
+                {list.map(item => (
+                    <ListItem 
+                        key={item.id}
+                        id={item.id}
+                        text={item.text}
+                        
+                        // ❌ НЕПРАВИЛЬНО: Инлайн-стрелка ломает React.memo для ListItem!
+                        // При каждом рендере TodoList здесь создается новая ссылка на функцию.
+                        // onRemove={() => console.log(item.id)}
+
+                        // 🟢 ПРАВИЛЬНО: Передаем функцию, созданную через каррирование
+                        // Ссылка на handleRemoveCorrect(item.id) стабильна (если обернуть в useCallback)
+                        onRemove={handleRemoveCorrect(item.id)}
+                    />
+                ))}
+            </ul>
+        </div>
+    );
+}`}
+    </pre>
+
+                    {/* Performance Trap */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🚨 <strong>Ловушка на собеседовании (Немедленный вызов функции):</strong> Самая популярная ошибка новичков — написать в JSX круглые скобки вызова прямо при передаче события: <code style={{ fontFamily: 'monospace' }}>{'onClick={handleClick()}'}</code>. Помните: в фигурные скобки нужно передавать <strong>ссылку на функцию</strong>, а не её вызов! Если написать круглые скобки, функция выполнится немедленно в фазе рендеринга. Если внутри неё меняется стейт, приложение упадет в бесконечный цикл ререндеров и намертво зависнет с ошибкой <code style={{ fontFamily: 'monospace' }}>Too many re-renders</code>.
                     </div>
                 </div>
 
