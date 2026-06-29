@@ -92,6 +92,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reactPropsEvents" style={anchorLinkStyle}>
                         ⚙️ Передача Props и событий
                     </a>
+                    <a href="#reactEventPrevention"  style={anchorLinkStyle}>
+                        🛑 Предотвращение DOM-событий
+                    </a>
 
 
                 </div>
@@ -1935,6 +1938,156 @@ export default function TodoList() {
                         }}
                     >
                         🚨 <strong>Ловушка на собеседовании (Немедленный вызов функции):</strong> Самая популярная ошибка новичков — написать в JSX круглые скобки вызова прямо при передаче события: <code style={{ fontFamily: 'monospace' }}>{'onClick={handleClick()}'}</code>. Помните: в фигурные скобки нужно передавать <strong>ссылку на функцию</strong>, а не её вызов! Если написать круглые скобки, функция выполнится немедленно в фазе рендеринга. Если внутри неё меняется стейт, приложение упадет в бесконечный цикл ререндеров и намертво зависнет с ошибкой <code style={{ fontFamily: 'monospace' }}>Too many re-renders</code>.
+                    </div>
+                </div>
+                <div
+                    id="reactEventPrevention"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Предотвращение DOM-событий: Bubbling и Default Actions
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        Управление потоком событий в React завязано на стандартную архитектуру DOM браузера, но упаковано в кроссбраузерную обертку <code style={{ fontFamily: 'monospace' }}>SyntheticEvent</code>. Разработчик обязан контролировать два независимых механизма: <strong>всплытие (Bubbling)</strong> и <strong>поведение по умолчанию (Default Behavior)</strong>.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Разница между методами «на пальцах»:
+                        </div>
+                        <div style={{ marginBottom: '8px' }}>
+                            <strong>event.stopPropagation() — Остановка всплытия:</strong> Предотвращает движение события вверх по дереву DOM. Если этого не сделать, клик по маленькой кнопке внутри большой карточки «всплывёт» и активирует обработчик клика на самой карточке.
+                        </div>
+                        <div>
+                            <strong>event.preventDefault() — Отмена действия по умолчанию:</strong> Отключает стандартное поведение самого браузера для этого тега. Например, запрещает ссылке <code style={{ fontFamily: 'monospace' }}>{'<a href="...">'}</code> перезагружать страницу или переходить по URL, а форме <code style={{ fontFamily: 'monospace' }}>{'<form>'}</code> — отправлять данные на сервер с перезагрузкой экрана при нажатии на Submit.
+                        </div>
+                    </div>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Практический пример: Изоляция клика в карточке и отмена отправки формы
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import React from 'react';
+
+export default function EventControl() {
+    const handleCardClick = () => {
+        console.log("👉 Открываем карточку товара...");
+    };
+
+    const handleFavoriteClick = (event) => {
+        // 🟢 1. Останавливаем всплытие!
+        // Клик замрёт на кнопке и НЕ пойдёт вверх к handleCardClick.
+        event.stopPropagation();
+        console.log("❤️ Добавлено в избранное!");
+    };
+
+    const handleSubmit = (event) => {
+        // 🟢 2. Отменяем поведение по умолчанию!
+        // Страница НЕ перезагрузится, мы можем обработать данные через JS.
+        event.preventDefault();
+        console.log("🚀 Форма отправлена асинхронно через fetch/axios");
+    };
+
+    return (
+        <div style={{ padding: '20px', gap: '20px', display: 'flex', flexDirection: 'column' }}>
+            {/* Пример со stopPropagation */}
+            <div 
+                onClick={handleCardClick} 
+                style={{ border: '1px solid #ccc', padding: '24px', cursor: 'pointer' }}
+            >
+                <h3>Карточка товара (Кликни меня)</h3>
+                
+                <button onClick={handleFavoriteClick}>
+                    В избранное
+                </button>
+            </div>
+
+            {/* Пример с preventDefault */}
+            <form onSubmit={handleSubmit}>
+                <input type="text" placeholder="Введите текст..." required />
+                <button type="submit">Сохранить</button>
+            </form>
+        </div>
+    );
+}`}
+    </pre>
+
+                    {/* Interview Caveat */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🚨 <strong>Важная ловушка на интервью (React-делегирование и nativeEvent):</strong> Помните, что под капотом React вешает обработчики не на сами DOM-элементы, а делегирует их на один корневой узел (<code style={{ fontFamily: 'monospace' }}>#root</code>) []. Поэтому использование <code style={{ fontFamily: 'monospace' }}>event.nativeEvent.stopPropagation()</code> внутри Реакт-компонента работает непредсказуемо и **не остановит** всплытие для других реакт-событий. Всегда используйте стандартный реакт-метод <code style={{ fontFamily: 'monospace' }}>event.stopPropagation()</code>, который гарантированно изолирует виртуальное всплытие.
                     </div>
                 </div>
 
