@@ -86,6 +86,9 @@ export default function ReactHooksCheatSheet() {
                         ⚡ Механизм Батчинга стейта
                     </a>
 
+                    <a href="#reactReconciliation" style={anchorLinkStyle}>
+                        📦 Стадии рендеринга и Reconciliation
+                    </a>
 
 
                 </div>
@@ -1581,6 +1584,189 @@ export default function BatchingDemo() {
                             {`import { flushSync } from 'react-dom';\n\nflushSync(() => {\n    setCount(count + 1); // Реальный DOM обновится немедленно!\n});`}
                         </code>
                         Использовать <code style={{ fontFamily: 'monospace' }}>flushSync</code> рекомендуется крайне редко, так как это бьет по производительности приложения.
+                    </div>
+                </div>
+                <div
+                    id="reactReconciliation"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Архитектура рендеринга: Render phase, Commit phase и Reconciliation
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        Процесс обновления интерфейса в React жестко разделен на две независимые стадии: расчетную (<strong>Render phase</strong>) и физическую (<strong>Commit phase</strong>). Между ними работает алгоритм <strong>Reconciliation (Согласование)</strong>, который вычисляет разницу (Diffing) между старым и новым снимками виртуального дерева.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Ментальная модель (Архитектор и Строители):
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>Render Phase (Проектирование):</strong> Архитектор садится за стол и чертит новый план здания на бумаге (React вызывает функции компонентов и строит новое дерево Virtual DOM). Это чисто математический расчет в памяти. На этой фазе ничего на улице не строится.
+                        </div>
+                        <div>
+                            <strong>Commit Phase (Строительство):</strong> Строители берут чертеж, сравнивают его со старым зданием, находят изменения и точечно перекладывают кирпичи (React передает инструкции в библиотеку <code style={{ fontFamily: 'monospace' }}>react-dom</code>, которая вносит изменения в реальный браузерный DOM).
+                        </div>
+                    </div>
+
+                    {/* Detailed Phase Separation */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Глубокий разбор стадий жизненного цикла рендера:
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px', fontSize: '13px', lineHeight: '1.5' }}>
+                        {/* Render Phase */}
+                        <div style={{ padding: '14px', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '6px' }}>
+            <span style={{ fontWeight: '700', color: '#1e3a8a', display: 'block', marginBottom: '6px' }}>
+                ⚙️ 1. Render Phase (Асинхронная / Чистая)
+            </span>
+                            <ul style={{ paddingLeft: '16px', margin: 0, listStyleType: 'circle', color: '#1e40af' }}>
+                                <li>React вызывает функции ваших компонентов сверху вниз.</li>
+                                <li>Генерируется новое виртуальное дерево (JSX транслируется в JS-объекты).</li>
+                                <li><strong>Эта фаза является чистой (Pure):</strong> она не должна содержать побочных эффектов (никаких <code style={{ fontFamily: 'monospace' }}>fetch</code> или манипуляций с DOM).</li>
+                                <li>В React 18+ эта фаза может ставиться на паузу или прерываться ради приоритетных задач (Concurrent Mode).</li>
+                            </ul>
+                        </div>
+
+                        {/* Commit Phase */}
+                        <div style={{ padding: '14px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '6px' }}>
+            <span style={{ fontWeight: '700', color: '#166534', display: 'block', marginBottom: '6px' }}>
+                🚀 2. Commit Phase (Синхронная / Побочные эффекты)
+            </span>
+                            <ul style={{ paddingLeft: '16px', margin: 0, listStyleType: 'circle', color: '#14532d' }}>
+                                <li>React точечно применяет изменения к реальному DOM через методы вроде <code style={{ fontFamily: 'monospace' }}>appendChild</code> или <code style={{ fontFamily: 'monospace' }}>setAttribute</code>.</li>
+                                <li><strong>Эта фаза всегда синхронна</strong> и не может быть прервана, чтобы пользователь не увидел наполовину обновленный экран.</li>
+                                <li>После завершения мутации DOM-дерева браузер делает перерисовку (Paint).</li>
+                                <li>Сразу после этого React запускает хуки побочных эффектов: <code style={{ fontFamily: 'monospace' }}>useLayoutEffect</code> (до отрисовки экрана) и <code style={{ fontFamily: 'monospace' }}>useEffect</code> (после).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* Reconciliation Rules */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '8px' }}>
+                        Эвристический алгоритм Reconciliation (Diffing):
+                    </div>
+                    <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', margin: '0 0 16px 0' }}>
+                        Полное сравнение двух деревьев объектов имеет математическую сложность <strong>O(n³)</strong>, что неприемлемо для интерфейсов. React реализует эвристический алгоритм со сложностью <strong>O(n)</strong>, основанный на двух железных правилах:
+                    </p>
+                    <ul style={{ paddingLeft: '16px', margin: '0 0 20px 0', fontSize: '14px', lineHeight: '1.6', listStyleType: 'decimal' }}>
+                        <li style={{ marginBottom: '6px' }}><strong>Разные типы элементов уничтожают ветку:</strong> Если тип элемента изменился (был <code style={{ fontFamily: 'monospace' }}>{'<div>'}</code>, а стал <code style={{ fontFamily: 'monospace' }}>{'<span>'}</code>), React не ищет сходства ниже. Он полностью уничтожает (размонтирует) старое дерево со всеми его дочерними узлами и стейтом, и строит новое с нуля.</li>
+                        <li><strong>Атрибут `key` сохраняет идентичность:</strong> При рендеринге списков элементы сравниваются по ключам. Если ключ совпал, React понимает, что это тот же самый DOM-узел, который просто передвинулся в массиве, и не перерисовывает его внутренности.</li>
+                    </ul>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Концептуальный пример: Как изменение типов элементов сбрасывает состояние
+                    </div>
+
+                    {/* Code Block */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import React, { useState } from 'react';
+
+function Counter() {
+    const [count, setCount] = useState(0);
+    return <button onClick={() => setCount(c => c + 1)}>Счет: {count}</button>;
+}
+
+export default function App() {
+    const [isWrapperDiv, setIsWrapperDiv] = useState(true);
+
+    return (
+        <div>
+            {isWrapperDiv ? (
+                // Контейнер DIV. Внутри него живет Counter
+                <div className="container">
+                    <Counter />
+                </div>
+            ) : (
+                // ⚠️ Переключаем на SECTION! 
+                // Алгоритм Reconciliation видит смену типа тега (div -> section).
+                // Результат: Старый div и вложенный Counter полностью уничтожаются.
+                // Внутренний стейт count сотрется и сбросится в 0!
+                <section className="container">
+                    <Counter />
+                </section>
+            )}
+            <button onClick={() => setIsWrapperDiv(!isWrapperDiv)}>Переключить обертку</button>
+        </div>
+    );
+}`}
+    </pre>
+
+                    {/* Interview Advice */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #3b82f6',
+                            backgroundColor: '#eff6ff',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#1e3a8a',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🎯 <strong>Формулировка для собеседования:</strong> Если вас просят объяснить разницу между рендером и коммитом, ответьте так:
+                        <em> «Рендеринг — это запуск функций компонентов для вычисления нового снимка Virtual DOM. Это фаза расчетов. Коммит — это физическое применение изменений к реальному браузерному DOM-дереву. Рендеринг происходит всегда при изменении стейта, но коммит случится только в том случае, если алгоритм Reconciliation обнаружит фактическую разницу между старым и новым снимком виртуального дерева».</em>
                     </div>
                 </div>
 
