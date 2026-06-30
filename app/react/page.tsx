@@ -111,6 +111,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reduxSelectors"  style={anchorLinkStyle}>
                         📊 Селекторы Redux и Мемоизация
                     </a>
+                    <a href="#reduxReducer"  style={anchorLinkStyle}>
+                        ⚙️ Что такое Редюсер (Reducer)
+                    </a>
 
                 </div>
             </aside>
@@ -3119,6 +3122,157 @@ export function TodoList() {
                     >
                         🎯 <strong>Что сказать на собеседовании:</strong>
                         <em> «Селекторы инкапсулируют структуру глобального стейта от компонентов UI, следуя принципу единственной ответственности. Хук useSelector делает строгое сравнение по ссылке (===) для возвращаемого значения, чтобы решить, нужен ли рендер. Если селектор производит трансформацию данных (через .map() или .filter()), он обязан быть мемоизированным с помощью библиотеки Reselect (метод createSelector). Это гарантирует стабильность ссылок и предотвращает каскадные лишние перерендеры дочерних деревьев».</em>
+                    </div>
+                </div>
+                <div
+                    id="reduxReducer"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Управление данными: Что такое Редюсер (Reducer)
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        <strong>Редюсер (Reducer / Функция свёртки)</strong> — это обычная JavaScript-функция, которая принимает текущее состояние (<strong>state</strong>) и объект действия (<strong>action</strong>), а затем вычисляет и возвращает <strong>абсолютно новое состояние</strong> приложения.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Математическая формула и ментальная модель:
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            Название происходит от метода массивов <code style={{ fontFamily: 'monospace' }}>Array.prototype.reduce()</code>, который берёт много значений и сворачивает их в одно. Формула редюсера выглядит так: <code style={{ fontFamily: 'monospace', fontWeight: '700' }}>(previousState, action) =&gt; newState</code>.
+                        </div>
+                        <div>
+                            Представьте калькулятор: на экране горит число <code style={{ fontFamily: 'monospace' }}>5</code> (старый стейт). Вы нажимаете кнопку <code style={{ fontFamily: 'monospace' }}>+ 3</code> (экшен). Процессор калькулятора берёт пятёрку, берёт команду сложения и выдаёт на экран совершенно новое число <code style={{ fontFamily: 'monospace' }}>8</code> (новый стейт). Этот внутренний процессор и есть редюсер.
+                        </div>
+                    </div>
+
+                    {/* Three Rules of Pure Functions */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        3 железных правила: Редюсер обязан быть Чистой функцией (Pure Function)
+                    </div>
+                    <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', margin: '0 0 16px 0' }}>
+                        Внутри редюсера **категорически запрещено** делать следующие вещи, так как они ломают предсказуемость стейта и отладку:
+                    </p>
+                    <ul style={{ paddingLeft: '16px', margin: '0 0 24px 0', fontSize: '14px', lineHeight: '1.6', listStyleType: 'decimal' }}>
+                        <li style={{ marginBottom: '6px' }}><strong>Никаких мутаций:</strong> Нельзя изменять прилетевшие аргументы напрямую (например, писать <code style={{ fontFamily: 'monospace' }}>state.count = 5</code>) []. Нужно всегда возвращать новую копию объекта.</li>
+                        <li style={{ marginBottom: '6px' }}><strong>Никаких побочных эффектов (Side Effects):</strong> Внутри редюсера запрещено делать запросы к серверу (<code style={{ fontFamily: 'monospace' }}>fetch</code>), работать с файлами или писать логи в localStorage [].</li>
+                        <li><strong>Никаких недетерминированных вызовов:</strong> Функция при одинаковых аргументах обязана возвращать одинаковый результат. Нельзя использовать <code style={{ fontFamily: 'monospace' }}>Math.random()</code>, генерировать случайные ID или вызывать <code style={{ fontFamily: 'monospace' }}>new Date()</code> [].</li>
+                    </ul>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Классический пример редюсера на чистом JS (До эпохи Redux Toolkit):
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`const initialState = {
+    todos: [],
+    loading: false
+};
+
+// Редюсер принимает дефолтный стейт и экшен
+function todoReducer(state = initialState, action) {
+    // В зависимости от типа экшена вычисляем новое состояние
+    switch (action.type) {
+        case 'ADD_TODO':
+            // 🟢 ПРАВИЛЬНО: возвращаем АБСОЛЮТНО НОВЫЙ объект стора.
+            // Старый массив todos не мутируется, а копируется через Spread
+            return {
+                ...state,
+                todos: [...state.todos, action.payload]
+            };
+
+        case 'TOGGLE_LOADING':
+            return {
+                ...state,
+                loading: !state.loading
+            };
+
+        default:
+            // 🔥 КРИТИЧЕСКИ ВАЖНО: Если редюсер не знает такой экшен,
+            // он ОБЯЗАН вернуть текущий старый state без изменений!
+            return state;
+    }
+}`}
+    </pre>
+
+                    {/* Interview Summary */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🚨 <strong>Ловушка на собеседовании (Почему нельзя мутировать стейт?):</strong>
+                        <br />
+                        Если вы мутируете объект внутри редюсера (например, <code style={{ fontFamily: 'monospace' }}>state.todos.push(newTodo); return state;</code>), ссылка на объект в памяти останется **абсолютно прежней**. Хук <code style={{ fontFamily: 'monospace' }}>useSelector</code> делает поверхностное сравнение ссылок (<code style={{ fontFamily: 'monospace' }}>===</code>). Не обнаружив изменения ссылки, React решит, что данные не поменялись, и **не запустит перерендер интерфейса**. Кэш сломается, а на экране останутся старые данные.
                     </div>
                 </div>
 
