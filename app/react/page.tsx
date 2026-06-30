@@ -114,6 +114,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reduxReducer"  style={anchorLinkStyle}>
                         ⚙️ Что такое Редюсер (Reducer)
                     </a>
+                    <a href="#reduxAction"  style={anchorLinkStyle}>
+                        ⚙️ Что такое Action в Redux
+                    </a>
 
                 </div>
             </aside>
@@ -3273,6 +3276,159 @@ function todoReducer(state = initialState, action) {
                         🚨 <strong>Ловушка на собеседовании (Почему нельзя мутировать стейт?):</strong>
                         <br />
                         Если вы мутируете объект внутри редюсера (например, <code style={{ fontFamily: 'monospace' }}>state.todos.push(newTodo); return state;</code>), ссылка на объект в памяти останется **абсолютно прежней**. Хук <code style={{ fontFamily: 'monospace' }}>useSelector</code> делает поверхностное сравнение ссылок (<code style={{ fontFamily: 'monospace' }}>===</code>). Не обнаружив изменения ссылки, React решит, что данные не поменялись, и **не запустит перерендер интерфейса**. Кэш сломается, а на экране останутся старые данные.
+                    </div>
+                </div>
+                <div
+                    id="reduxAction"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Что такое Action для Reducer: Архитектура инструкций
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        <strong>Action (Действие / Экшен)</strong> — это простой JavaScript-объект, который служит посылкой или инструкцией для Редюсера. Экшен сообщает системе две вещи: <strong>какое именно событие произошло</strong> в интерфейсе и <strong>какие новые данные</strong> нужно доставить в глобальное хранилище. Это единственный способ передать информацию с экрана в Store.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Ментальная модель (Курьерская накладная):
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            Представьте, что Store — это строго охраняемый банковский сейф, а Reducer — его управляющий. Вы не можете зайти в сейф и переложить деньги руками.
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            Вместо этого вы отправляете курьера (<code style={{ fontFamily: 'monospace' }}>dispatch</code>), который передает управляющему запечатанный бланк — **Action**.
+                        </div>
+                        <div>
+                            В бланке написано: <code style={{ fontFamily: 'monospace' }}>type: "ПОПОЛНИТЬ_СЧЕТ"</code> (название операции) и прикреплены купюры <code style={{ fontFamily: 'monospace' }}>payload: 100</code> (данные). Управляющий читает бланк, понимает команду и строго по инструкции пересчитывает баланс сейфа.
+                        </div>
+                    </div>
+
+                    {/* Flux Standard Action (FSA) Specification */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Анатомия объекта Action: Стандарт Flux Standard Action (FSA)
+                    </div>
+                    <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', margin: '0 0 16px 0' }}>
+                        Чтобы кодовая база крупных проектов не превращалась в хаос, сообщество приняло строгую спецификацию FSA. Согласно ей, объект экшена может содержать **только 4 конкретных свойства**:
+                    </p>
+                    <ul style={{ paddingLeft: '16px', margin: '0 0 24px 0', fontSize: '14px', lineHeight: '1.6', listStyleType: 'disc' }}>
+                        <li style={{ marginBottom: '6px' }}><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>type</code> — <strong>(Обязательное)</strong> Строковая константа, уникальное имя действия. Всегда пишется в верхнем регистре или в формате <code style={{ fontFamily: 'monospace' }}>"домен/событие"</code> (например, <code style={{ fontFamily: 'monospace' }}>"cart/addItem"</code>).</li>
+                        <li style={{ marginBottom: '6px' }}><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>payload</code> — <strong>(Опциональное)</strong> Полезная нагрузка. Любые данные (строка, число, объект, массив), которые нужны редюсеру для расчета. Если данных нет, свойство опускается.</li>
+                        <li style={{ marginBottom: '6px' }}><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>error</code> — <strong>(Опциональное)</strong> Флаг-булеан (<code style={{ fontFamily: 'monospace' }}>true</code>), если экшен сигнализирует о сбое. В таком случае в <code style={{ fontFamily: 'monospace' }}>payload</code> обычно передается объект ошибки `Error`.</li>
+                        <li><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>meta</code> — <strong>(Опциональное)</strong> Любая контекстная информация, которая не является частью полезной нагрузки (например, ID сессии, таймстамп отправки).</li>
+                    </ul>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Практическая реализация экшенов и фабрик (Action Creators):
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`// 1. Создаем строковую константу (чтобы избежать опечаток в редюсерах)
+const ADD_USER = 'users/add';
+
+// 2. Классический Action Creator (Фабрика экшенов)
+// Функция, которая просто генерирует и возвращает правильный объект экшена
+export const addUserAction = (id, name) => {
+    return {
+        type: ADD_USER,
+        payload: { id, name } // Упаковываем аргументы в полезную нагрузку по стандарту FSA
+    };
+};
+
+// 3. Как Редюсер обрабатывает этот экшен:
+function userReducer(state = { list: [] }, action) {
+    switch (action.type) {
+        case ADD_USER:
+            return {
+                ...state,
+                // Извлекаем данные из .payload и добавляем в новый массив
+                list: [...state.list, action.payload] 
+            };
+        default:
+            return state;
+    }
+}
+
+// 4. Отправка из компонента: dispatch(addUserAction(1, "Екатерина"));`}
+    </pre>
+
+                    {/* Modern Redux Toolkit Note */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #3b82f6',
+                            backgroundColor: '#eff6ff',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#1e3a8a',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        💡 <strong>Как экшены работают в современном Redux Toolkit (RTK):</strong>
+                        <br />
+                        В современном коде вам больше не нужно вручную создавать константы и писать функции Action Creators. Когда вы объявляете метод внутри <code style={{ fontFamily: 'monospace' }}>createSlice</code>, Redux Toolkit под капотом **автоматически** генерирует и константу типа, и фабрику экшена. При этом имя свойства, которое вы передаете при вызове, в редюсере всегда будет доступно строго под именем <code style={{ fontFamily: 'monospace' }}>action.payload</code>.
                     </div>
                 </div>
 
