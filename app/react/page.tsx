@@ -117,6 +117,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reduxAction"  style={anchorLinkStyle}>
                         ⚙️ Что такое Action в Redux
                     </a>
+                    <a href="#reduxStore"  style={anchorLinkStyle}>
+                        📦 Понятие и устройство Store
+                    </a>
 
                 </div>
             </aside>
@@ -3429,6 +3432,174 @@ function userReducer(state = { list: [] }, action) {
                         💡 <strong>Как экшены работают в современном Redux Toolkit (RTK):</strong>
                         <br />
                         В современном коде вам больше не нужно вручную создавать константы и писать функции Action Creators. Когда вы объявляете метод внутри <code style={{ fontFamily: 'monospace' }}>createSlice</code>, Redux Toolkit под капотом **автоматически** генерирует и константу типа, и фабрику экшена. При этом имя свойства, которое вы передаете при вызове, в редюсере всегда будет доступно строго под именем <code style={{ fontFamily: 'monospace' }}>action.payload</code>.
+                    </div>
+                </div>
+                <div
+                    id="reduxStore"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Архитектура Redux Стороны: Понятие и устройство Store
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        <strong>Redux Store (Стор / Хранилище)</strong> — это центральный управляющий объект приложения, который объединяет состояние, методы его изменения и подписки в единую экосистему. Стор является единственным источником правды (Single Source of Truth) для всего интерфейса.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+                            🧠 Три фундаментальных закона Redux:
+                        </div>
+
+                        <div style={{ marginBottom: '12px' }}>
+                            <strong>1. Единственный источник правды:</strong> Всё глобальное состояние приложения хранится в виде одного дерева объектов внутри одного-единственного Стора. Это упрощает отладку и логирование данных (Time Travel Debugging).
+                        </div>
+
+                        <div style={{ marginBottom: '12px' }}>
+                            <strong>2. Состояние доступно только для чтения (Read-Only):</strong> Единственный способ изменить состояние — отправить объект-событие, описывающий действие (<strong>Action</strong>). Ни один компонент не может залезть в Стор и мутировать переменную напрямую.
+                        </div>
+
+                        <div>
+                            <strong>3. Изменения производятся чистыми функциями (Pure Functions):</strong> Для описания того, как дерево состояния преобразуется экшенами, пишутся чистые редюсеры (<strong>Reducers</strong>). Они принимают старый стейт и экшен, а возвращают <em>абсолютно новый</em> объект состояния.
+                        </div>
+                    </div>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Реализация Redux Store с нуля на чистом JavaScript (Логика под капотом):
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`// 🛠️ Паттерн "Наблюдатель" + Замыкание
+function createStore(reducer, initialState) {
+    let state = initialState; // Приватная переменная состояния
+    let listeners = [];       // Массив функций-подписчиков (компонентов)
+
+    // 1. Метод получения текущего состояния
+    const getState = () => state;
+
+    // 2. Метод отправки экшена
+    const dispatch = (action) => {
+        // Редюсер считает НОВЫЙ стейт на основе СТАРОГО и ЭКШЕНА
+        state = reducer(state, action);
+        
+        // Оповещаем всех подписчиков (например, заставляем React вызвать рендер)
+        listeners.forEach(listener => listener());
+    };
+
+    // 3. Метод подписки на изменения стора
+    const subscribe = (listener) => {
+        listeners.push(listener);
+        
+        // Возвращаем функцию отписки (Unsubscribe)
+        return () => {
+            listeners = listeners.filter(l => l !== listener);
+        };
+    };
+
+    // Инициализируем стор дефолтным вызовом редюсера
+    dispatch({ type: '@@redux/INIT' });
+
+    return { getState, dispatch, subscribe };
+}
+
+// Пример простейшего редюсера
+const counterReducer = (state = { count: 0 }, action) => {
+    if (action.type === 'INCREMENT') {
+        return { count: state.count + 1 }; // Возвращаем НОВЫЙ объект!
+    }
+    return state;
+};
+
+// Создаем экземпляр стора
+const store = createStore(counterReducer);`}
+    </pre>
+
+                    {/* Public Methods of Store */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        4 публичных метода любого Redux Store:
+                    </div>
+                    <ul style={{ paddingLeft: '16px', margin: '0 0 20px 0', fontSize: '14px', lineHeight: '1.6', listStyleType: 'disc' }}>
+                        <li style={{ marginBottom: '4px' }}><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>getState()</code> — возвращает текущий снимок состояния стора.</li>
+                        <li style={{ marginBottom: '4px' }}><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>dispatch(action)</code> — единственный способ спровоцировать изменение данных. Принимает объект экшена.</li>
+                        <li style={{ marginBottom: '4px' }}><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>subscribe(listener)</code> — регистрирует слушателей, которые вызываются при каждом обновлении данных.</li>
+                        <li><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>replaceReducer(nextReducer)</code> — продвинутый метод для горячей перезагрузки (Hot Reloading) или динамической подгрузки редюсеров.</li>
+                    </ul>
+
+                    {/* Summary for Interview */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #10b981',
+                            backgroundColor: '#f0fdf4',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#065f46',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🎯 <strong>Что говорить на собеседовании:</strong>
+                        <em> «Redux Store — это реализация паттерна Одиночка (Singleton) в рамках архитектуры Flux. Под капотом он инкапсулирует приватную переменную состояния и массив подписчиков. Изменение данных происходит строго по однонаправленному циклу: Dispatch(Action) → Reducer(State, Action) → New State → Notify Listeners. Прямой доступ к изменению стейта закрыт, что делает поток данных на 100% предсказуемым и защищенным от побочных эффектов мутации».</em>
                     </div>
                 </div>
 
