@@ -108,6 +108,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reactCallbackProps" style={anchorLinkStyle}>
                         ↗️ Передача данных наверх (Callbacks)
                     </a>
+                    <a href="#reduxSelectors"  style={anchorLinkStyle}>
+                        📊 Селекторы Redux и Мемоизация
+                    </a>
 
                 </div>
             </aside>
@@ -2946,6 +2949,176 @@ export default function ThemeSettings() {
                     >
                         🎯 <strong>Что сказать на собеседовании:</strong>
                         <em> «В React нет прямого способа передать данные от ребенка к родителю из-за принципа однонаправленного потока данных. Вместо этого используется паттерн подъёма состояния (Lifting State Up). Родитель объявляет функцию-коллбэк и спускает её ребенку через пропсы. Ребенок вызывает эту функцию и прокидывает туда свои локальные данные в качестве аргументов. Технически поток все еще направлен сверху вниз, так как ребенок использует лишь предоставленный ему сверху интерфейс рации».</em>
+                    </div>
+                </div>
+                <div
+                    id="reduxSelectors"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Управление данными: Селекторы в Redux и Мемоизация (Reselect)
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        <strong>Селектор (Selector)</strong> — это обычная чистая функция, которая принимает на вход весь глобальный объект состояния Redux (<strong>state</strong>) и возвращает из него конкретный, необходимый компоненту кусочек данных. Селекторы служат защитной абстракцией между внутренней структурой стора и компонентами интерфейса.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Три главные причины использовать селекторы:
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>1. Инкапсуляция структуры (DRY):</strong> Если структура вашего стора изменится (например, вы перенесете <code style={{ fontFamily: 'monospace' }}>state.items</code> в <code style={{ fontFamily: 'monospace' }}>state.products.list</code>), вам не придется переписывать 50 компонентов по всему проекту. Вы измените путь только в одном глобальном селекторе.
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>2. Переиспользование логики:</strong> Фильтрация, сортировка или тяжелый расчет данных выносится из тела компонентов в селекторы, делая UI-компоненты «глупыми» и легко тестируемыми.
+                        </div>
+                        <div>
+                            <strong>3. Оптимизация производительности:</strong> Хук <code style={{ fontFamily: 'monospace' }}>useSelector</code> запускается при каждом экшене в системе. Если селектор возвращает новую ссылку (например, после фильтрации через <code style={{ fontFamily: 'monospace' }}>.filter()</code>), компонент перерисуется, даже если данные не изменились. Селекторы позволяют внедрить **мемоизацию** и остановить лишние рендеры.
+                        </div>
+                    </div>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Реализация базовых и мемоизированных селекторов (Redux Toolkit + Reselect):
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import { useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit'; // Встроено в RTK под капотом
+
+// 1. БАЗОВЫЕ СЕЛЕКТОРЫ (Просто вытаскивают сырые данные один-к-одному)
+const selectTodos = (state) => state.todo.items;
+const selectFilter = (state) => state.todo.currentFilter;
+
+// ❌ ТЯЖЕЛЫЙ НЕОПТИМИЗИРОВАННЫЙ СЕЛЕКТОР:
+// Метод .filter() ВСЕГДА возвращает новую ссылку на массив.
+// Этот селектор заставит компонент перерисовываться при ЛЮБОМ изменении стора!
+// const selectFilteredTodosBad = (state) => state.todo.items.filter(t => t.completed);
+
+
+// 🟢 МЕМОИЗИРОВАННЫЙ СЕЛЕКТОР (Через createSelector):
+// Он кэширует результат. Если 'items' и 'currentFilter' в сторе не изменились, 
+// функция фильтрации НЕ запустится, и вернется СТАРАЯ ссылка на массив!
+export const selectFilteredTodos = createSelector(
+    [selectTodos, selectFilter], // 1. Передаем входные селекторы-зависимости
+    (todos, filter) => {         // 2. Результаты прилетают в аргументы функции расчета
+        console.log("⚡ Тяжелый расчет запустился!"); 
+        switch (filter) {
+            case 'completed': return todos.filter(t => t.completed);
+            case 'active':    return todos.filter(t => !t.completed);
+            default:          return todos;
+        }
+    }
+);
+
+// 3. Использование в React компоненте
+export function TodoList() {
+    // Хук useSelector строго следит за ссылкой. Благодаря мемоизации, рендер очень плавный.
+    const filteredTodos = useSelector(selectFilteredTodos);
+
+    return (
+        <ul>
+            {filteredTodos.map(todo => <li key={todo.id}>{todo.text}</li>)}
+        </ul>
+    );
+}`}
+    </pre>
+
+                    {/* Performance Caveat */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5',
+                            marginBottom: '20px'
+                        }}
+                    >
+                        🚨 <strong>Ловушка производительности (Динамические селекторы с аргументами):</strong>
+                        <br />
+                        Если вам нужно передать аргумент в селектор (например, найти задачу по ID: <code style={{ fontFamily: 'monospace' }}>{'useSelector(state => selectTodoById(state, id))'}</code>), стандартный кэш <code style={{ fontFamily: 'monospace' }}>createSelector</code> размером в 1 элемент **сломается**, если компонент используется в списке многократно. Каждый экземпляр компонента будет затирать кэш предыдущего.
+                        <br />
+                        <strong>Решение:</strong> Оборачивайте создание мемоизированного селектора в хук <code style={{ fontFamily: 'monospace' }}>useMemo</code> прямо внутри компонента, чтобы у каждого инстанса была своя изолированная фабрика селектора.
+                    </div>
+
+                    {/* Summary for Interview */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #10b981',
+                            backgroundColor: '#f0fdf4',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#065f46',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🎯 <strong>Что сказать на собеседовании:</strong>
+                        <em> «Селекторы инкапсулируют структуру глобального стейта от компонентов UI, следуя принципу единственной ответственности. Хук useSelector делает строгое сравнение по ссылке (===) для возвращаемого значения, чтобы решить, нужен ли рендер. Если селектор производит трансформацию данных (через .map() или .filter()), он обязан быть мемоизированным с помощью библиотеки Reselect (метод createSelector). Это гарантирует стабильность ссылок и предотвращает каскадные лишние перерендеры дочерних деревьев».</em>
                     </div>
                 </div>
 
