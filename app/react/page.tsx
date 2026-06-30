@@ -102,6 +102,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reactErrorBoundary"  style={anchorLinkStyle}>
                         🛡️ Механизм Error Boundary
                     </a>
+                    <a href="#controlledComponents"  style={anchorLinkStyle}>
+                        📝 Контролируемые инпуты и формы
+                    </a>
 
                 </div>
             </aside>
@@ -2500,6 +2503,202 @@ function App() {
                             <li style={{ marginBottom: '2px' }}><strong>Обработчики событий:</strong> Если ошибка упадет внутри функции <code style={{ fontFamily: 'monospace' }}>onClick</code> при клике пользователя, предохранитель её пропустит (для обработки таких ошибок используйте стандартный <code style={{ fontFamily: 'monospace' }}>try/catch</code>).</li>
                             <li><strong>Серверный рендеринг (SSR):</strong> Ошибки, возникшие при генерации HTML на сервере.</li>
                         </ul>
+                    </div>
+                </div>
+                <div
+                    id="controlledComponents"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Работа с формами: Контролируемые и Неконтролируемые компоненты
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        В React управление элементами ввода форм (<code style={{ fontFamily: 'monospace' }}>input</code>, <code style={{ fontFamily: 'monospace' }}>textarea</code>, <code style={{ fontFamily: 'monospace' }}>select</code>) может осуществляться двумя кардинально разными путями. Разница заключается в том, <strong>где именно хранятся текущие данные</strong>, вводимые пользователем.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Ментальная модель (Кто владеет правдой?):
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>Контролируемый компонент:</strong> Источником правды является сам <strong>React-стейт</strong>. Каждое нажатие клавиши триггерит функцию-обработчик, меняет состояние React, а React через пропс <code style={{ fontFamily: 'monospace' }}>value</code> принудительно диктует инпуту, что отображать.
+                        </div>
+                        <div>
+                            <strong>Неконтролируемый компонент:</strong> Источником правды является сам <strong>браузерный DOM</strong>. Инпут живет своей жизнью и сам помнит, что в него ввели. Чтобы вытащить данные из инпута (например, при отправке формы), React заглядывает внутрь DOM-узла с помощью специальной ссылки — <strong>Рефы (useRef)</strong>.
+                        </div>
+                    </div>
+
+                    {/* Detailed Comparison Table */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Сравнение сценариев использования:
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px', fontSize: '13px', lineHeight: '1.5' }}>
+                        {/* Controlled Props */}
+                        <div style={{ padding: '14px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '6px' }}>
+            <span style={{ fontWeight: '700', color: '#166534', display: 'block', marginBottom: '6px' }}>
+                🟢 Контролируемые (Через useState)
+            </span>
+                            <ul style={{ paddingLeft: '16px', margin: 0, listStyleType: 'circle', color: '#14532d' }}>
+                                <li>Идеально для **валидации на лету** (например, подсветить поле красным, если пароль слишком короткий).</li>
+                                <li>Позволяет делать **динамическое форматирование** (автоматически подставлять дефисы в номер телефона при вводе).</li>
+                                <li>Критически важно для отключения кнопки отправки формы в реальном времени, если поля не заполнены.</li>
+                                <li style={{ color: '#b91c1c' }}><em>Минус:</em> вызывает повторный рендер компонента на каждое нажатие клавиши пользователем.</li>
+                            </ul>
+                        </div>
+
+                        {/* Uncontrolled Props */}
+                        <div style={{ padding: '14px', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '6px' }}>
+            <span style={{ fontWeight: '700', color: '#1e3a8a', display: 'block', marginBottom: '6px' }}>
+                🔵 Неконтролируемые (Через useRef)
+            </span>
+                            <ul style={{ paddingLeft: '16px', margin: 0, listStyleType: 'circle', color: '#1e40af' }}>
+                                <li>Максимальная **производительность** (ноль лишних ререндеров при наборе текста).</li>
+                                <li>Идеально для очень простых форм (например, форма поиска или логина из двух полей, где данные нужны только в момент клика «Войти»).</li>
+                                <li>Единственный способ работы с тегом <code style={{ fontFamily: 'monospace' }}>{'<input type="file" />'}</code>, так как файлы в целях безопасности браузера доступны только для чтения из DOM.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Практическая реализация обоих подходов в коде:
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import React, { useState, useRef } from 'react';
+
+export default function FormDemo() {
+    // 🟢 Контролируемый инпут: стейт синхронизирован с полем ввода
+    const [controlledValue, setControlledValue] = useState('');
+
+    // 🔵 Неконтролируемый инпут: создаем ссылку на DOM-узел
+    const uncontrolledInputRef = useRef(null);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        // Извлекаем данные из неконтролируемого инпута через .current.value
+        const uncontrolledValue = uncontrolledInputRef.current.value;
+
+        console.log("Данные отправки:", {
+            controlled: controlledValue,
+            uncontrolled: uncontrolledValue
+        });
+    };
+
+    return (
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            
+            {/* 1. КОНТРОЛИРУЕМЫЙ ИНПУТ */}
+            <div>
+                <label>Контролируемый: </label>
+                <input 
+                    type="text" 
+                    value={controlledValue} 
+                    onChange={(e) => setControlledValue(e.target.value)} 
+                />
+                {controlledValue.length < 3 && <span style={{ color: 'red' }}> Минимум 3 символа!</span>}
+            </div>
+
+            {/* 2. НЕКОНТРОЛИРУЕМЫЙ ИНПУТ */}
+            <div>
+                <label>Неконтролируемый: </label>
+                {/* Вместо value/onChange используем ref. По желанию задаем defaultValue */}
+                <input 
+                    type="text" 
+                    ref={uncontrolledInputRef} 
+                    defaultValue="Значение по умолчанию" 
+                />
+            </div>
+
+            <button type="submit">Отправить форму</button>
+        </form>
+    );
+}`}
+    </pre>
+
+                    {/* Interview Caveat */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🚨 <strong>Ловушка на собеседовании (Смена типа на лету / Ошибка uncontrolled to controlled):</strong>
+                        <br />
+                        Если вы инициализируете стейт контролируемого инпута как <code style={{ fontFamily: 'monospace' }}>undefined</code> (например, <code style={{ fontFamily: 'monospace' }}>const [val, setVal] = useState()</code>) и передадите его в инпут: <code style={{ fontFamily: 'monospace' }}>{'value={val}'}</code>, React решит, что инпут **неконтролируемый**, так как значение отсутствует.
+                        Когда вы начнете печатать и стейт обновится строкой, React выдаст в консоль критический варнинг:
+                        <code style={{ display: 'block', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '4px', marginTop: '6px', fontFamily: 'monospace', border: '1px solid #fee2e2', color: '#b91c1c' }}>
+                            A component is changing an uncontrolled input to be controlled.
+                        </code>
+                        Чтобы этого избежать, **всегда инициализируйте стейт инпутов пустой строкой** — <code style={{ fontFamily: 'monospace' }}>useState('')</code>.
                     </div>
                 </div>
 
