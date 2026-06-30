@@ -105,6 +105,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#controlledComponents"  style={anchorLinkStyle}>
                         📝 Контролируемые инпуты и формы
                     </a>
+                    <a href="#reactCallbackProps" style={anchorLinkStyle}>
+                        ↗️ Передача данных наверх (Callbacks)
+                    </a>
 
                 </div>
             </aside>
@@ -2783,6 +2786,167 @@ function ProfileFixed2() {
                         </div>
                     </div>
 
+                </div>
+                <div
+                    id="reactCallbackProps"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Передача данных наверх: Подъём состояния (Callback Props)
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        Несмотря на то, что поток данных в React строго однонаправленный, дочерний компонент может отправлять информацию родителю. Для этого родитель передаёт вниз через <code style={{ fontFamily: 'monospace' }}>props</code> специальную функцию-обработчик (<strong>Callback</strong>). Дочерний компонент вызывает её и прокидывает аргументы обратно наверх.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Ментальная модель (Кнопка звонка и Диспетчер):
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            Родительский компонент — это <strong>Диспетчерская</strong>, у которой есть рация и пульт управления стейтом. Дочерний компонент — это <strong>Кнопка вызова</strong> на стене.
+                        </div>
+                        <div>
+                            Кнопка не знает, что произойдет после нажатия, и не имеет доступа к пульту. Она просто активирует «провод» (вызывает функцию-коллбэк), переданный ей сверху, и кричит в него данные: <em>«Эй, меня нажали, вот мой ID!»</em>. Диспетчер ловит этот сигнал и обновляет состояние на своем уровне.
+                        </div>
+                    </div>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Практическая реализация паттерна (Передача данных из инпута родителю):
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import React, { useState } from 'react';
+
+// 1. ДОЧЕРНИЙ КОМПОНЕНТ: принимает колллбэк-пропс 'onSelectColor'
+function ColorPicker({ onSelectColor }) {
+    const colors = ['#ef4444', '#3b82f6', '#10b981'];
+
+    return (
+        <div style={{ display: 'flex', gap: '8px' }}>
+            {colors.map(color => (
+                <button
+                    key={color}
+                    style={{ backgroundColor: color, width: '30px', height: '30px', border: 'none' }}
+                    // При клике вызываем функцию родителя и передаем цвет НАВЕРХ ↗️
+                    onClick={() => onSelectColor(color)}
+                />
+            ))}
+        </div>
+    );
+}
+
+// 2. РОДИТЕЛЬСКИЙ КОМПОНЕНТ: владеет стейтом и логикой
+export default function ThemeSettings() {
+    const [selectedColor, setSelectedColor] = useState('#ffffff');
+
+    // Функция-обработчик, которая примет данные из дочернего компонента
+    const handleColorChange = (colorFromServer) => {
+        setSelectedColor(colorFromServer); // Обновляем стейт родителя
+    };
+
+    return (
+        <div style={{ padding: '20px', backgroundColor: selectedColor }}>
+            <h3>Выберите цвет фона приложения:</h3>
+            {/* Передаем ссылку на функцию вниз через props */}
+            <ColorPicker onSelectColor={handleColorChange} />
+        </div>
+    );
+}`}
+    </pre>
+
+                    {/* Performance Advice */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #3b82f6',
+                            backgroundColor: '#eff6ff',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#1e3a8a',
+                            lineHeight: '1.5',
+                            marginBottom: '20px'
+                        }}
+                    >
+                        ⚡ <strong>Совет по оптимизации производительности:</strong> Помните, что передача инлайн-функций в пропсы дочерних компонентов (например, <code style={{ fontFamily: 'monospace' }}>{'onSelectColor={(color) => handleColorChange(color)}'}</code>) заставляет дочерний компонент перерисовываться при каждом рендере родителя. Чтобы сохранить ссылку на функцию стабильной, оборачивайте её в хук <code style={{ fontFamily: 'monospace' }}>useCallback</code>, а сам дочерний компонент — в <code style={{ fontFamily: 'monospace' }}>React.memo</code>.
+                    </div>
+
+                    {/* Interview Summary */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #10b981',
+                            backgroundColor: '#f0fdf4',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#065f46',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🎯 <strong>Что сказать на собеседовании:</strong>
+                        <em> «В React нет прямого способа передать данные от ребенка к родителю из-за принципа однонаправленного потока данных. Вместо этого используется паттерн подъёма состояния (Lifting State Up). Родитель объявляет функцию-коллбэк и спускает её ребенку через пропсы. Ребенок вызывает эту функцию и прокидывает туда свои локальные данные в качестве аргументов. Технически поток все еще направлен сверху вниз, так как ребенок использует лишь предоставленный ему сверху интерфейс рации».</em>
+                    </div>
                 </div>
 
             </main>
