@@ -2230,6 +2230,107 @@ const childBFiber  = { type: ChildB, child: null, sibling: null,        return: 
                         </ul>
                         Как только фоновая сборка дерева <code style={{ fontFamily: 'monospace' }}>workInProgress</code> полностью завершена, React в одну синхронную строчку кода на стадии Commit фазы меняет указатель местами, мгновенно делая новое дерево текущим.
                     </div>
+                    {/* Блок "Простыми словами" для интеграции внутрь карточки #reactFiber */}
+                    <div
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            padding: '20px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#334155',
+                            fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif'
+                        }}
+                    >
+                        <div
+                            style={{
+                                fontWeight: '700',
+                                color: '#0f172a',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                marginBottom: '12px',
+                                fontSize: '15px'
+                            }}
+                        >
+                            📦 Механика Fiber простыми словами: Один компонент = Один узел
+                        </div>
+
+                        <p style={{ margin: '0 0 16px 0' }}>
+                            В React Fiber один узел (Fiber node) — это обычный JS-объект, который представляет
+                            <strong>ровно один компонент</strong> в дереве приложения.
+                        </p>
+
+                        {/* Сетка со схемами */}
+                        <div
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                                gap: '20px',
+                                marginBottom: '20px'
+                            }}
+                        >
+                            {/* Схема 1: Дерево связей */}
+                            <div style={{ backgroundColor: '#ffffff', padding: '14px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+            <span style={{ fontWeight: '700', color: '#4338ca', display: 'block', marginBottom: '8px', fontSize: '13px' }}>
+                🗺️ Структура графа в памяти:
+            </span>
+                                <pre style={{ margin: 0, fontFamily: 'ui-monospace, monospace', fontSize: '12px', color: '#0f172a', lineHeight: '1.4' }}>
+{`Fiber(App)
+   │
+   ├── Fiber(Header) ──► (сосед: Main)
+   │
+   ├── Fiber(Main) ──► (сосед: Footer)
+   │      │
+   │      └── Fiber(Sidebar) ──► (сосед: Content)
+   │
+   └── Fiber(Footer)`}
+            </pre>
+                            </div>
+
+                            {/* Схема 2: Карточка узла */}
+                            <div style={{ backgroundColor: '#ffffff', padding: '14px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+            <span style={{ fontWeight: '700', color: '#4338ca', display: 'block', marginBottom: '8px', fontSize: '13px' }}>
+                📇 Анатомия карточки узла:
+            </span>
+                                <pre style={{ margin: 0, fontFamily: 'ui-monospace, monospace', fontSize: '12px', color: '#0f172a', lineHeight: '1.3' }}>
+{`┌──────────────────────────┐
+│ Fiber(Header)            │
+├──────────────────────────┤
+│ type: Header             │
+│ props: { title: "Dev" }  │
+│ state: null              │
+│ child: null              │
+│ sibling: Fiber(Main)     │
+│ return: Fiber(App)       │
+└──────────────────────────┘`}
+            </pre>
+                            </div>
+                        </div>
+
+                        {/* Схема 3: Горизонтальный конвейер */}
+                        <div style={{ backgroundColor: '#ffffff', padding: '14px', borderRadius: '6px', border: '1px solid #e2e8f0', marginBottom: '16px' }}>
+        <span style={{ fontWeight: '700', color: '#4338ca', display: 'block', marginBottom: '8px', fontSize: '13px' }}>
+            🔄 Жизненный цикл связывания:
+        </span>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', fontFamily: 'ui-monospace, monospace', fontSize: '12px', color: '#0f172a' }}>
+                                <span style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>Компонент React</span>
+                                <span>➔</span>
+                                <span style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>Создаётся Fiber-узел</span>
+                                <span>➔</span>
+                                <span style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>React связывает ссылки</span>
+                                <span>➔</span>
+                                <span style={{ backgroundColor: '#f1f5f9', padding: '4px 8px', borderRadius: '4px' }}>Точечное обновление UI</span>
+                            </div>
+                        </div>
+
+                        <p style={{ margin: 0, fontStyle: 'italic', color: '#475569' }}>
+                            📌 <strong>Главная идея:</strong> Все узлы намертво связаны между собой жесткими ссылками на родителя (<code style={{ fontFamily: 'monospace' }}>return</code>), первого ребёнка (<code style={{ fontFamily: 'monospace' }}>child</code>) и соседа (<code style={{ fontFamily: 'monospace' }}>sibling</code>). Благодаря этой паутине указателей React может в любой момент поставить задачу на паузу, обработать клик пользователя, а затем мгновенно вернуться и продолжить обновление интерфейса частями, не перерисовывая всё дерево целиком.
+                        </p>
+                    </div>
+
                 </div>
 
             </main>
