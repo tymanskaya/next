@@ -99,6 +99,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reactFiber"  style={anchorLinkStyle}>
                         ⚙️ Архитектурный движок Fiber
                     </a>
+                    <a href="#reactErrorBoundary"  style={anchorLinkStyle}>
+                        🛡️ Механизм Error Boundary
+                    </a>
 
                 </div>
             </aside>
@@ -2331,6 +2334,173 @@ const childBFiber  = { type: ChildB, child: null, sibling: null,        return: 
                         </p>
                     </div>
 
+                </div>
+                <div
+                    id="reactErrorBoundary"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Механизм Предохранителей: Error Boundary в React
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        <strong>Error Boundary (Предохранитель)</strong> — это специальный компонент, который ловит JavaScript-ошибки в любом месте своего <strong>дочернего дерева компонентов</strong>, логирует эти ошибки и вместо упавшего интерфейса отображает запасной UI (Fallback).
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Поведение по умолчанию и Системная ментальная модель:
+                        </div>
+                        <div style={{ marginBottom: '8px' }}>
+                            Начиная с React 16, любая необработанная ошибка в JavaScript (например, попытка прочитать свойство у <code style={{ fontFamily: 'monospace' }}>undefined</code> во время рендера) приводит к **полному размонтированию всего приложения**. React считает, что оставлять поломанный UI на экране небезопасно для пользователя.
+                        </div>
+                        <div>
+                            Предохранители работают как обычные электрические автоматы в щитке: если «закоротило» один конкретный компонент (например, сломался виджет погоды), предохранитель отключает только эту ветку дерева, сохраняя остальную страницу (шапку, меню, чат) абсолютно рабочей.
+                        </div>
+                    </div>
+
+                    {/* Class Components Trap */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '8px' }}>
+                        🚨 Важнейшая ловушка для интервью (Только Классовые компоненты):
+                    </div>
+                    <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', margin: '0 0 20px 0' }}>
+                        На сегодняшний день в React **не существует хуков для создания Предохранителя**. На собеседовании вас обязательно спросят: <em>«Можно ли написать Error Boundary как функциональный компонент?»</em>. Единственный правильный ответ — **нет, нельзя**. Предохранитель обязан быть классовым компонентом, так как он завязан на два специфических метода жизненного цикла:
+                    </p>
+                    <ul style={{ paddingLeft: '16px', margin: '0 0 20px 0', fontSize: '14px', lineHeight: '1.6', listStyleType: 'disc' }}>
+                        <li style={{ marginBottom: '4px' }}><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>static getDerivedStateFromError(error)</code> — вызывается во время <strong>фазы рендера (Render phase)</strong>. Используется для изменения стейта, чтобы переключить интерфейс на отображение заглушки.</li>
+                        <li><code style={{ fontFamily: 'monospace', fontWeight: '700' }}>componentDidCatch(error, errorInfo)</code> — вызывается во время <strong>фазы коммита (Commit phase)</strong>. Используется для отправки логов в сервисы мониторинга ошибок (например, Sentry).</li>
+                    </ul>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Реализация эталонного Error Boundary компонента:
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import React, { Component } from 'react';
+
+class ErrorBoundary extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+
+    // 1. Перехватываем ошибку на фазе рендера и обновляем стейт
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
+
+    // 2. Логируем сбой на фазе коммита
+    componentDidCatch(error, errorInfo) {
+        console.error("Sentry Log:", error, errorInfo);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            // Отображаем переданный сверху Fallback UI или дефолтный текст
+            return this.props.fallback || <h2>Что-то пошло не так.</h2>;
+        }
+
+        // Если все отлично — просто рендерим дочерние компоненты (композиция)
+        return this.props.children;
+    }
+}
+
+// 🟢 Использование в приложении: Изолируем тяжелый виджет
+function App() {
+    return (
+        <div>
+            <Header />
+            <ErrorBoundary fallback={<p>Ошибка загрузки аналитики 😢</p>}>
+                <HeavyAnalyticsWidget />
+            </ErrorBoundary>
+            <Footer />
+        </div>
+    );
+}`}
+    </pre>
+
+                    {/* Limits of Error Boundaries */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        ⚠️ <strong>Что Error Boundary поймать НЕ сможет (Ограничения):</strong>
+                        <br />
+                        Предохранители перехватывают ошибки **только во время рендеринга и в методах жизненного цикла**. Они абсолютно бессильны перед следующими сценариями:
+                        <ul style={{ paddingLeft: '16px', margin: '4px 0 0 0', listStyleType: 'circle' }}>
+                            <li style={{ marginBottom: '2px' }}><strong>Асинхронный код:</strong> Ошибки внутри вызовов <code style={{ fontFamily: 'monospace' }}>setTimeout</code> или блоков <code style={{ fontFamily: 'monospace' }}>fetch().then()</code>.</li>
+                            <li style={{ marginBottom: '2px' }}><strong>Обработчики событий:</strong> Если ошибка упадет внутри функции <code style={{ fontFamily: 'monospace' }}>onClick</code> при клике пользователя, предохранитель её пропустит (для обработки таких ошибок используйте стандартный <code style={{ fontFamily: 'monospace' }}>try/catch</code>).</li>
+                            <li><strong>Серверный рендеринг (SSR):</strong> Ошибки, возникшие при генерации HTML на сервере.</li>
+                        </ul>
+                    </div>
                 </div>
 
             </main>
