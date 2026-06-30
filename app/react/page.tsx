@@ -2679,27 +2679,110 @@ export default function FormDemo() {
 }`}
     </pre>
 
-                    {/* Interview Caveat */}
-                    <div
-                        style={{
-                            borderLeft: '4px solid #ef4444',
-                            backgroundColor: '#fef2f2',
-                            padding: '12px 16px',
-                            borderRadius: '0 6px 6px 0',
-                            fontSize: '14px',
-                            color: '#991b1b',
-                            lineHeight: '1.5'
-                        }}
-                    >
-                        🚨 <strong>Ловушка на собеседовании (Смена типа на лету / Ошибка uncontrolled to controlled):</strong>
-                        <br />
-                        Если вы инициализируете стейт контролируемого инпута как <code style={{ fontFamily: 'monospace' }}>undefined</code> (например, <code style={{ fontFamily: 'monospace' }}>const [val, setVal] = useState()</code>) и передадите его в инпут: <code style={{ fontFamily: 'monospace' }}>{'value={val}'}</code>, React решит, что инпут **неконтролируемый**, так как значение отсутствует.
-                        Когда вы начнете печатать и стейт обновится строкой, React выдаст в консоль критический варнинг:
-                        <code style={{ display: 'block', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '4px', marginTop: '6px', fontFamily: 'monospace', border: '1px solid #fee2e2', color: '#b91c1c' }}>
-                            A component is changing an uncontrolled input to be controlled.
-                        </code>
-                        Чтобы этого избежать, **всегда инициализируйте стейт инпутов пустой строкой** — <code style={{ fontFamily: 'monospace' }}>useState('')</code>.
+                    {/* Блок углубленного разбора ловушки для интеграции внутрь карточки #controlledComponents */}
+                    <div style={{ marginTop: '24px', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif' }}>
+                        <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', margin: '0 0 12px 0' }}>
+                            🚨 Спецификация ловушки: Переключение режимов инпута в течение жизненного цикла
+                        </h3>
+
+                        <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', margin: '0 0 16px 0' }}>
+                            React строго требует, чтобы режим работы инпута оставался неизменным на протяжении всей его жизни. Смешивать подходы или менять их на лету категорически запрещено. Нарушение этого правила приводит к рассинхронизации данных между DOM и Virtual DOM.
+                        </p>
+
+                        {/* Сетка двух сценариев ошибок */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+
+                            {/* Сценарий 1 */}
+                            <div style={{ padding: '14px', backgroundColor: '#fef2f2', border: '1px solid #fee2e2', borderRadius: '6px' }}>
+            <span style={{ fontWeight: '700', color: '#991b1b', display: 'block', marginBottom: '6px', fontSize: '13px' }}>
+                ❌ Сценарий А: Uncontrolled → Controlled
+            </span>
+                                <pre style={{ margin: '0 0 8px 0', fontFamily: 'monospace', fontSize: '12px', backgroundColor: '#ffffff', padding: '8px', borderRadius: '4px', border: '1px solid #fca5a5' }}>
+{`const [name, setName] = useState(); // undefined
+<input value={name} /> // Режим: uncontrolled
+
+// Позже после ввода пользователя:
+setName('Alex'); // Режим: controlled`}
+            </pre>
+                                <span style={{ fontSize: '12px', color: '#7f1d1d', lineHeight: '1.4', display: 'block' }}>
+                <strong>Предупреждение:</strong> <code style={{ fontFamily: 'monospace', fontSize: '11px' }}>Warning: A component is changing an uncontrolled input to be controlled.</code>
+            </span>
+                            </div>
+
+                            {/* Сценарий 2 */}
+                            <div style={{ padding: '14px', backgroundColor: '#fef2f2', border: '1px solid #fee2e2', borderRadius: '6px' }}>
+            <span style={{ fontWeight: '700', color: '#991b1b', display: 'block', marginBottom: '6px', fontSize: '13px' }}>
+                ❌ Сценарий Б: Controlled → Uncontrolled
+            </span>
+                                <pre style={{ margin: '0 0 8px 0', fontFamily: 'monospace', fontSize: '12px', backgroundColor: '#ffffff', padding: '8px', borderRadius: '4px', border: '1px solid #fca5a5' }}>
+{`const [name, setName] = useState('Alex');
+<input value={name} /> // Режим: controlled
+
+// Позже при очистке формы:
+setName(undefined); // Режим: uncontrolled`}
+            </pre>
+                                <span style={{ fontSize: '12px', color: '#7f1d1d', lineHeight: '1.4', display: 'block' }}>
+                <strong>Предупреждение:</strong> <code style={{ fontFamily: 'monospace', fontSize: '11px' }}>Warning: A component is changing a controlled input to be uncontrolled.</code>
+            </span>
+                            </div>
+
+                        </div>
+
+                        {/* Реальный кейс с загрузкой данных */}
+                        <div style={{ fontWeight: '700', fontSize: '14px', color: '#0f172a', marginBottom: '8px' }}>
+                            Частая архитектурная ошибка при загрузке данных с сервера:
+                        </div>
+                        <pre
+                            style={{
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                padding: '16px',
+                                overflowX: 'auto',
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '13px',
+                                color: '#0f172a',
+                                margin: '0 0 20px 0',
+                                whiteSpace: 'pre',
+                                lineHeight: '1.5'
+                            }}
+                        >
+{`// ❌ Опасный код: пока данные грузятся, user равен null. user?.name возвращает undefined!
+function Profile() {
+    const [user, setUser] = useState(null);
+    return <input value={user?.name} />; // Сначала uncontrolled, после загрузки — controlled!
+}
+
+// 🟢 Решение №1: Оператор нулевого слияния (Nullish Coalescing) напрямую в JSX
+function ProfileFixed1() {
+    const [user, setUser] = useState(null);
+    return <input value={user?.name ?? ''} />; // Гарантирует строку '' на первом рендере
+}
+
+// 🟢 Решение №2: Инициализация стейта правильным дефолтным примитивом
+function ProfileFixed2() {
+    const [name, setName] = useState(''); // Сразу контролируемый режим
+    // Загружаем данные в useEffect и вызываем setName(res.user.name)
+}`}
+    </pre>
+
+                        {/* Шпаргалка для ответа на интервью */}
+                        <div
+                            style={{
+                                borderLeft: '4px solid #3b82f6',
+                                backgroundColor: '#eff6ff',
+                                padding: '12px 16px',
+                                borderRadius: '0 6px 6px 0',
+                                fontSize: '14px',
+                                color: '#1e3a8a',
+                                lineHeight: '1.5'
+                            }}
+                        >
+                            🎯 <strong>Что говорить на собеседовании:</strong>
+                            <em> «Инпут в React должен оставаться либо строго controlled, либо строго uncontrolled на протяжении всего своего жизненного цикла. Если на первом рендере передать в пропс value значение undefined (или забыть передать дефолтный стейт в useState), React посчитает инпут неконтролируемым. Как только туда позже прилетит строка, произойдет запрещенное переключение режимов, и React выдаст предупреждение. Для предотвращения этого controlled-компоненты всегда обязаны иметь валидное начальное значение, например пустую строку '' или оператор защиты ?? ''».</em>
+                        </div>
                     </div>
+
                 </div>
 
             </main>
