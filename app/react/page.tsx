@@ -117,8 +117,15 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reduxAction"  style={anchorLinkStyle}>
                         ⚙️ Что такое Action в Redux
                     </a>
+                    <a href="#reduxActionCreator"  style={anchorLinkStyle}>
+                        ⚙️ Понятие Action Creator
+                    </a>
+
                     <a href="#reduxStore"  style={anchorLinkStyle}>
                         📦 Понятие и устройство Store
+                    </a>
+                    <a href="#reactReduxHooks" style={anchorLinkStyle}>
+                        ⚓ Хуки useSelector и useDispatch
                     </a>
 
                 </div>
@@ -3600,6 +3607,326 @@ const store = createStore(counterReducer);`}
                     >
                         🎯 <strong>Что говорить на собеседовании:</strong>
                         <em> «Redux Store — это реализация паттерна Одиночка (Singleton) в рамках архитектуры Flux. Под капотом он инкапсулирует приватную переменную состояния и массив подписчиков. Изменение данных происходит строго по однонаправленному циклу: Dispatch(Action) → Reducer(State, Action) → New State → Notify Listeners. Прямой доступ к изменению стейта закрыт, что делает поток данных на 100% предсказуемым и защищенным от побочных эффектов мутации».</em>
+                    </div>
+                </div>
+                <div
+                    id="reduxActionCreator"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Понятие Action Creator: Фабрика объектов-инструкций
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        <strong>Action Creator (Генератор / Создатель действия)</strong> — это обычная чистая функция, которая принимает аргументы и возвращает валидный объект экшена (<code style={{ fontFamily: 'monospace' }}>{'{ type, payload }'}</code>). Вместо того чтобы вручную штамповать однотипные объекты-инструкции в UI-компонентах, разработчики делегируют эту задачу функциям-фабрикам.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Ментальная модель (Шаблон для бланков):
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            Вместо того чтобы каждый раз вручную писать на чистом листе бумаги официальное заявление: <em>«Я, Иванов, прошу предоставить мне отпуск с такого-то числа...»</em> (писать объект экшена руками в компоненте), вы используете готовый <strong>шаблон на компьютере</strong>.
+                        </div>
+                        <div>
+                            <strong>Action Creator</strong> — это и есть функция-шаблон. Вы просто передаете в нее свои данные: имя и дату, а она мгновенно распечатывает идеально оформленный, юридически правильный документ (объект экшена), готовый к отправке руководству (в Reducer).
+                        </div>
+                    </div>
+
+                    {/* Why use Action Creators */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Зачем нужны Action Creators? (Принцип DRY):
+                    </div>
+                    <ul style={{ paddingLeft: '16px', margin: '0 0 24px 0', fontSize: '14px', lineHeight: '1.6', listStyleType: 'disc' }}>
+                        <li style={{ marginBottom: '6px' }}><strong>Защита от опечаток:</strong> Строковая константа типа (<code style={{ fontFamily: 'monospace' }}>type</code>) пишется всего один раз внутри фабрики. Компонентам больше не нужно помнить точные имена экшенов, исключая риск сделать глупую синтаксическую ошибку в строке.</li>
+                        <li style={{ marginBottom: '6px' }}><strong>Инкапсуляция логики подготовки:</strong> Если перед отправкой данных в стор их нужно минимально трансформировать (например, привести к верхнему регистру или сгенерировать уникальный <code style={{ fontFamily: 'monospace' }}>id</code>), эту логику можно безопасно спрятать прямо внутри Action Creator, освободив компоненты от лишнего кода.</li>
+                        <li><strong>Упрощение тестирования:</strong> Фабрики являются чистыми функциями без побочных эффектов. Их тестирование сводится к проверке того, что при определенных аргументах возвращается правильная структура объекта.</li>
+                    </ul>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Сравнение «ручного» подхода и использования Action Creator:
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import { useDispatch } from 'react-redux';
+
+// Константа типа экшена
+const TODO_ADD = 'todo/add';
+
+// 🟢 ЭТАЛОННЫЙ ACTION CREATOR (Фабрика экшенов)
+// Дополнительно инкапсулирует генерацию ID и таймстампа, разгружая интерфейс
+export const addTodo = (text) => {
+    return {
+        type: TODO_ADD,
+        payload: {
+            id: Math.random().toString(36).substr(2, 9),
+            text: text,
+            createdAt: Date.now()
+        }
+    };
+};
+
+
+// 🔄 Использование внутри React-компонента:
+export function AddTodoForm() {
+    const dispatch = useDispatch();
+
+    // ❌ ПЛОХОЙ ВАРИАНТ (Без фабрики): 
+    // Пишем гигантский объект руками. Легко ошибиться в названии типа 'todo/add'.
+    const handleBadSubmit = () => {
+        dispatch({
+            type: 'todo/add', 
+            payload: { id: '1', text: 'Купить молоко', createdAt: 12345678 }
+        });
+    };
+
+    // 🟢 ОТЛИЧНЫЙ ВАРИАНТ (С использованием Action Creator):
+    // Код лаконичный, чистый и защищен от опечаток в строках
+    const handleGoodSubmit = () => {
+        dispatch(addTodo('Купить молоко'));
+    };
+}`}
+    </pre>
+
+                    {/* Modern Redux Toolkit Note */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #3b82f6',
+                            backgroundColor: '#eff6ff',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#1e3a8a',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        💡 <strong>Автоматизация в Redux Toolkit (RTK):</strong>
+                        <br />
+                        При использовании современной функции <code style={{ fontFamily: 'monospace' }}>createSlice</code> из Redux Toolkit вам больше не нужно писать Action Creators руками. RTK автоматически создает одноименные фабрики для каждого редюсера, объявленного в секции <code style={{ fontFamily: 'monospace' }}>reducers</code>. Вы можете сразу экспортировать их одной строкой деструктуризации:
+                        <code style={{ display: 'block', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '4px', marginTop: '6px', fontFamily: 'monospace', border: '1px solid #dbeafe', color: '#0f172a' }}>
+                            {`export const { addTodo, removeTodo } = todoSlice.actions;`}
+                        </code>
+                    </div>
+                </div>
+                <div
+                    id="reactReduxHooks"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Связывание React и Redux: Хуки useSelector и useDispatch
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        Официальная библиотека связывания <strong>react-redux</strong> предоставляет два хука, которые полностью заменяют старый синтаксис высшего порядка <code style={{ fontFamily: 'monospace' }}>connect(mapStateToProps, mapDispatchToProps)</code>. Они позволяют компонентам подписываться на данные из Store и отправлять экшены в однонаправленный цикл Flux.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Под капотом: Как хуки узнают об изменениях?
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>useDispatch():</strong> Просто возвращает ссылку на метод <code style={{ fontFamily: 'monospace' }}>store.dispatch</code>. Вызов этого хука не подписывает компонент на изменения и никогда не вызывает повторные рендеры сам по себе.
+                        </div>
+                        <div>
+                            <strong>useSelector(selector):</strong> Намертво привязывает компонент к Стору. Каждый раз, когда в приложении отправляется <em>любой</em> экшен, <code style={{ fontFamily: 'monospace' }}>useSelector</code> автоматически запускает переданную функцию-селектор. Он берет старый результат вычислений, берет новый, сравнивает их по строгой ссылке (<code style={{ fontFamily: 'monospace' }}>===</code>) и, если ссылки отличаются, <strong>принудительно инициирует рендер</strong> текущего компонента.
+                        </div>
+                    </div>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Практическая интеграция хуков в UI-компонент:
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleTheme } from './themeSlice'; // Импортируем Action Creator
+
+export function ThemeWidget() {
+    // 1. Получаем ссылку на диспетчер для отправки команд
+    const dispatch = useDispatch();
+
+    // 2. Подписываемся строго на примитивное значение (строку)
+    // Так как строки сравниваются по значению, лишних рендеров не будет
+    const currentTheme = useSelector((state) => state.theme.mode);
+
+    const handleToggle = () => {
+        // Отправляем объект-инструкцию в Стор
+        dispatch(toggleTheme()); 
+    };
+
+    return (
+        <div style={{ padding: '16px', background: currentTheme === 'dark' ? '#333' : '#fff' }}>
+            <p>Текущая тема: {currentTheme}</p>
+            <button onClick={handleToggle}>Переключить тему</button>
+        </div>
+    );
+}`}
+    </pre>
+
+                    {/* Crucial Interview Trap: Shallow Equal */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5',
+                            marginBottom: '20px'
+                        }}
+                    >
+                        🚨 <strong>Критическая ловушка на собеседовании (Возврат объекта из useSelector):</strong>
+                        <br />
+                        Если вы напишете код вида: <code style={{ fontFamily: 'monospace' }}>{'const { name, age } = useSelector(state => ({ name: state.user.name, age: state.user.age }))'}</code>, вы устроите катастрофу производительности. При каждом экшене в приложении селектор будет возвращать <strong>абсолютно новый объект-пустышку <code style={{ fontFamily: 'monospace' }}>{'{...}'}</code> с новой ссылкой в памяти</strong>. Сравнение <code style={{ fontFamily: 'monospace' }}>oldObj === newObj</code> всегда вернет <code style={{ fontFamily: 'monospace' }}>false</code>. Компонент будет перерисовываться при любом шорохе в Сторе, даже если имя и возраст не менялись!
+                        <br />
+                        <strong style={{ display: 'block', marginTop: '6px' }}>Как это исправить (2 пути):</strong>
+                        <ul style={{ paddingLeft: '16px', margin: '4px 0 0 0', listStyleType: 'circle' }}>
+                            <li style={{ marginBottom: '2px' }}>Вызывать <code style={{ fontFamily: 'monospace' }}>useSelector</code> несколько раз подряд для каждого примитива отдельно (это абсолютно нормально и рекомендуется).</li>
+                            <li>Передать вторым аргументом функцию поверхностного сравнения объектов **`shallowEqual`** из библиотеки `react-redux`:
+                                <code style={{ display: 'block', backgroundColor: '#ffffff', padding: '4px 8px', borderRadius: '4px', marginTop: '4px', fontFamily: 'monospace', border: '1px solid #fee2e2', color: '#0f172a' }}>
+                                    {`import { shallowEqual } from 'react-redux';\nconst user = useSelector(selectUserFields, shallowEqual);`}
+                                </code>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Summary for Interview */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #10b981',
+                            backgroundColor: '#f0fdf4',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#065f46',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🎯 <strong>Что говорить на собеседовании:</strong>
+                        <em> «Хуки useSelector и useDispatch заменяют HOC connect и работают через контекст React. useDispatch просто отдает ссылку на метод отправки экшенов. useSelector подписывает компонент на изменения Стора. Главный нюанс его работы заключается в строгом сравнении ссылок (===) между старым и новым результатом выполнения селектора. Если селектор возвращает комбинированный объект или массив после .filter()/.map(), необходимо либо делить вызовы хука на отдельные примитивы, либо использовать функцию мемоизации createSelector, либо передавать вторым аргументом shallowEqual. В противном случае компонент будет каскадно перерендериваться на любой экшен в системе».</em>
                     </div>
                 </div>
 
