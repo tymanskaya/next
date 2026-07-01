@@ -3928,6 +3928,53 @@ export function ThemeWidget() {
                         🎯 <strong>Что говорить на собеседовании:</strong>
                         <em> «Хуки useSelector и useDispatch заменяют HOC connect и работают через контекст React. useDispatch просто отдает ссылку на метод отправки экшенов. useSelector подписывает компонент на изменения Стора. Главный нюанс его работы заключается в строгом сравнении ссылок (===) между старым и новым результатом выполнения селектора. Если селектор возвращает комбинированный объект или массив после .filter()/.map(), необходимо либо делить вызовы хука на отдельные примитивы, либо использовать функцию мемоизации createSelector, либо передавать вторым аргументом shallowEqual. В противном случае компонент будет каскадно перерендериваться на любой экшен в системе».</em>
                     </div>
+                    {/* Блок "Простыми словами" для интеграции внутрь карточки #reactReduxHooks */}
+                    <div
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                            gap: '16px',
+                            marginBottom: '24px',
+                            fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif'
+                        }}
+                    >
+                        {/* Капсула useSelector */}
+                        <div
+                            style={{
+                                padding: '16px',
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                borderLeft: '4px solid #3b82f6' // Синий акцент для чтения данных
+                            }}
+                        >
+        <span style={{ fontWeight: '700', color: '#1e3a8a', display: 'block', marginBottom: '4px', fontSize: '15px' }}>
+            🔍 useSelector
+        </span>
+                            <span style={{ fontSize: '14px', color: '#334155', lineHeight: '1.5' }}>
+            <strong>Читает данные</strong> из глобального Store и автоматически подписывает компонент на их изменения.
+        </span>
+                        </div>
+
+                        {/* Капсула useDispatch */}
+                        <div
+                            style={{
+                                padding: '16px',
+                                backgroundColor: '#f8fafc',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '6px',
+                                borderLeft: '4px solid #10b981' // Зеленый акцент для отправки команд
+                            }}
+                        >
+        <span style={{ fontWeight: '700', color: '#065f46', display: 'block', marginBottom: '4px', fontSize: '15px' }}>
+            🚀 useDispatch
+        </span>
+                            <span style={{ fontSize: '14px', color: '#334155', lineHeight: '1.5' }}>
+            Получает ссылку на диспетчер и <strong>отправляет действия (actions)</strong> в Store для изменения состояния.
+        </span>
+                        </div>
+                    </div>
+
                 </div>
 
             </main>
