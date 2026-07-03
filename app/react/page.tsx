@@ -127,6 +127,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reactReduxHooks" style={anchorLinkStyle}>
                         ⚓ Хуки useSelector и useDispatch
                     </a>
+                    <a href="#reactBrowserRouter" style={anchorLinkStyle}>
+                        🌐 BrowserRouter и SPA роутинг
+                    </a>
 
                 </div>
             </aside>
@@ -3975,6 +3978,155 @@ export function ThemeWidget() {
                         </div>
                     </div>
 
+                </div>
+                <div
+                    id="reactBrowserRouter"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Маршрутизация в SPA: Механизм BrowserRouter
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        Компонент <strong>BrowserRouter</strong> из библиотеки <code style={{ fontFamily: 'monospace' }}>react-router-dom</code> является сердцем навигации в современных React-приложениях. Он превращает сайт в полноценное **SPA (Single Page Application)**, позволяя мгновенно переключать страницы без перезагрузки браузера и запросов к серверу.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Под капотом: Магия HTML5 History API
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            В старые времена при клике на любую ссылку браузер отправлял запрос на сервер, скачивал новый HTML-файл и полностью перерисовывал экран с белой вспышкой.
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            <strong>BrowserRouter</strong> перехватывает клики по ссылкам. Вместо отправки запроса в сеть, он использует встроенный в браузер метод <code style={{ fontFamily: 'monospace' }}>window.history.pushState()</code>.
+                        </div>
+                        <div>
+                            Этот метод позволяет **вручную менять URL в адресной строке** и сохранять историю переходов (чтобы работали кнопки браузера «Назад» и «Вперед»), но при этом физически оставаться на той же самой HTML-странице. React видит изменение URL, запускает алгоритм Diffing и точечно подменяет один компонент страницы на другой.
+                        </div>
+                    </div>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Классическая декларативная настройка роутинга (Версии React Router v6+):
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import React from 'react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+
+// Компоненты-страницы
+const Home = () => <h2>🏡 Главная страница</h2>;
+const About = () => <h2>📖 О нас</h2>;
+const NotFound = () => <h2>🛑 Ошибка 404: Страница не найдена</h2>;
+
+export default function AppNavigation() {
+    return (
+        // 1. Оборачиваем всё приложение в BrowserRouter для раздачи контекста истории
+        <BrowserRouter>
+            <nav style={{ display: 'flex', gap: '16px', marginBottom: '20px' }}>
+                {/* ❌ НЕПРАВИЛЬНО: <a href="/about">О нас</a> — перезагрузит страницу и сотрет стейт */}
+                
+                {/* 🟢 ПРАВИЛЬНО: Link блокирует дефолтное поведение браузера и меняет URL через pushState */}
+                <Link to="/">Главная</Link>
+                <Link to="/about">О нас</Link>
+                <Link to="/broken-link">Тест 404</Link>
+            </nav>
+
+            {/* 2. Блок Routes анализирует текущий URL и выбирает строго ОДИН подходящий Route */}
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                
+                {/* Звёздочка означает "любой другой URL" — сработает, если совпадений выше не нашлось */}
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </BrowserRouter>
+    );
+}`}
+    </pre>
+
+                    {/* Critical Production Trap: Nginx Fallback */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🚨 <strong>Критическая ловушка в продакшене (Проблема перезагрузки страницы / 404 Error):</strong>
+                        <br />
+                        Пока вы кликаете по кнопкам <code style={{ fontFamily: 'monospace' }}>{'<Link />'}</code> внутри запущенного приложения, всё работает идеально. Но если пользователь перейдет по прямой ссылке <code style={{ fontFamily: 'monospace' }}>://mysite.com</code> или нажмет **F5 (Обновить страницу)** на вкладке «О нас», браузер в обход React пойдет на реальный сервер искать файл по пути <code style={{ fontFamily: 'monospace' }}>/about/index.html</code>.
+                        <br />
+                        Поскольку у вас SPA, этого файла на сервере физически не существует (есть только один главный <code style={{ fontFamily: 'monospace' }}>index.html</code> в корне), и сервер выдаст жесткую ошибку **404 Not Found**.
+                        <br />
+                        <strong style={{ display: 'block', marginTop: '6px' }}>Как это чинится:</strong>
+                        Это задача системного администрирования. В конфиге веб-сервера (Nginx, Apache) или хостинга (Vercel, Netlify) нужно прописать **правило перенаправления (Fallback / Rewrites)**: абсолютно все входящие запросы на любые адреса сервер обязан принудительно перенаправлять на корневой файл <code style={{ fontFamily: 'monospace' }}>index.html</code>. Тогда управление перехватит React Router, прочитает URL и плавно откроет нужный компонент.
+                    </div>
                 </div>
 
             </main>
