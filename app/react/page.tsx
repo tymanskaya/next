@@ -130,6 +130,9 @@ export default function ReactHooksCheatSheet() {
                     <a href="#reactBrowserRouter" style={anchorLinkStyle}>
                         🌐 BrowserRouter и SPA роутинг
                     </a>
+                    <a href="#reactUseNavigate"  style={anchorLinkStyle}>
+                        ⚓ Программная навигация useNavigate
+                    </a>
 
                 </div>
             </aside>
@@ -4126,6 +4129,163 @@ export default function AppNavigation() {
                         <br />
                         <strong style={{ display: 'block', marginTop: '6px' }}>Как это чинится:</strong>
                         Это задача системного администрирования. В конфиге веб-сервера (Nginx, Apache) или хостинга (Vercel, Netlify) нужно прописать **правило перенаправления (Fallback / Rewrites)**: абсолютно все входящие запросы на любые адреса сервер обязан принудительно перенаправлять на корневой файл <code style={{ fontFamily: 'monospace' }}>index.html</code>. Тогда управление перехватит React Router, прочитает URL и плавно откроет нужный компонент.
+                    </div>
+                </div>
+                <div
+                    id="reactUseNavigate"
+                    style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '8px',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        padding: '24px sm:32px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif',
+                        color: '#334155',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        marginTop: '32px'
+                    }}
+                >
+                    {/* Upper Indigo Card Bar */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: '4px',
+                            backgroundColor: '#6366f1'
+                        }}
+                    />
+
+                    {/* Title */}
+                    <h2
+                        style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: '#4338ca',
+                            margin: '0 0 12px 0'
+                        }}
+                    >
+                        Программная навигация: Хук useNavigate
+                    </h2>
+
+                    <p style={{ fontSize: '15px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 20px 0' }}>
+                        В то время как компонент <code style={{ fontFamily: 'monospace' }}>{'<Link />'}</code> используется для обычных кликов пользователя по меню, хук <strong>useNavigate</strong> предназначен для <strong>программного (принудительного)</strong> изменения URL-адреса внутри JavaScript-логики. Он незаменим, когда навигация должна произойти только после успешного завершения какого-то события.
+                    </p>
+
+                    {/* Mental Model (Violet Box) */}
+                    <div
+                        style={{
+                            backgroundColor: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            padding: '16px',
+                            borderRadius: '6px',
+                            marginBottom: '24px',
+                            fontSize: '14px',
+                            lineHeight: '1.6',
+                            color: '#4c1d95'
+                        }}
+                    >
+                        <div style={{ fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                            🧠 Ментальная модель и параметр replace:
+                        </div>
+                        <div style={{ marginBottom: '6px' }}>
+                            По умолчанию вызов <code style={{ fontFamily: 'monospace' }}>navigate('/dashboard')</code> работает как стандартный метод **push**: он добавляет новый адрес поверх старого в стек истории браузера. Кнопка «Назад» вернет пользователя на предыдущую страницу.
+                        </div>
+                        <div>
+                            Параметр <code style={{ fontFamily: 'monospace' }}>{'{ replace: true }'}</code> работает кардинально иначе. Он не добавляет новую запись, а **стирает текущий URL из истории и перезаписывает его новым**. Это критически важно использовать на страницах авторизации или оплаты, чтобы пользователь, нажав кнопку «Назад», не смог случайно повторно отправить форму или вернуться на форму ввода пароля после успешного входа.
+                        </div>
+                    </div>
+
+                    {/* Text Before Code */}
+                    <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a', marginBottom: '12px' }}>
+                        Практический пример: Имитация отправки формы с последующим редиректом
+                    </div>
+
+                    {/* Code Block (Formatted & Cleaned) */}
+                    <pre
+                        style={{
+                            backgroundColor: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            padding: '16px',
+                            overflowX: 'auto',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '14px',
+                            color: '#0f172a',
+                            margin: '0 0 20px 0',
+                            whiteSpace: 'pre',
+                            lineHeight: '1.5'
+                        }}
+                    >
+{`import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+export default function OrderForm() {
+    // 1. Инициализируем функцию навигации
+    const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setIsSubmitting(true);
+
+        try {
+            // Имитируем запрос к серверу на создание заказа
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            console.log("🚀 Заказ успешно оформлен!");
+
+            // 2. Делаем авто-редирект на страницу успеха.
+            // Флаг replace: true стирает страницу формы из истории браузера, 
+            // чтобы кнопка "Назад" не вела обратно на заполненную форму.
+            navigate('/success-order', { replace: true });
+
+        } catch (error) {
+            console.error("Ошибка оформления:", error);
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} style={{ padding: '20px' }}>
+            <h3>Оформление заказа</h3>
+            <input type="text" placeholder="Адрес доставки" required style={{ marginRight: '8px' }} />
+            
+            <button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Оформляем...' : 'Купить'}
+            </button>
+
+            {/* 3. Относительный переход по истории (Имитация кнопки "Назад") */}
+            {/* Число -1 означает "сделать ровно один шаг назад в истории браузера" */}
+            <button type="button" onClick={() => navigate(-1)} style={{ marginLeft: '8px' }}>
+                Назад в каталог
+            </button>
+        </form>
+    );
+}`}
+    </pre>
+
+                    {/* Interview Trap */}
+                    <div
+                        style={{
+                            borderLeft: '4px solid #ef4444',
+                            backgroundColor: '#fef2f2',
+                            padding: '12px 16px',
+                            borderRadius: '0 6px 6px 0',
+                            fontSize: '14px',
+                            color: '#991b1b',
+                            lineHeight: '1.5'
+                        }}
+                    >
+                        🚨 <strong>Важнейшая ловушка на собеседовании (Вызов вне контекста Router):</strong>
+                        <br />
+                        Хук <code style={{ fontFamily: 'monospace' }}>useNavigate</code> (как и любой другой хук роутера) работает строго через механизм Context API. Вы можете вызывать его <strong>только внутри тех компонентов, которые физически обёрнуты в тег <code style={{ fontFamily: 'monospace' }}>{'<BrowserRouter />'}</code></strong>.
+                        <br />
+                        Если вы попытаетесь вызвать его на самом верхнем уровне приложения (например, в файле <code style={{ fontFamily: 'monospace' }}>main.jsx / index.jsx</code> на той же строчке, где объявляется сам роутер), приложение мгновенно упадет с критической ошибкой: <code style={{ fontFamily: 'monospace', fontSize: '12px' }}>useNavigate() may be used only in the context of a Router component</code>. Сначала оборачивайте дерево в провайдер роутинга, и только в дочерних узлах используйте хуки.
                     </div>
                 </div>
 
