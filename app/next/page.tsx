@@ -82,6 +82,7 @@ export default function NextJsCheatSheet() {
                     <a href="#folders" style={anchorLinkStyle}>🔹 Виды папок Next.js</a>
                     <a href="#pageFile" style={anchorLinkStyle}>🔹 Системный файл page.tsx</a>
                     <a href="#layouts" style={anchorLinkStyle}>🔹 layout.tsx и template.tsx</a>
+                    <a href="#images" style={anchorLinkStyle}>🔹 Оптимизация картинок</a>
 
 
 
@@ -339,6 +340,70 @@ export default function RootLayout({ children }) {
                     </div>
                 </section>
 
+                {/* БЛОК 8: РАБОТА С ИЗОБРАЖЕНИЯМИ */}
+                <section id="images" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>8. Оптимизация изображений: компонент &lt;Image /&gt;</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p>Встроенный компонент <code style={codeInlineStyle}>&lt;Image /&gt;</code> автоматически оптимизирует картинки: сжимает их размер, конвертирует в современный формат <b>WebP/AVIF</b> и загружает лениво (строго при скролле), что критически ускоряет загрузку сайта.</p>
+
+                        {/* ПРАВИЛО ALT */}
+                        <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#856404' }}>♿ Важно для доступности: Атрибут alt является обязательным!</p>
+                            <p style={{ fontSize: '0.95em', margin: 0 }}>
+                                Параметр <code style={codeInlineStyle}>alt</code> (альтернативный текст) обязателен для каждого компонента <code style={codeInlineStyle}>&lt;Image /&gt;</code>. Он нужен для поисковых роботов и экранных дикторов (скринридеров), которые читают сайт вслух незрячим людям. Если картинка является чисто декоративной (например, фоновый узор или незначительная иконка), атрибут всё равно <b>нельзя удалять</b> &mdash; в таком случае укажи в качестве значения пустую строку: <code style={codeInlineStyle}>alt=&quot;&quot;</code>.
+                            </p>
+                        </div>
+
+                        {/* Локальные vs Удаленные */}
+                        <div style={{ backgroundColor: '#f6f8fa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #24292f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#24292f' }}>Два сценария использования:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.95em' }}>
+                                <li>
+                                    <b>Локальные файлы (из папки проекта):</b> Картинку нужно импортировать через <code style={codeInlineStyle}>import img from &apos;...&apos;</code>. Размеры <code style={codeInlineStyle}>width</code> и <code style={codeInlineStyle}>height</code> указывать <b>не нужно</b> &mdash; Next.js определит их автоматически. Доступен эффект <code style={codeInlineStyle}>placeholder=&quot;blur&quot;</code>.
+                                </li>
+                                <li>
+                                    <b>Удаленные файлы (по URL из сети):</b> В параметре <code style={codeInlineStyle}>src</code> передается строка-ссылка. Здесь ты <b>обязана вручную указать размеры</b> <code style={codeInlineStyle}>width</code> and <code style={codeInlineStyle}>height</code>, чтобы защитить верстку от дёргания при загрузке.
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Пример конфигурации */}
+                        <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#cf1322' }}>🚨 Обязательная настройка для внешних ссылок:</p>
+                            <p style={{ fontSize: '0.95em', margin: '0 0 8px 0' }}>
+                                По соображениям безопасности Next.js выдаст ошибку, если попытаться загрузить картинку со стороннего сайта, не прописав его домен в конфигурационном файле <code style={codeInlineStyle}>next.config.ts</code>:
+                            </p>
+                            <pre style={{
+                                display: 'block',
+                                backgroundColor: '#fff',
+                                padding: '12px',
+                                borderRadius: '6px',
+                                fontFamily: 'monospace',
+                                fontSize: '0.88em',
+                                color: '#333',
+                                overflowX: 'auto',
+                                margin: 0,
+                                whiteSpace: 'pre-wrap',
+                                border: '1px solid #ffa39e'
+                            }}>
+{`// nextConfig внутри next.config.ts (или .js)
+const nextConfig = {
+    images: {
+        remotePatterns: [
+            { protocol: 'https', hostname: '://unsplash.com' }
+        ]
+    }
+};`}
+            </pre>
+                        </div>
+
+                        {/* Лайфхак fill */}
+                        <div style={{ backgroundColor: '#e6f7ff', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #1890ff', fontSize: '0.93em' }}>
+                            💡 <b>Лайфхак со свойством fill:</b> Если ты делаешь адаптивную карточку и не знаешь точных размеров картинки заранее, передай свойство <code style={codeInlineStyle}>fill</code> вместо width/height. Картинка автоматически растянется на 100% ширины и высоты своего родительского блока. <i>Важно: у родительского тега <code style={codeInlineStyle}>&lt;div&gt;</code> в стилях обязательно должно стоять <code style={codeInlineStyle}>position: &apos;relative&apos;</code>!</i>
+                        </div>
+                    </div>
+                </section>
 
             </div>
         </div>
