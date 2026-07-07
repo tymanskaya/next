@@ -285,12 +285,20 @@ export default async function ProfilePage({ params }) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <p>Для создания общих элементов интерфейса (шапки, меню) в Next.js используются файлы <code style={codeInlineStyle}>layout.tsx</code> и <code style={codeInlineStyle}>template.tsx</code>. Они принимают текущую страницу в пропсы как <code style={codeInlineStyle}>children</code>.</p>
 
+                        {/* ПРАВИЛО КОРНЕВОГО ЛАЙАУТА */}
+                        <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#cf1322' }}>🚨 Главное правило: Корневой Root Layout</p>
+                            <p style={{ fontSize: '0.95em', margin: 0 }}>
+                                В самом корне папки <code style={codeInlineStyle}>src/app/layout.tsx</code> <b>обязательно</b> должен лежать самый главный, корневой макет. Он применяется ко всему сайту целиком. Только в этом корневом файле прописываются системные теги <code style={codeInlineStyle}>&lt;html&gt;</code> и <code style={codeInlineStyle}>&lt;body&gt;</code>. Если его удалить или забыть создать, Next.js выдаст критическую ошибку и приложение не запустится.
+                            </p>
+                        </div>
+
                         {/* Сравнение макетов и шаблонов */}
                         <div style={{ backgroundColor: '#f0f5ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #2f54eb' }}>
                             <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#1d39c4' }}>В чём разница между Layout и Template:</p>
                             <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.95em' }}>
                                 <li>
-                                    <b>layout.tsx (Макет):</b> Создаётся один раз. При переходах между страницами внутри него он <b>не перерисовывается</b>. Состояние хуков <code style={codeInlineStyle}>useState</code> внутри макета полностью сохраняется. Идеально для боковых меню (Sidebar).
+                                    <b>layout.tsx (Макет):</b> Создаётся один раз. При переходах между страницами внутри него он <b>не перерисовывается</b>. Состояние хуков <code style={codeInlineStyle}>useState</code> внутри макета полностью сохраняется. Идеально для боковых меню (Sidebar). Вложенные макеты в подпапках дополняют корневой, но не заменяют его.
                                 </li>
                                 <li>
                                     <b>template.tsx (Шаблон):</b> Полностью <b>пересоздаётся с нуля</b> при каждом переходе между страницами. Все стейты внутри него сбрасываются. Идеально подходит, если нужно запускать анимацию появления страницы каждый раз или собирать чистую аналитику просмотров.
@@ -300,7 +308,7 @@ export default async function ProfilePage({ params }) {
 
                         {/* Пример кода */}
                         <div>
-                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Базовый синтаксис layout.tsx:</p>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Базовый синтаксис корневого layout.tsx:</p>
                             <pre style={{
                                 display: 'block',
                                 backgroundColor: '#f5f5f5',
@@ -313,21 +321,24 @@ export default async function ProfilePage({ params }) {
                                 margin: 0,
                                 whiteSpace: 'pre-wrap'
                             }}>
-{`// Файл принимает children и выводит их внутри общего каркаса
-export default function SharedLayout({ children }) {
+{`// Корневой макет ОБЯЗАН содержать теги html и body
+export default function RootLayout({ children }) {
     return (
-        <div style={{ display: 'flex', minHeight: '100vh' }}>
-            <aside>Боковое меню сайта</aside>
-            
-            {/* Здесь отрендерится текущая страница page.tsx */}
-            <main style={{ flex: 1 }}>{children}</main>
-        </div>
+        <html lang="ru">
+            <body style={{ margin: 0, display: 'flex' }}>
+                <aside>Общий Sidebar на весь сайт</aside>
+                
+                {/* Сюда Next.js подставит вложенные страницы */}
+                <main style={{ flex: 1 }}>{children}</main>
+            </body>
+        </html>
     );
 }`}
             </pre>
                         </div>
                     </div>
                 </section>
+
 
             </div>
         </div>
