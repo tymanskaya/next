@@ -1,0 +1,220 @@
+"use client";
+
+import React from 'react';
+
+export default function NextJsCheatSheet() {
+    const tableHeaderStyle: React.CSSProperties = {
+        textAlign: 'left',
+    }
+    return (
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            minHeight: '100vh',
+            backgroundColor: '#f0f2f5',
+            padding: '40px 20px',
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+            lineHeight: '1.6'
+        }}>
+            <div style={{ width: '100%', maxWidth: '850px', display: 'flex', flexDirection: 'column', gap: '25px' }}>
+
+                {/* КРАСИВОЕ ЗАГЛАВИЕ СТРАНИЦЫ */}
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                    <div style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '10px',
+                        padding: '8px 16px',
+                        backgroundColor: '#f6f8fa',
+                        borderRadius: '30px',
+                        marginBottom: '20px',
+                        border: '1px solid #d1d9e0',
+                        color: '#57606a',
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                    }}>
+                        <svg height="16" width="16" viewBox="0 0 16 16" style={{ fill: '#000000' }}>
+                            <path d="M12.98 2a.45.45 0 0 0-.41.26L6.5 13H4.15l5.24-9.35c.1-.18.06-.41-.11-.53a.47.47 0 0 0-.54.04L2 8.77V14h12V2h-1.02z" />
+                        </svg>
+                        Production Framework
+                    </div>
+
+                    <h1 style={{
+                        fontSize: '46px',
+                        fontWeight: '850',
+                        color: '#1f2328',
+                        margin: '0 0 15px 0',
+                        letterSpacing: '-0.03em'
+                    }}>
+                        Что такое <span style={{
+                        background: 'linear-gradient(90deg, #000000, #555555)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                    }}>Next.js</span>?
+                    </h1>
+
+                    <p style={{ fontSize: '19px', color: '#636c76', maxWidth: '650px', margin: '0 auto', lineHeight: '1.5' }}>
+                        Архитектура, ключевые фичи и фундаментальные отличия от библиотеки <b>React</b> в современной фронтенд-разработке
+                    </p>
+
+                    <div style={{ width: '80px', height: '5px', backgroundColor: '#000000', margin: '25px auto 0', borderRadius: '10px' }}></div>
+                </div>
+
+                {/* ВНУТРЕННЯЯ НАВИГАЦИЯ ПО СТРАНИЦЕ */}
+                <nav style={{
+                    backgroundColor: '#fff',
+                    padding: '15px 20px',
+                    borderRadius: '12px',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.04)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '15px',
+                    flexWrap: 'wrap'
+                }}>
+                    <a href="#difference" style={anchorLinkStyle}>📊 Главное отличие</a>
+                    <a href="#routing" style={anchorLinkStyle}>📁 Файловый роутинг</a>
+                    <a href="#optimization" style={anchorLinkStyle}>⚡ Оптимизация</a>
+                    <a href="#fullstack" style={anchorLinkStyle}>🛠️ Full-stack фичи</a>
+                </nav>
+
+                {/* БЛОК 1: ГЛАВНОЕ ОТЛИЧИЕ */}
+                <section id="difference" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>1. Место рендеринга кода (React vs Next.js)</h2>
+                    <p style={{ margin: '0 0 15px 0', color: '#555' }}>
+                        React &mdash; это библиотека для построения интерфейсов на клиенте. Next.js &mdash; это полноценный фреймворк, который берет React за основу, но переносит сборку страниц на сервер.
+                    </p>
+
+                    <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px', fontSize: '0.95em' }}>
+                            <thead>
+                            <tr style={{ borderBottom: '2px solid #e1e4e8', backgroundColor: '#fafbfc' }}>
+                                <th style={tableHeaderStyle}>Критерий</th>
+                                <th style={tableHeaderStyle}>React (Чистый Client-Side)</th>
+                                <th style={tableHeaderStyle}>Next.js (Server-Side &amp; Hybrid)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                <td style={tableCellStyle}><b>Сборка HTML</b></td>
+                                <td style={tableCellStyle}><b>В браузере (CSR).</b> Сервер шлет пустую разметку, браузер сам собирает сайт через JS.</td>
+                                <td style={tableCellStyle}><b>На сервере (SSR/SSG).</b> Браузер сразу получает готовую страницу с текстом.</td>
+                            </tr>
+                            <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                <td style={tableCellStyle}><b>SEO (Поисковики)</b></td>
+                                <td style={tableCellStyle}><span style={{ color: '#cf1322' }}>Плохо.</span> Роботы видят пустой HTML и плохо индексируют контент.</td>
+                                <td style={tableCellStyle}><span style={{ color: '#388e3c' }}>Идеально.</span> Роботы мгновенно считывают готовый текст с сервера.</td>
+                            </tr>
+                            <tr>
+                                <td style={tableCellStyle}><b>Первый экран</b></td>
+                                <td style={tableCellStyle}>Пользователь ждет, пока скачается и запустится тяжелый бандл скриптов.</td>
+                                <td style={tableCellStyle}>Каркас и текст видны сразу, а скрипты «оживляют» кнопки чуть позже.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                {/* БЛОК 2: ФАЙЛОВЫЙ РОУТИНГ */}
+                <section id="routing" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>2. Автоматический файловый роутинг (App Router)</h2>
+                    <p style={{ margin: '0 0 15px 0', color: '#555' }}>
+                        Забудь про ручную настройку тяжелого пакета <code style={codeInlineStyle}>react-router-dom</code>. В Next.js структура твоих папок внутри директории <code style={codeInlineStyle}>src/app</code> автоматически превращается в рабочие адреса страниц на сайте.
+                    </p>
+
+                    <div style={{ backgroundColor: '#f6f8fa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #24292f' }}>
+                        <p style={{ fontWeight: 'bold', margin: '0 0 8px 0' }}>Как устроен App Router:</p>
+                        <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.95em' }}>
+                            <li>Папка <code style={codeInlineStyle}>src/app/page.tsx</code> &mdash; главная страница сайта (<code style={codeInlineStyle}>/</code>).</li>
+                            <li>Папка <code style={codeInlineStyle}>src/app/git/page.tsx</code> &mdash; страница со встроенным адресом <code style={codeInlineStyle}>/git</code>.</li>
+                            <li>Папка <code style={codeInlineStyle}>src/app/profile/[id]/page.tsx</code> &mdash; динамический роут для профилей (например, <code style={codeInlineStyle}>/profile/123</code>).</li>
+                        </ul>
+                    </div>
+                </section>
+
+                {/* БЛОК 3: УМНАЯ ОПТИМИЗАЦИЯ */}
+                <section id="optimization" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>3. Автоматическая оптимизация производительности</h2>
+                    <p style={{ margin: '0 0 15px 0', color: '#555' }}>Next.js поставляется со встроенными умными компонентами, которые берут на себя всю рутину по оптимизации скорости работы приложения:</p>
+
+                    <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.95em' }}>
+                        <li><b>&lt;Image /&gt;</b> &mdash; автоматически сжимает картинки под экраны, конвертирует их в современный формат WebP и загружает их лениво (строго при скролле).</li>
+                        <li><b>&lt;Link /&gt;</b> &mdash; фоном предзагружает (prefetch) код страницы, на которую ведет ссылка, как только она появляется в зоне видимости пользователя.</li>
+                        <li><b>&lt;Font /&gt;</b> &mdash; скачивает Google-шрифты на этапе сборки проекта и хранит их локально, защищая интерфейс от задержек загрузки сторонней сети.</li>
+                    </ul>
+                </section>
+
+                {/* БЛОК 4: API ROUTES */}
+                <section id="fullstack" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>4. Возможности Full-stack разработки (API Routes)</h2>
+                    <p style={{ margin: '0 0 15px 0', color: '#555' }}>Тебе больше не нужно создавать отдельный бэкенд-сервер на Node.js/Express для простых задач. Вы можете писать бэкенд-код прямо внутри папки проекта Next.js.</p>
+
+                    <div style={{ backgroundColor: '#f0f5ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #2f54eb' }}>
+                        <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#1d39c4' }}>Безопасное скрытие секретных токенов и API-ключей:</p>
+                        <p style={{ fontSize: '0.95em', margin: 0 }}>
+                            Если делать запросы к сторонним ИИ-сервисам (например, OpenAI) прямо из обычного React, злоумышленники увидят твой приватный токен в сетевых вкладках браузера. В Next.js ты можешь создать изолированный файл <code style={codeInlineStyle}>route.ts</code>, делать защищенные запросы через него на стороне сервера, а браузер пользователя никогда не увидит секретные ключи.
+                        </p>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+);
+}
+
+// НАБОР СТИЛЕЙ ДЛЯ КОРРЕКТНОЙ СБОРКИ (Вставить в самый конец файла)
+const sidebarTitleStyle = {
+    fontSize: '11px',
+    fontWeight: '700',
+    color: '#8c95a0',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    margin: '0 0 10px 10px'
+};
+
+const anchorLinkStyle: React.CSSProperties = {
+    display: 'block',
+    padding: '8px 15px',
+    color: '#57606a',
+    fontSize: '13px',
+    fontWeight: '500',
+    textDecoration: 'none',
+    borderRadius: '6px',
+    transition: 'color 0.2s',
+    scrollBehavior: 'smooth'
+};
+
+const sectionCardStyle = {
+    backgroundColor: '#fff',
+    padding: '25px',
+    borderRadius: '12px',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
+    scrollMarginTop: '40px'
+};
+
+const tableHeaderStyle = {
+    padding: '12px',
+    textAlign: 'left',
+    fontWeight: '700',
+    color: '#1f2328'
+};
+
+const tableCellStyle = {
+    padding: '12px',
+    verticalAlign: 'top',
+    color: '#444',
+    lineHeight: '1.5'
+};
+
+const codeInlineStyle = {
+    backgroundColor: '#f0f0f0',
+    padding: '2px 5px',
+    borderRadius: '4px',
+    fontFamily: 'monospace',
+    fontSize: '0.9em',
+    color: '#c41d7f'
+};
