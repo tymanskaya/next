@@ -70,6 +70,14 @@ export const Header = () => {
                     </button>
                 </li>
                 <li>
+                    <button
+                        onClick={() => router.push("/next")}
+                        className={`${styles.link} ${isActive("/next") ? styles.active : ""}`}
+                    >
+                        Next.js
+                    </button>
+                </li>
+                <li>
                     <button onClick={() => router.forward()} className={styles.link}>
                         Forward
                     </button>

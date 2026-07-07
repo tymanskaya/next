@@ -64,6 +64,9 @@ export default function Sidebar() {
                 <button onClick={() => router.push('/js')} style={getSidebarLinkStyle(pathname === '/js')}>
                     ⚛️ JavaScript
                 </button>
+                <button onClick={() => router.push('/next')} style={getSidebarLinkStyle(pathname === '/next')}>
+                    ⚛️ Next.js
+                </button>
 
             </div>
         </aside>
