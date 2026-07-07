@@ -81,6 +81,8 @@ export default function NextJsCheatSheet() {
                     <a href="#fullstack" style={anchorLinkStyle}>🛠️ Full-stack фичи</a>
                     <a href="#folders" style={anchorLinkStyle}>🔹 Виды папок Next.js</a>
                     <a href="#pageFile" style={anchorLinkStyle}>🔹 Системный файл page.tsx</a>
+                    <a href="#layouts" style={anchorLinkStyle}>🔹 layout.tsx и template.tsx</a>
+
 
 
                 </nav>
@@ -269,6 +271,56 @@ export default async function ProfilePage({ params }) {
         <div>
             <h1>Личный кабинет</h1>
             <p>Вы просматриваете профиль: {id}</p>
+        </div>
+    );
+}`}
+            </pre>
+                        </div>
+                    </div>
+                </section>
+                {/* БЛОК 7: LAYOUT И TEMPLATE */}
+                <section id="layouts" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>7. Обёртки страниц: layout.tsx и template.tsx</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p>Для создания общих элементов интерфейса (шапки, меню) в Next.js используются файлы <code style={codeInlineStyle}>layout.tsx</code> и <code style={codeInlineStyle}>template.tsx</code>. Они принимают текущую страницу в пропсы как <code style={codeInlineStyle}>children</code>.</p>
+
+                        {/* Сравнение макетов и шаблонов */}
+                        <div style={{ backgroundColor: '#f0f5ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #2f54eb' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#1d39c4' }}>В чём разница между Layout и Template:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.95em' }}>
+                                <li>
+                                    <b>layout.tsx (Макет):</b> Создаётся один раз. При переходах между страницами внутри него он <b>не перерисовывается</b>. Состояние хуков <code style={codeInlineStyle}>useState</code> внутри макета полностью сохраняется. Идеально для боковых меню (Sidebar).
+                                </li>
+                                <li>
+                                    <b>template.tsx (Шаблон):</b> Полностью <b>пересоздаётся с нуля</b> при каждом переходе между страницами. Все стейты внутри него сбрасываются. Идеально подходит, если нужно запускать анимацию появления страницы каждый раз или собирать чистую аналитику просмотров.
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Пример кода */}
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Базовый синтаксис layout.tsx:</p>
+                            <pre style={{
+                                display: 'block',
+                                backgroundColor: '#f5f5f5',
+                                padding: '12px',
+                                borderRadius: '6px',
+                                fontFamily: 'monospace',
+                                fontSize: '0.88em',
+                                color: '#333',
+                                overflowX: 'auto',
+                                margin: 0,
+                                whiteSpace: 'pre-wrap'
+                            }}>
+{`// Файл принимает children и выводит их внутри общего каркаса
+export default function SharedLayout({ children }) {
+    return (
+        <div style={{ display: 'flex', minHeight: '100vh' }}>
+            <aside>Боковое меню сайта</aside>
+            
+            {/* Здесь отрендерится текущая страница page.tsx */}
+            <main style={{ flex: 1 }}>{children}</main>
         </div>
     );
 }`}
