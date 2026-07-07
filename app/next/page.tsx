@@ -80,6 +80,8 @@ export default function NextJsCheatSheet() {
                     <a href="#optimization" style={anchorLinkStyle}>⚡ Оптимизация</a>
                     <a href="#fullstack" style={anchorLinkStyle}>🛠️ Full-stack фичи</a>
                     <a href="#folders" style={anchorLinkStyle}>🔹 Виды папок Next.js</a>
+                    <a href="#pageFile" style={anchorLinkStyle}>🔹 Системный файл page.tsx</a>
+
 
                 </nav>
 
@@ -225,6 +227,53 @@ export default function NextJsCheatSheet() {
                             </p>
                         </div>
 
+                    </div>
+                </section>
+                {/* БЛОК 6: КАК ВЫГЛЯДИТ PAGE.TSX */}
+                <section id="pageFile" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>6. Системный файл page.tsx</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p><b>page.tsx</b> &mdash; это обязательный файл, который делает папку доступной в виде веб-страницы. Он должен содержать React-компонент, экспортируемый <b>по умолчанию (export default)</b>.</p>
+
+                        {/* Разница Server vs Client */}
+                        <div style={{ backgroundColor: '#f6f8fa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #24292f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#24292f' }}>Два режима работы страницы:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95em' }}>
+                                <li><b>Server Component (По умолчанию):</b> Страница рендерится на сервере. В ней можно напрямую делать запросы к базе данных или скрывать API-ключи, но нельзя использовать хуки (<code style={codeInlineStyle}>useState</code>, <code style={codeInlineStyle}>useEffect</code>).</li>
+                                <li><b>Client Component (С директивой):</b> Если в самой первой строчке файла написать <code style={codeInlineStyle}>&quot;use client&quot;;</code>, страница оживёт: в ней можно будет кликать по кнопкам, открывать модалки и использовать любые хуки.</li>
+                            </ul>
+                        </div>
+
+                        {/* Пример кода динамической страницы */}
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Шаблон динамической страницы (например, для /profile/[id]):</p>
+                            <pre style={{
+                                display: 'block',
+                                backgroundColor: '#f5f5f5',
+                                padding: '12px',
+                                borderRadius: '6px',
+                                fontFamily: 'monospace',
+                                fontSize: '0.88em',
+                                color: '#333',
+                                overflowX: 'auto',
+                                margin: 0,
+                                whiteSpace: 'pre-wrap'
+                            }}>
+{`// Обязательно экспортируем через default
+export default async function ProfilePage({ params }) {
+    // Получаем динамический ID из URL-адреса
+    const { id } = await params;
+
+    return (
+        <div>
+            <h1>Личный кабинет</h1>
+            <p>Вы просматриваете профиль: {id}</p>
+        </div>
+    );
+}`}
+            </pre>
+                        </div>
                     </div>
                 </section>
 
