@@ -355,40 +355,51 @@ export default function RootLayout({ children }) {
                             </p>
                         </div>
 
-                        {/* Локальные vs Удаленные */}
+                        {/* ДВА СПОСОБА ИМПОРТА ИЗ ПРОЕКТА */}
                         <div style={{ backgroundColor: '#f6f8fa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #24292f' }}>
-                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#24292f' }}>Два сценария использования:</p>
-                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.95em' }}>
-                                <li>
-                                    <b>Локальные файлы (из папки проекта):</b> Картинку нужно импортировать через <code style={codeInlineStyle}>import img from &apos;...&apos;</code>. Размеры <code style={codeInlineStyle}>width</code> и <code style={codeInlineStyle}>height</code> указывать <b>не нужно</b> &mdash; Next.js определит их автоматически. Доступен эффект <code style={codeInlineStyle}>placeholder=&quot;blur&quot;</code>.
-                                </li>
-                                <li>
-                                    <b>Удаленные файлы (по URL из сети):</b> В параметре <code style={codeInlineStyle}>src</code> передается строка-ссылка. Здесь ты <b>обязана вручную указать размеры</b> <code style={codeInlineStyle}>width</code> and <code style={codeInlineStyle}>height</code>, чтобы защитить верстку от дёргания при загрузке.
-                                </li>
-                            </ul>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 12px 0', color: '#24292f' }}>Варианты подключения локальных изображений:</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+
+                                {/* 1 способ: Папка public */}
+                                <div style={{ borderBottom: '1px solid #e1e4e8', paddingBottom: '12px' }}>
+                                    <p style={{ margin: '0 0 6px 0', fontWeight: '600' }}>1 способ: Когда картинка импортируется из папки public</p>
+                                    <p style={{ margin: '0 0 8px 0', fontSize: '0.93em', color: '#555' }}>
+                                        При использовании строкового пути из папки <code style={codeInlineStyle}>public</code> Next.js не может заранее прочитать файл. Поэтому размеры становятся обязательными.
+                                    </p>
+                                    <p style={{ margin: '0 0 6px 0', fontSize: '0.9em', fontWeight: 'bold', color: '#555' }}>Обязательные атрибуты: <code style={codeInlineStyle}>alt</code>, <code style={codeInlineStyle}>width</code> и <code style={codeInlineStyle}>height</code></p>
+                                    <pre style={codeSnippetStyle}>
+{`<Image src="/logo.png" alt="IT-Incubator's logo" width={100} height={100} />`}
+                    </pre>
+                                </div>
+
+                                {/* 2 способ: Папка src */}
+                                <div>
+                                    <p style={{ margin: '0 0 6px 0', fontWeight: '600' }}>2 способ: Для изображений, которые находятся внутри папки src</p>
+                                    <p style={{ margin: '0 0 8px 0', fontSize: '0.93em', color: '#555' }}>
+                                        Используется для файлов, расположенных в <code style={codeInlineStyle}>src/assets</code> или рядом с компонентами, а не в public.
+                                    </p>
+                                    <p style={{ margin: '0 0 6px 0', fontSize: '0.9em', fontWeight: 'bold', color: '#388e3c' }}>
+                                        🔥 Ключевое преимущество: при прямом импорте объекта НЕ нужно указывать width и height.
+                                    </p>
+                                    <pre style={codeSnippetStyle}>
+{`import logo from './logo.png'; // Прямой импорт файла как объекта
+
+<Image src={logo} alt="IT-Incubator's logo" />`}
+                    </pre>
+                                </div>
+
+                            </div>
                         </div>
 
-                        {/* Пример конфигурации */}
+                        {/* Пример конфигурации удаленных картинок */}
                         <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f' }}>
-                            <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#cf1322' }}>🚨 Обязательная настройка для внешних ссылок:</p>
+                            <p><b>Удаленные файлы (по URL из сети):</b> В параметре <code style={codeInlineStyle}>src</code> передается строка-ссылка. Здесь ты <b>обязана вручную указать размеры</b> <code style={codeInlineStyle}>width</code> and <code style={codeInlineStyle}>height</code>, чтобы защитить верстку от дёргания при загрузке.</p>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#cf1322' }}>🚨 Настройка для внешних ссылок (из интернета):</p>
                             <p style={{ fontSize: '0.95em', margin: '0 0 8px 0' }}>
-                                По соображениям безопасности Next.js выдаст ошибку, если попытаться загрузить картинку со стороннего сайта, не прописав его домен в конфигурационном файле <code style={codeInlineStyle}>next.config.ts</code>:
+                                По соображениям безопасности Next.js заблокирует внешние URL-строки, пока ты не пропишешь домен в конфигурационном файле <code style={codeInlineStyle}>next.config.ts</code>. Для них ручные размеры или параметр <code style={codeInlineStyle}>fill</code> также обязательны.
                             </p>
-                            <pre style={{
-                                display: 'block',
-                                backgroundColor: '#fff',
-                                padding: '12px',
-                                borderRadius: '6px',
-                                fontFamily: 'monospace',
-                                fontSize: '0.88em',
-                                color: '#333',
-                                overflowX: 'auto',
-                                margin: 0,
-                                whiteSpace: 'pre-wrap',
-                                border: '1px solid #ffa39e'
-                            }}>
-{`// nextConfig внутри next.config.ts (или .js)
-const nextConfig = {
+                            <pre style={{ ...codeSnippetStyle, backgroundColor: '#fff', border: '1px solid #ffa39e' }}>
+{`const nextConfig = {
     images: {
         remotePatterns: [
             { protocol: 'https', hostname: '://unsplash.com' }
@@ -397,13 +408,9 @@ const nextConfig = {
 };`}
             </pre>
                         </div>
-
-                        {/* Лайфхак fill */}
-                        <div style={{ backgroundColor: '#e6f7ff', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #1890ff', fontSize: '0.93em' }}>
-                            💡 <b>Лайфхак со свойством fill:</b> Если ты делаешь адаптивную карточку и не знаешь точных размеров картинки заранее, передай свойство <code style={codeInlineStyle}>fill</code> вместо width/height. Картинка автоматически растянется на 100% ширины и высоты своего родительского блока. <i>Важно: у родительского тега <code style={codeInlineStyle}>&lt;div&gt;</code> в стилях обязательно должно стоять <code style={codeInlineStyle}>position: &apos;relative&apos;</code>!</i>
-                        </div>
                     </div>
                 </section>
+
 
             </div>
         </div>
@@ -487,5 +494,18 @@ const folderExampleStyle: React.CSSProperties = {
     padding: '8px 12px',
     borderRadius: '6px',
     display: 'inline-block',
+    border: '1px solid #e1e4e8'
+};
+const codeSnippetStyle: React.CSSProperties = {
+    display: 'block',
+    backgroundColor: '#f5f5f5',
+    padding: '10px 14px',
+    borderRadius: '6px',
+    fontFamily: 'monospace',
+    fontSize: '13px',
+    color: '#333',
+    overflowX: 'auto',
+    margin: 0,
+    whiteSpace: 'pre-wrap',
     border: '1px solid #e1e4e8'
 };
