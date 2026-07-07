@@ -79,6 +79,8 @@ export default function NextJsCheatSheet() {
                     <a href="#routing" style={anchorLinkStyle}>📁 Файловый роутинг</a>
                     <a href="#optimization" style={anchorLinkStyle}>⚡ Оптимизация</a>
                     <a href="#fullstack" style={anchorLinkStyle}>🛠️ Full-stack фичи</a>
+                    <a href="#folders" style={anchorLinkStyle}>🔹 Виды папок Next.js</a>
+
                 </nav>
 
                 {/* БЛОК 1: ГЛАВНОЕ ОТЛИЧИЕ */}
@@ -159,6 +161,72 @@ export default function NextJsCheatSheet() {
                         </p>
                     </div>
                 </section>
+                {/* БЛОК 5: ВИДЫ ПАПОК В APP ROUTER */}
+                <section id="folders" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>5. Виды папок в App Router</h2>
+                    <p style={{ margin: '0 0 20px 0', color: '#555' }}>
+                        В Next.js папки внутри <code style={codeInlineStyle}>src/app/</code> &mdash; это не просто организация кода. У каждой есть своя роль, определяемая именем папки.
+                    </p>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+                        {/* 1. Обычная папка */}
+                        <div style={folderBlockStyle('#000000')}>
+                            <p style={folderTitleStyle}>📁 <span style={{ color: '#d63384', fontFamily: 'monospace' }}>movies</span> &mdash; обычная папка &rarr; сегмент URL</p>
+                            <p style={folderExampleStyle}>
+                                <span style={{ color: '#666' }}>src/app/movies/page.tsx</span> &rarr; <span style={{ color: '#d63384', fontWeight: 'bold' }}>/movies</span>
+                            </p>
+                            <p style={{ margin: '8px 0 0 0', fontSize: '0.95em', color: '#333' }}>
+                                Просто папка + <code style={codeInlineStyle}>page.tsx</code> внутри = новая страница на сайте.
+                            </p>
+                        </div>
+
+                        {/* 2. Динамический сегмент */}
+                        <div style={folderBlockStyle('#faad14')}>
+                            <p style={folderTitleStyle}>📁 <span style={{ color: '#d63384', fontFamily: 'monospace' }}>[id]</span> &mdash; динамический сегмент</p>
+                            <p style={folderExampleStyle}>
+                                <span style={{ color: '#666' }}>src/app/movies/[id]/page.tsx</span> &rarr; <span style={{ color: '#d63384', fontWeight: 'bold' }}>/movies/123</span> , <span style={{ color: '#d63384', fontWeight: 'bold' }}>/movies/456</span>
+                            </p>
+                            <p style={{ margin: '8px 0 0 0', fontSize: '0.95em', color: '#333' }}>
+                                Значение из URL приходит в компонент через <code style={{...codeInlineStyle, color: '#d63384'}}>params.id</code>.
+                            </p>
+                        </div>
+
+                        {/* 3. Группа маршрутов */}
+                        <div style={folderBlockStyle('#1890ff')}>
+                            <p style={folderTitleStyle}>📁 <span style={{ color: '#d63384', fontFamily: 'monospace' }}>(group)</span> &mdash; группа маршрутов <span style={{ color: '#888', fontWeight: 'normal' }}>(не влияет на URL)</span></p>
+                            <p style={folderExampleStyle}>
+                                <span style={{ color: '#666' }}>src/app/(auth)/login/page.tsx</span> &rarr; <span style={{ color: '#d63384', fontWeight: 'bold' }}>/login</span> <span style={{ color: '#888' }}>(не /auth/login!)</span>
+                            </p>
+                            <p style={{ margin: '8px 0 0 0', fontSize: '0.95em', color: '#333' }}>
+                                Организует файлы и применяет общий <code style={codeInlineStyle}>layout.tsx</code> к группе страниц без лишнего сегмента в адресе.
+                            </p>
+                        </div>
+
+                        {/* 4. Исключена из роутинга */}
+                        <div style={folderBlockStyle('#ff4d4f')}>
+                            <p style={folderTitleStyle}>📁 <span style={{ color: '#d63384', fontFamily: 'monospace' }}>_private</span> &mdash; исключена из роутинга</p>
+                            <p style={folderExampleStyle}>
+                                <span style={{ color: '#666' }}>src/app/_components/Button.tsx</span> &rarr; <span style={{ color: '#cf1322', fontWeight: 'bold' }}>не создаёт страницу</span>
+                            </p>
+                            <p style={{ margin: '8px 0 0 0', fontSize: '0.95em', color: '#333' }}>
+                                Нижнее подчёркивание говорит Next.js: &laquo;это приватная папка, игнорируй её&raquo;.
+                            </p>
+                        </div>
+
+                        {/* 5. Параллельные роуты */}
+                        <div style={folderBlockStyle('#722ed1')}>
+                            <p style={folderTitleStyle}>📁 <span style={{ color: '#d63384', fontFamily: 'monospace' }}>@slot</span> &mdash; параллельные роуты</p>
+                            <p style={folderExampleStyle}>
+                                <span style={{ color: '#666' }}>src/app/@modal/login/page.tsx</span>
+                            </p>
+                            <p style={{ margin: '8px 0 0 0', fontSize: '0.95em', color: '#333' }}>
+                                Продвинутая фича &mdash; рендерит несколько страниц одновременно в одном layout. Например, модалка поверх текущей страницы без смены URL.
+                            </p>
+                        </div>
+
+                    </div>
+                </section>
 
             </div>
         </div>
@@ -217,4 +285,30 @@ const codeInlineStyle = {
     fontFamily: 'monospace',
     fontSize: '0.9em',
     color: '#c41d7f'
+};
+const folderBlockStyle = (borderColor: string): React.CSSProperties => ({
+    backgroundColor: '#fafbfc',
+    padding: '20px',
+    borderRadius: '8px',
+    borderLeft: `4px solid ${borderColor}`,
+    boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+    fontFamily: 'system-ui, sans-serif'
+});
+
+const folderTitleStyle: React.CSSProperties = {
+    fontWeight: '700',
+    margin: '0 0 10px 0',
+    color: '#1f2328',
+    fontSize: '16px'
+};
+
+const folderExampleStyle: React.CSSProperties = {
+    margin: 0,
+    fontSize: '14px',
+    fontFamily: 'monospace',
+    backgroundColor: '#fff',
+    padding: '8px 12px',
+    borderRadius: '6px',
+    display: 'inline-block',
+    border: '1px solid #e1e4e8'
 };
