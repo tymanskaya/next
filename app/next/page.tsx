@@ -87,6 +87,7 @@ export default function NextJsCheatSheet() {
                     <a href="#getParamsDetailed" style={anchorLinkStyle}>🔹 Извлечение параметров</a>
                     <a href="#routerMethods" style={anchorLinkStyle}>🔹 Навигация через useRouter</a>
                     <a href="#useClientDeep" style={anchorLinkStyle}>🔹 Под капотом use client</a>
+                    <a href="#serverRenderPractice" style={anchorLinkStyle}>🔹 Как сделать SSR</a>
 
                 </nav>
 
@@ -780,8 +781,61 @@ const isActive = (path: string) => pathname === path;`}
                             </table>
                         </div>
                     </div>
+                    {/* Подблок: Почему первый рендер на сервере критичен для SEO */}
+                    <div style={{
+                        backgroundColor: '#f0f5ff',
+                        padding: '15px',
+                        borderRadius: '8px',
+                        borderLeft: '4px solid #2f54eb',
+                        marginTop: '10px'
+                    }}>
+                        <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#1d39c4' }}>🎯 Зачем нужен первый рендер на сервере (Даже для Клиентских компонентов)?</p>
+                        <p style={{ fontSize: '0.95em', margin: 0, color: '#333', lineHeight: '1.5' }}>
+                            Основная причина первичной сборки разметки на сервере &mdash; это <b>Идеальное SEO (Поисковая оптимизация)</b> [INDEX].
+                            Поисковые роботы (Яндекс, Google) сканируют страницы мгновенно. Если бы Next.js отдавал пустую страницу-пустышку (как чистый React), роботы не увидели бы твоего текста [INDEX].
+                            Благодаря первому серверному запросу, робот сразу считывает полностью заполненный контентом HTML-код, индексирует сайт и выводит его на первые строчки поиска [INDEX].
+                        </p>
+                    </div>
+
                 </section>
 
+                {/* БЛОК 14: КАК СДЕЛАТЬ СЕРВЕРНЫЙ РЕНДЕР */}
+                <section id="serverRenderPractice" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>14. Практика: Как сделать рендеринг на сервере?</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p>В Next.js App Router все компоненты <b>по умолчанию являются серверными</b>. Тебе не нужно включать SSR вручную &mdash; достаточно просто не писать директиву <code style={codeInlineStyle}>&quot;use client&quot;;</code> вверху файла [INDEX].</p>
+
+                        {/* Шаблон серверного компонента */}
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Идеальный шаблон серверной страницы с запросом данных:</p>
+                            <pre style={codeSnippetStyle}>
+{`// src/app/movies/page.tsx
+// Компонент является асинхронным (async default)
+export default async function MoviesPage() {
+    // Запрос выполняется напрямую на сервере в момент клика пользователя
+    const res = await fetch('https://api.com', { cache: 'no-store' });
+    const movies = await res.json();
+
+    return (
+        <div>
+            <h1>Каталог фильмов (SSR)</h1>
+            <ul>
+                {movies.map(movie => <li key={movie.id}>{movie.title}</li>)}
+            </ul>
+        </div>
+    );
+}`}
+            </pre>
+                        </div>
+
+                        {/* Главное правило архитектуры */}
+                        <div style={{ backgroundColor: '#fff7e6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14', fontSize: '0.95em' }}>
+                            📌 <b>Золотое правило архитектуры Next.js:</b> <br/>
+                            Делай страницы серверными на 90%. Если внутри страницы нужна интерактивность (например, форма ввода или кнопка переключения табов), выноси её в отдельный изолированный клиентский компонент (папка <code style={codeInlineStyle}>_components</code>) и просто импортируй внутрь серверного макета. Это сохранит высокую скорость загрузки и идеальное SEO [INDEX].
+                        </div>
+                    </div>
+                </section>
 
             </div>
         </div>
