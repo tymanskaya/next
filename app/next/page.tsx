@@ -672,6 +672,21 @@ const isActive = (path: string) => pathname === path;`}
     </button>
 </li>`}
                     </pre>
+                                    {/* Предупреждение о внешних ссылках для prefetch */}
+                                    <div style={{
+                                        backgroundColor: '#fff1f0',
+                                        padding: '12px 15px',
+                                        borderRadius: '8px',
+                                        borderLeft: '4px solid #ff4d4f',
+                                        marginTop: '10px',
+                                        fontSize: '0.93em'
+                                    }}>
+                                        <p style={{ margin: '0 0 5px 0', fontWeight: 'bold', color: '#cf1322' }}>⚠️ Ограничение метода prefetch:</p>
+                                        <p style={{ margin: 0, color: '#444' }}>
+                                            Метод <code style={codeInlineStyle}>router.prefetch()</code> работает <b>строго с внутренними маршрутами</b> твоего приложения. Ты не можешь предзагрузить сторонний сайт (например, Google или YouTube). Этот инструмент ищет файлы внутри твоей папки <code style={codeInlineStyle}>src/app/</code>, чтобы скачать их серверный кэш для мгновенного переключения.
+                                        </p>
+                                    </div>
+
                                 </div>
 
                                 {/* 5. router.back */}
