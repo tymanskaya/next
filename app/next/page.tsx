@@ -86,9 +86,7 @@ export default function NextJsCheatSheet() {
                     <a href="#paramsTheory" style={anchorLinkStyle}>🔹 Теория: URI vs Query</a>
                     <a href="#getParamsDetailed" style={anchorLinkStyle}>🔹 Извлечение параметров</a>
                     <a href="#routerMethods" style={anchorLinkStyle}>🔹 Навигация через useRouter</a>
-
-
-
+                    <a href="#useClientDeep" style={anchorLinkStyle}>🔹 Под капотом use client</a>
 
                 </nav>
 
@@ -725,6 +723,64 @@ const isActive = (path: string) => pathname === path;`}
                     </div>
                 </section>
 
+                {/* БЛОК 13: КАК РАБОТАЕТ USE CLIENT ПОД КАПОТОМ */}
+                <section id="useClientDeep" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>13. Как на самом деле работает &quot;use client&quot;?</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p>Критически важное правило для понимания Next.js: <b>директива &quot;use client&quot; НЕ превращает компонент в чистый Client-Side (CSR)</b>. Страница всё равно проходит этап сборки на сервере.</p>
+
+                        {/* Двухэтапная схема */}
+                        <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#237804' }}>🔄 Процесс гибридного рендеринга (Гидратация):</p>
+                            <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.95em' }}>
+                                <li>
+                                    <b>Этап 1 (На сервере):</b> Next.js берет твой клиентский компонент и делает из него предварительный «сухой» HTML-каркас (Pre-rendering) [INDEX]. Пользователь мгновенно видит текст и блоки вместо белого экрана.
+                                </li>
+                                <li>
+                                    <b>Этап 2 (В браузере):</b> Браузер загружает JavaScript и накладывает его на готовый HTML-каркас. Этот процесс называется <b>Гидратацией (Hydration)</b> &mdash; интерфейс оживает, подключаются хуки <code style={codeInlineStyle}>useState</code> и начинают работать клики [INDEX].
+                                </li>
+                            </ol>
+                        </div>
+
+                        {/* Что разрешает директива */}
+                        <div style={{ backgroundColor: '#f5f5f5', padding: '12px', borderRadius: '8px', fontSize: '0.93em' }}>
+                            💡 <b>Запомни:</b> Строка <code style={codeInlineStyle}>&quot;use client&quot;;</code> &mdash; это просто граница (Boundary) между серверным и клиентским кодом [INDEX]. Она говорит Next.js: <i>«Этому файлу и всем его вложенным импортам разрешено использовать браузерные API (window, document, localStorage), обработчики событий (onClick, onChange, onSubmit) и хуки React (useState, useEffect, useReducer, кастомным хукам)»</i> [INDEX].
+                        </div>
+                    </div>
+                    {/* СВОДНАЯ ТАБЛИЦА ПРОЦЕССА */}
+                    <div>
+                        <p style={{ fontWeight: 'bold', margin: '10px 0 10px 0' }}>📋 Сводная таблица: Что и где происходит для &quot;use client&quot;</p>
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.92em', border: '1px solid #e1e4e8' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fafbfc', borderBottom: '2px solid #e1e4e8' }}>
+                                    <th style={tableHeaderStyle}>Этап разработки</th>
+                                    <th style={tableHeaderStyle}>Где выполняется код?</th>
+                                    <th style={tableHeaderStyle}>Что именно происходит?</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={tableCellStyle}><b>Первый визит (SSR)</b></td>
+                                    <td style={{ ...tableCellStyle, color: '#0050b3', fontWeight: '600' }}>🌐 На Сервере</td>
+                                    <td style={tableCellStyle}>Генерация начального HTML-каркаса страницы, чтобы пользователь не смотрел на белый экран [INDEX].</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={tableCellStyle}><b>Оживление (Hydration)</b></td>
+                                    <td style={{ ...tableCellStyle, color: '#722ed1', fontWeight: '600' }}>💻 В Браузере</td>
+                                    <td style={tableCellStyle}>Подключение хуков, запуск обработчиков событий (<code style={codeInlineStyle}>onClick</code>), &laquo;оживление&raquo; интерфейса [INDEX].</td>
+                                </tr>
+                                <tr>
+                                    <td style={tableCellStyle}><b>Повторные клики и роутинг</b></td>
+                                    <td style={{ ...tableCellStyle, color: '#237804', fontWeight: '600' }}>💻 В Браузере</td>
+                                    <td style={tableCellStyle}>Все дальнейшие изменения состояния (<code style={codeInlineStyle}>useState</code>), переключения табов и отрисовка новых блоков происходят <b>строго в браузере</b> [INDEX].</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
 
 
             </div>
