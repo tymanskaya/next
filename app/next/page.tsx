@@ -835,6 +835,120 @@ export default async function MoviesPage() {
                             Делай страницы серверными на 90%. Если внутри страницы нужна интерактивность (например, форма ввода или кнопка переключения табов), выноси её в отдельный изолированный клиентский компонент (папка <code style={codeInlineStyle}>_components</code>) и просто импортируй внутрь серверного макета. Это сохранит высокую скорость загрузки и идеальное SEO [INDEX].
                         </div>
                     </div>
+                    {/* ПОДБЛОК: ГЛУБОКИЙ РАЗБОР АСИНХРОННЫХ КОМПОНЕНТОВ */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '15px' }}>
+                        <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#1f2328' }}>🧠 Глубокий разбор: Почему компонент стал асинхронным?</p>
+                        <p style={{ fontSize: '0.95em', margin: 0, color: '#444' }}>
+                            В чистом React компоненты обязаны быть синхронными и сразу возвращать JSX [INDEX]. В серверных компонентах Next.js мы имеем право писать <code style={codeInlineStyle}>async/await</code> напрямую в теле функции [INDEX]. Это избавляет от необходимости писать тонны шаблонного кода с <code style={codeInlineStyle}>useEffect</code> и <code style={codeInlineStyle}>useState</code> для каждого запроса [INDEX].
+                        </p>
+
+                        {/* Сравнительная таблица запросов */}
+                        <div style={{ overflowX: 'auto', marginTop: '10px' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.92em', border: '1px solid #e1e4e8' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fafbfc', borderBottom: '2px solid #e1e4e8' }}>
+                                    <th style={tableHeaderStyle}>Где запрашиваем?</th>
+                                    <th style={tableHeaderStyle}>Как выглядит код?</th>
+                                    <th style={tableHeaderStyle}>Плюсы и особенности</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, color: '#237804', fontWeight: '600' }}>🌐 На Сервере (По умолчанию)</td>
+                                    <td style={{ ...tableCellStyle, fontFamily: 'monospace', fontSize: '0.85em', color: '#c41d7f' }}>
+                                        {`export default async function Page() {
+  const data = await fetch('...').then(res => res.json());
+  return <div>{data.title}</div>;
+}`}
+                                    </td>
+                                    <td style={tableCellStyle}>
+                                        Компонент помечается как <code style={codeInlineStyle}>async</code>. Запрос идет на сервере, в браузер летит готовый HTML [INDEX]. <b>Идеально для SEO</b> [INDEX].
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style={{ ...tableCellStyle, color: '#531dab', fontWeight: '600' }}>💻 На Клиенте (&quot;use client&quot;)</td>
+                                    <td style={{ ...tableCellStyle, fontFamily: 'monospace', fontSize: '0.85em', color: '#555' }}>
+                                        {`export default function Page() {
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    fetch('...').then(res => res.json()).then(setData);
+  }, []);
+  return <div>{data?.title}</div>;
+}`}
+                                    </td>
+                                    <td style={tableCellStyle}>
+                                        Делать сам компонент асинхронным <b>запрещено</b>! Данные тянутся из браузера пользователя через стандартные хуки [INDEX].
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {/* ПОДБЛОК: КАК ЭТО УСТРОЕНО ПОД КАПОТОМ (ПОШАГОВО) */}
+                    <div style={{
+                        marginTop: '25px',
+                        backgroundColor: '#f6f8fa',
+                        padding: '20px',
+                        borderRadius: '8px',
+                        border: '1px solid #e1e4e8'
+                    }}>
+                        <p style={{ fontWeight: 'bold', margin: '0 0 15px 0', color: '#24292f', fontSize: '1.05em' }}>
+                            🧱 Как это устроено под капотом (Пошагово):
+                        </p>
+
+                        <p style={{ fontSize: '0.95em', margin: '0 0 15px 0', color: '#57606a' }}>
+                            Когда пользователь переходит на асинхронную серверную страницу, за кулисами происходит следующий процесс:
+                        </p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', position: 'relative' }}>
+
+                            {/* Шаг 1 */}
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <div style={stepNumberStyle}>1</div>
+                                <div>
+                                    <p style={{ margin: '0 0 4px 0', fontWeight: '600' }}>Анализ компонента</p>
+                                    <p style={{ margin: 0, fontSize: '0.93em', color: '#444' }}>
+                                        Next.js видит ключевое слово <code style={codeInlineStyle}>async</code> у экспортируемого компонента страницы.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Шаг 2 */}
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <div style={stepNumberStyle}>2</div>
+                                <div>
+                                    <p style={{ margin: '0 0 4px 0', fontWeight: '600', color: '#1d39c4' }}>Ожидание данных (Пауза)</p>
+                                    <p style={{ margin: 0, fontSize: '0.93em', color: '#444' }}>
+                                        Сервер ставит рендеринг этой страницы &laquo;на паузу&raquo; и покорно ждет, пока полностью выполнится твой запрос <code style={codeInlineStyle}>await fetch()</code>.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Шаг 3 */}
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <div style={stepNumberStyle}>3</div>
+                                <div>
+                                    <p style={{ margin: '0 0 4px 0', fontWeight: '600' }}>Сборка HTML-строки</p>
+                                    <p style={{ margin: 0, fontSize: '0.93em', color: '#444' }}>
+                                        Сервер успешно получает данные из базы, подставляет их в JSX-верстку, превращает весь компонент в готовую текстовую HTML-строку и отправляет её по сети в браузер.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Шаг 4 */}
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <div style={stepNumberStyle}>4</div>
+                                <div>
+                                    <p style={{ margin: '0 0 4px 0', fontWeight: '600', color: '#237804' }}>Мгновенное отображение</p>
+                                    <p style={{ margin: 0, fontSize: '0.93em', color: '#444' }}>
+                                        Браузер пользователя получает уже <b>100% готовый HTML с текстом и данными</b>. Никаких повторных фоновых запросов с компьютера пользователя больше не происходит.
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </section>
 
             </div>
@@ -952,4 +1066,19 @@ const methodCodeStyle: React.CSSProperties = {
     alignSelf: 'flex-start',
     fontWeight: 'bold',
     border: '1px solid #e1e4e8'
+};
+const stepNumberStyle: React.CSSProperties = {
+    backgroundColor: '#fff',
+    border: '2px solid #e1e4e8',
+    color: '#57606a',
+    width: '24px',
+    height: '24px',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '12px',
+    fontWeight: '700',
+    flexShrink: 0,
+    marginTop: '2px'
 };
