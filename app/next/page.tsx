@@ -948,6 +948,57 @@ export default async function MoviesPage() {
 
                         </div>
                     </div>
+                    {/* ПОДБЛОК: КОГДА НУЖЕН СЕРВЕР, А КОГДА КЛИЕНТ ДЛЯ ЗАПРОСОВ */}
+                    <div style={{
+                        marginTop: '20px',
+                        backgroundColor: '#fff7e6',
+                        padding: '15px',
+                        borderRadius: '8px',
+                        borderLeft: '4px solid #faad14'
+                    }}>
+                        <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#856404' }}>🎯 Железное правило выбора архитектуры для запросов:</p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.95em', color: '#333' }}>
+                            <div>
+                                <b>1. Нужны данные при ЗАГРУЗКЕ страницы (Каталог, Профиль, Статья):</b> <br/>
+                                &rarr; Используй <b>Серверный компонент</b> (без <code style={codeInlineStyle}>&quot;use client&quot;</code>). Делай функцию асинхронной <code style={codeInlineStyle}>async/await</code> и забирай готовый HTML, идеальный для SEO [INDEX].
+                            </div>
+
+                            <div>
+                                <b>2. Нужен запрос после ДЕЙСТВИЯ пользователя (Клик на кнопку, ввод в поиск, отправка формы):</b> <br/>
+                                &rarr; Используй <b>Клиентский компонент</b> с директивой <code style={codeInlineStyle}>&quot;use client&quot;</code>. Обрабатывай события через <code style={codeInlineStyle}>onClick / onSubmit</code> и делай запросы через стандартные хуки [INDEX].
+                            </div>
+                        </div>
+                    </div>
+                    {/* ПОДБЛОК: 3 ПРЕИМУЩЕСТВА СЕРВЕРНЫХ ЗАПРОСОВ */}
+                    <div style={{
+                        marginTop: '20px',
+                        backgroundColor: '#f6ffed',
+                        padding: '15px 20px',
+                        borderRadius: '8px',
+                        borderLeft: '4px solid #52c41a'
+                    }}>
+                        <p style={{ fontWeight: 'bold', margin: '0 0 12px 0', color: '#237804', fontSize: '1.05em' }}>
+                            🔥 3 колоссальных преимущества запросов на сервере:
+                        </p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.95em', color: '#333' }}>
+                            <div>
+                                <b>1. Безопасность токенов:</b> <br/>
+                                Весь бэкенд-код и секретные API-ключи (например, пароли от базы данных или приватные токены OpenAI) выполняются и хранятся строго на сервере. Они физически не могут утечь в браузер к хакерам или обычным пользователям во вкладку Network [INDEX].
+                            </div>
+
+                            <div>
+                                <b>2. Минимум кода:</b> <br/>
+                                Полное отсутствие рутины. Тебе больше вообще не нужны громоздкие конструкции из хуков <code style={codeInlineStyle}>useEffect</code>, <code style={codeInlineStyle}>useState</code>, а также ручные флаги загрузки <code style={codeInlineStyle}>loading</code> и обработки ошибок. Достаточно написать лаконичную строчку: <code style={codeInlineStyle}>const data = await fetch()</code> [INDEX].
+                            </div>
+
+                            <div>
+                                <b>3. Идеальное SEO:</b> <br/>
+                                Роботы поисковых систем (Google, Яндекс) мгновенно считывают полностью заполненную реальным текстом и данными из базы HTML-страницу. Сайт легко индексируется и без проблем поднимается на первые строчки поисковой выдачи [INDEX].
+                            </div>
+                        </div>
+                    </div>
 
                 </section>
 
