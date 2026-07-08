@@ -83,6 +83,8 @@ export default function NextJsCheatSheet() {
                     <a href="#pageFile" style={anchorLinkStyle}>🔹 Системный файл page.tsx</a>
                     <a href="#layouts" style={anchorLinkStyle}>🔹 layout.tsx и template.tsx</a>
                     <a href="#images" style={anchorLinkStyle}>🔹 Оптимизация картинок</a>
+                    <a href="#paramsTheory" style={anchorLinkStyle}>🔹 Теория: URI vs Query</a>
+
 
 
 
@@ -411,6 +413,81 @@ export default function RootLayout({ children }) {
                     </div>
                 </section>
 
+                {/* БЛОК 10: ГЛУБОКИЙ РАЗБОР URI И QUERY ПАРАМЕТРОВ */}
+                <section id="paramsTheory" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>10. Что такое URI и Query параметры на самом деле?</h2>
+                    <p style={{ margin: '0 0 15px 0', color: '#555' }}>
+                        Разберём фундаментальную разницу на примере одного URL-адреса:
+                    </p>
+
+                    <div style={{
+                        backgroundColor: '#fafbfc',
+                        padding: '12px 16px',
+                        borderRadius: '8px',
+                        border: '1px solid #e1e4e8',
+                        fontFamily: 'monospace',
+                        fontSize: '0.95em',
+                        wordBreak: 'break-all',
+                        marginBottom: '20px'
+                    }}>
+                        https://kinopoisk.ru/movies/<span style={{ backgroundColor: '#e6f7ff', color: '#0050b3', padding: '2px 4px', borderRadius: '4px', fontWeight: 'bold' }}>inception</span>?<span style={{ backgroundColor: '#f6ffed', color: '#237804', padding: '2px 4px', borderRadius: '4px', fontWeight: 'bold' }}>page=2&amp;lang=ru</span>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+                        {/* Раздел: URI */}
+                        <div style={{ borderLeft: '4px solid #1890ff', paddingLeft: '15px' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 6px 0', color: '#0050b3', fontSize: '1.05em' }}>🔵 URI-параметры (Path params)</p>
+                            <p style={{ margin: '0 0 8px 0', fontSize: '0.95em' }}>Это часть самого пути &mdash; они вшиты прямо в адрес и ведут на конкретное место.</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '5px', fontSize: '0.93em', color: '#444' }}>
+                                <li><b>Однозначно идентифицируют ресурс:</b> указывают на конкретный фильм, конкретного пользователя или статью.</li>
+                                <li><b>Обязательны для структуры:</b> без них URL либо ведёт на совершенно другую страницу, либо вообще не существует (ошибка 404).</li>
+                                <li><b>В Next.js:</b> реализуются через папки в квадратных скобках, например <code style={codeInlineStyle}>[id]</code> или <code style={codeInlineStyle}>[slug]</code>.</li>
+                            </ul>
+                        </div>
+
+                        {/* Раздел: Query */}
+                        <div style={{ borderLeft: '4px solid #52c41a', paddingLeft: '15px' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 6px 0', color: '#237804', fontSize: '1.05em' }}>🟢 Query-параметры (Search params)</p>
+                            <p style={{ margin: '0 0 8px 0', fontSize: '0.95em' }}>Это дополнительные динамические настройки и фильтры, которые пишутся в конце адреса.</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '5px', fontSize: '0.93em', color: '#444' }}>
+                                <li><b>Синтаксис:</b> всегда идут строго после знака вопроса <code style={codeInlineStyle}>?</code> и разделяются между собой амперсандом <code style={codeInlineStyle}>&amp;</code>.</li>
+                                <li><b>Не меняют страницу:</b> они лишь уточняют, сортируют или фильтруют итоговый результат, но глобально пользователь остаётся на том же самом макете.</li>
+                                <li><b>Необязательны:</b> их можно полностью стереть из адресной строки &mdash; страница всё равно продолжит успешно работать.</li>
+                                <li><b>Используются для:</b> поиска, пагинации (номеров страниц), фильтров каталога и сортировок по цене/дате.</li>
+                            </ul>
+                        </div>
+
+                        {/* Раздел: Аналогия из жизни */}
+                        <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #faad14', marginTop: '5px' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#856404' }}>🏠 Прекрасная аналогия из реальной жизни:</p>
+                            <p style={{ fontSize: '0.95em', margin: '0 0 10px 0' }}>Представь стандартный адрес для курьера доставки:</p>
+
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.92em', backgroundColor: '#fff', borderRadius: '6px', overflow: 'hidden', border: '1px solid #ffe58f' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fffbe6', borderBottom: '1px solid #ffe58f' }}>
+                                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: '700' }}>Тип параметра</th>
+                                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: '700' }}>Пример из жизни</th>
+                                    <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: '700' }}>Архитектурный смысл</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ borderBottom: '1px solid #ffe58f' }}>
+                                    <td style={{ padding: '8px 12px', color: '#0050b3', fontWeight: '600' }}>URI-параметр</td>
+                                    <td style={{ padding: '8px 12px' }}>ул. Ленина, дом 5</td>
+                                    <td style={{ padding: '8px 12px', color: '#555' }}>Находит конкретный физический объект (здание) в городе.</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ padding: '8px 12px', color: '#237804', fontWeight: '600' }}>Query-параметр</td>
+                                    <td style={{ padding: '8px 12px', fontFamily: 'monospace' }}>этаж=3&amp;квартира=12</td>
+                                    <td style={{ padding: '8px 12px', color: '#555' }}>Уточняет навигацию курьера уже внутри этого конкретного объекта.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </section>
 
             </div>
         </div>
