@@ -84,6 +84,7 @@ export default function NextJsCheatSheet() {
                     <a href="#layouts" style={anchorLinkStyle}>🔹 layout.tsx и template.tsx</a>
                     <a href="#images" style={anchorLinkStyle}>🔹 Оптимизация картинок</a>
                     <a href="#paramsTheory" style={anchorLinkStyle}>🔹 Теория: URI vs Query</a>
+                    <a href="#getParamsDetailed" style={anchorLinkStyle}>🔹 Извлечение параметров</a>
                     <a href="#routerMethods" style={anchorLinkStyle}>🔹 Навигация через useRouter</a>
 
 
@@ -489,7 +490,88 @@ export default function RootLayout({ children }) {
 
                     </div>
                 </section>
-                {/* БЛОК 11: ПРОГРАММНАЯ НАВИГАЦИЯ И USEROUTER */}
+                {/* БЛОК 11: КАК ДОСТАТЬ ПАРАМЕТРЫ И ЗАЧЕМ ЭТО НУЖНО */}
+                <section id="getParamsDetailed" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>12. Как достать URI и Query параметры и зачем они нужны</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+                        {/* Краткая суть */}
+                        <p style={{ margin: 0 }}>
+                            <b>URI-параметры</b> идентифицируют конкретный объект на сервере, а <b>Query-параметры</b> фильтруют, ищут или сортируют данные внутри этого объекта, не меняя саму страницу.
+                        </p>
+
+                        {/* СПОСОБ 1: НА СЕРВЕРЕ */}
+                        <div style={{ backgroundColor: '#f0f5ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #2f54eb' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#1d39c4' }}>🌐 Способ 1: На сервере (Server Components в page.tsx):</p>
+                            <p style={{ fontSize: '0.95em', margin: '0 0 10px 0' }}>
+                                Параметры приходят автоматически в свойства (props) файла <code style={codeInlineStyle}>page.tsx</code> [INDEX].
+                                <b> Критически важно:</b> начиная с Next.js 15, они являются асинхронными (Promise), поэтому перед ними обязательно нужно писать <b>await</b> [INDEX]!
+                            </p>
+
+                            <pre style={codeSnippetStyle}>
+{`// src/app/movies/[id]/page.tsx
+interface PageProps {
+    params: Promise<{ id: string }>; // Из названия папки [id]
+    searchParams: Promise<{ [key: string]: string | undefined }>; // Из ?page=2
+}
+
+export default async function MoviePage({ params, searchParams }: PageProps) {
+    // Раскрываем асинхронные параметры через await
+    const { id } = await params;
+    const { page, lang } = await searchParams;
+
+    return (
+        <div>
+            <p>Ищем в базе фильм с ID: {id}</p>
+            <p>Фильтруем: страница {page || 1}, язык {lang || 'ru'}</p>
+        </div>
+    );
+}`}
+            </pre>
+                        </div>
+
+                        {/* СПОСОБ 2: НА КЛИЕНТЕ */}
+                        <div style={{ backgroundColor: '#f9f0ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #722ed1' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#531dab' }}>💻 Способ 2: На клиенте (Client Components с &quot;use client&quot;):</p>
+                            <p style={{ fontSize: '0.95em', margin: '0 0 10px 0' }}>
+                                Внутри интерактивных кнопок, форм или виджетов пропсы страницы недоступны [INDEX]. Вместо них используются встроенные хуки из пакета <code style={codeInlineStyle}>next/navigation</code> [INDEX].
+                            </p>
+
+                            <pre style={codeSnippetStyle}>
+{`"use client";
+
+import { useParams, useSearchParams } from 'next/navigation';
+
+export default function ClientWidget() {
+    // 1. Достаем URI (из папки [id])
+    const params = useParams();
+    const id = params.id; 
+
+    // 2. Достаем Query (всё, что после знака ?)
+    const searchParams = useSearchParams();
+    const page = searchParams.get('page'); // Используем метод .get()
+    const lang = searchParams.get('lang');
+
+    return <p>ID: {id}, Страница: {page}, Язык: {lang}</p>;
+}`}
+            </pre>
+                        </div>
+
+                        {/* ПОЛЕЗНЫЕ МЕТОДЫ SEARCHPARAMS */}
+                        <div style={{ backgroundColor: '#f5f5f5', padding: '12px', borderRadius: '8px', fontSize: '0.93em' }}>
+                            💡 <b>Полезные встроенные методы клиентского <code style={codeInlineStyle}>useSearchParams()</code>:</b>
+                            <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <li><code style={codeInlineStyle}>searchParams.get(&apos;key&apos;)</code> &mdash; возвращает первое найденное значение для этого ключа [INDEX].</li>
+                                <li><code style={codeInlineStyle}>searchParams.has(&apos;key&apos;)</code> &mdash; возвращает <code style={codeInlineStyle}>true/false</code>, проверяя, передан ли параметр в URL [INDEX].</li>
+                                <li><code style={codeInlineStyle}>searchParams.getAll(&apos;tag&apos;)</code> &mdash; вернет массив, если параметров несколько (например: <code style={codeInlineStyle}>?tag=js&amp;tag=react</code>) [INDEX].</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </section>
+
+                {/* БЛОК 12: ПРОГРАММНАЯ НАВИГАЦИЯ И USEROUTER */}
                 <section id="routerMethods" style={sectionCardStyle}>
                     <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>11. Навигация в коде: хуки useRouter и usePathname</h2>
                     <p style={{ margin: '0 0 15px 0', color: '#555' }}>
