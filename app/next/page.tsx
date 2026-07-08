@@ -84,6 +84,7 @@ export default function NextJsCheatSheet() {
                     <a href="#layouts" style={anchorLinkStyle}>🔹 layout.tsx и template.tsx</a>
                     <a href="#images" style={anchorLinkStyle}>🔹 Оптимизация картинок</a>
                     <a href="#paramsTheory" style={anchorLinkStyle}>🔹 Теория: URI vs Query</a>
+                    <a href="#routerMethods" style={anchorLinkStyle}>🔹 Навигация через useRouter</a>
 
 
 
@@ -488,6 +489,69 @@ export default function RootLayout({ children }) {
 
                     </div>
                 </section>
+                {/* БЛОК 11: ПРОГРАММНАЯ НАВИГАЦИЯ И USEROUTER */}
+                <section id="routerMethods" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>11. Навигация в коде: хуки useRouter и usePathname</h2>
+                    <p style={{ margin: '0 0 15px 0', color: '#555' }}>
+                        В Next.js для перехода по страницам и отслеживания текущего URL используются встроенные клиентские хуки.
+                        <b> Важно:</b> импорт всегда должен идти строго из <code style={codeInlineStyle}>&quot;next/navigation&quot;</code>.
+                    </p>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+                        {/* Блок: Отслеживание активных ссылок */}
+                        <div style={{ backgroundColor: '#e6f7ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #1890ff' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 5px 0', color: '#0050b3' }}>🔍 Динамическое определение активного пути:</p>
+                            <p style={{ fontSize: '0.95em', margin: '0 0 8px 0' }}>
+                                Хук <code style={codeInlineStyle}>usePathname()</code> возвращает строку с текущим адресом (например, <code style={codeInlineStyle}>/git</code>). С его помощью создаётся функция проверки активности ссылки для подсветки пунктов меню:
+                            </p>
+                            <pre style={codeSnippetStyle}>
+{`const pathname = usePathname();
+const isActive = (path: string) => pathname === path;`}
+            </pre>
+                        </div>
+
+                        {/* Блок: Разбор всех методов useRouter */}
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0' }}>🛠️ Разбор всех методов объекта router (<code style={codeInlineStyle}>const router = useRouter()</code>):</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+                                <div style={methodRowStyle}>
+                                    <code style={methodCodeStyle}>router.push(path, options?)</code>
+                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95em' }}>
+                                        Перебрасывает пользователя на новый адрес, добавляя его в историю браузера. Кнопка &laquo;Назад&raquo; на компьютере будет работать.
+                                    </p>
+                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.9em', color: '#666', fontStyle: 'italic' }}>
+                                        Опция скролла: <code style={codeInlineStyle}>{`router.push("/profile/123", { scroll: false })`}</code> &mdash; отключает автоматическую прокрутку страницы наверх при переходе.
+                                    </p>
+                                </div>
+
+                                <div style={methodRowStyle}>
+                                    <code style={methodCodeStyle}>router.replace(path, options?)</code>
+                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95em' }}>
+                                        Перезаписывает (заменяет) текущий адрес в истории браузера на новый. Пользователь <b>не сможет</b> вернуться назад на предыдущую страницу.
+                                    </p>
+                                </div>
+
+                                <div style={methodRowStyle}>
+                                    <code style={methodCodeStyle}>router.back()</code>
+                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95em' }}>
+                                        Аналог кнопки Назад в браузере. Возвращает пользователя на одну страницу назад по его истории переходов.
+                                    </p>
+                                </div>
+
+                                <div style={methodRowStyle}>
+                                    <code style={methodCodeStyle}>router.forward()</code>
+                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95em' }}>
+                                        Аналог кнопки Вперёд в браузере. Перемещает пользователя на одну страницу вперёд, если он до этого возвращался назад.
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
 
             </div>
         </div>
@@ -584,5 +648,24 @@ const codeSnippetStyle: React.CSSProperties = {
     overflowX: 'auto',
     margin: 0,
     whiteSpace: 'pre-wrap',
+    border: '1px solid #e1e4e8'
+};
+const methodRowStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+    paddingBottom: '12px',
+    borderBottom: '1px solid #f0f0f0'
+};
+
+const methodCodeStyle: React.CSSProperties = {
+    backgroundColor: '#fafbfc',
+    padding: '4px 8px',
+    borderRadius: '4px',
+    fontFamily: 'monospace',
+    fontSize: '14px',
+    color: '#c41d7f',
+    alignSelf: 'flex-start',
+    fontWeight: 'bold',
     border: '1px solid #e1e4e8'
 };
