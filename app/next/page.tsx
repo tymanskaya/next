@@ -493,7 +493,7 @@ export default function RootLayout({ children }) {
                 <section id="routerMethods" style={sectionCardStyle}>
                     <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>11. Навигация в коде: хуки useRouter и usePathname</h2>
                     <p style={{ margin: '0 0 15px 0', color: '#555' }}>
-                        В Next.js для перехода по страницам и отслеживания текущего URL используются встроенные клиентские хуки.
+                        В Next.js для перехода по страницам, предзагрузки данных и отслеживания текущего URL используются встроенные клиентские хуки.
                         <b> Важно:</b> импорт всегда должен идти строго из <code style={codeInlineStyle}>&quot;next/navigation&quot;</code>.
                     </p>
 
@@ -511,40 +511,115 @@ const isActive = (path: string) => pathname === path;`}
             </pre>
                         </div>
 
-                        {/* Блок: Разбор всех методов useRouter */}
+                        {/* Блок: Разбор всех методов useRouter с примерами верстки */}
                         <div>
-                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0' }}>🛠️ Разбор всех методов объекта router (<code style={codeInlineStyle}>const router = useRouter()</code>):</p>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 15px 0' }}>🛠️ Разбор всех методов объекта router и примеры кнопок в JSX:</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
+                                {/* 1. router.push */}
                                 <div style={methodRowStyle}>
                                     <code style={methodCodeStyle}>router.push(path, options?)</code>
-                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95em' }}>
+                                    <p style={{ margin: '4px 0 6px 0', fontSize: '0.95em' }}>
                                         Перебрасывает пользователя на новый адрес, добавляя его в историю браузера. Кнопка &laquo;Назад&raquo; на компьютере будет работать.
                                     </p>
-                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.9em', color: '#666', fontStyle: 'italic' }}>
-                                        Опция скролла: <code style={codeInlineStyle}>{`router.push("/profile/123", { scroll: false })`}</code> &mdash; отключает автоматическую прокрутку страницы наверх при переходе.
-                                    </p>
+                                    <pre style={codeSnippetStyle}>
+{`<li>
+    <button 
+        onClick={() => router.push("/git")} 
+        className={\`\${styles.link} \${isActive("/git") ? styles.active : ""}\`}
+    >
+        GIT
+    </button>
+</li>
+
+// Пример с отключением скролла наверх при переходе:
+<button onClick={() => router.push("/profile/123", { scroll: false })}>
+    Профиль
+</button>`}
+                    </pre>
                                 </div>
 
+                                {/* 2. router.replace */}
                                 <div style={methodRowStyle}>
                                     <code style={methodCodeStyle}>router.replace(path, options?)</code>
-                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95em' }}>
+                                    <p style={{ margin: '4px 0 6px 0', fontSize: '0.95em' }}>
                                         Перезаписывает (заменяет) текущий адрес в истории браузера на новый. Пользователь <b>не сможет</b> вернуться назад на предыдущую страницу.
                                     </p>
+                                    <pre style={codeSnippetStyle}>
+{`<li>
+    <button 
+        onClick={() => router.replace("/dashboard")} 
+        className={\`\${styles.link} \${isActive("/dashboard") ? styles.active : ""}\`}
+    >
+        Панель управления
+    </button>
+</li>`}
+                    </pre>
                                 </div>
 
+                                {/* 3. router.refresh */}
+                                <div style={methodRowStyle}>
+                                    <code style={methodCodeStyle}>router.refresh()</code>
+                                    <p style={{ margin: '4px 0 6px 0', fontSize: '0.95em' }}>
+                                        Обновляет текущий маршрут. Он заново делает запросы к серверу за данными и перерендеривает Серверные компоненты (Server Components), при этом **полностью сохраняя текущее состояние клиентских хуков** (<code style={codeInlineStyle}>useState</code>, положение скролла, фокус ввода в инпутах не сбросятся). Полезно для мгновенного обновления списков после добавления новой записи.
+                                    </p>
+                                    <pre style={codeSnippetStyle}>
+{`<li>
+    <button onClick={() => router.refresh()} className={styles.link}>
+        Обновить данные
+    </button>
+</li>`}
+                    </pre>
+                                </div>
+
+                                {/* 4. router.prefetch */}
+                                <div style={methodRowStyle}>
+                                    <code style={methodCodeStyle}>router.prefetch(path)</code>
+                                    <p style={{ margin: '4px 0 6px 0', fontSize: '0.95em' }}>
+                                        Программный **Prefetching (предзагрузка)**. Говорит Next.js заранее незаметно скачать в кэш браузера код и данные указанной страницы. Когда пользователь реально нажмет кнопку перехода, страница откроется мгновенно без ожидания сети. Встроенный тег <code style={codeInlineStyle}>&lt;Link&gt;</code> делает это автоматически, но метод <code style={codeInlineStyle}>router.prefetch()</code> незаменим, если навигация завязана на кастомные кнопки или логику.
+                                    </p>
+                                    <pre style={codeSnippetStyle}>
+{`<li>
+    {/* Загрузит код страницы '/profile' заранее, например, при наведении мыши */}
+    <button 
+        onMouseEnter={() => router.prefetch("/profile")} 
+        onClick={() => router.push("/profile")} 
+        className={styles.link}
+    >
+        Профиль (Быстрый вход)
+    </button>
+</li>`}
+                    </pre>
+                                </div>
+
+                                {/* 5. router.back */}
                                 <div style={methodRowStyle}>
                                     <code style={methodCodeStyle}>router.back()</code>
-                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95em' }}>
-                                        Аналог кнопки Назад в браузере. Возвращает пользователя на одну страницу назад по его истории переходов.
+                                    <p style={{ margin: '4px 0 6px 0', fontSize: '0.95em' }}>
+                                        Аналог кнопки &laquo;Назад&raquo; в браузере. Возвращает пользователя на одну страницу назад по его истории переходов.
                                     </p>
+                                    <pre style={codeSnippetStyle}>
+{`<li>
+    <button onClick={() => router.back()} className={styles.link}>
+        Back
+    </button>
+</li>`}
+                    </pre>
                                 </div>
 
+                                {/* 6. router.forward */}
                                 <div style={methodRowStyle}>
                                     <code style={methodCodeStyle}>router.forward()</code>
-                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.95em' }}>
-                                        Аналог кнопки Вперёд в браузере. Перемещает пользователя на одну страницу вперёд, если он до этого возвращался назад.
+                                    <p style={{ margin: '4px 0 6px 0', fontSize: '0.95em' }}>
+                                        Аналог кнопки &laquo;Вперёд&raquo; в браузере. Перемещает пользователя на одну страницу вперёд, если он до этого возвращался назад.
                                     </p>
+                                    <pre style={codeSnippetStyle}>
+{`<li>
+    <button onClick={() => router.forward()} className={styles.link}>
+        Forward
+    </button>
+</li>`}
+                    </pre>
                                 </div>
 
                             </div>
@@ -552,6 +627,8 @@ const isActive = (path: string) => pathname === path;`}
 
                     </div>
                 </section>
+
+
 
             </div>
         </div>
