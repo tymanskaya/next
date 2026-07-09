@@ -88,6 +88,7 @@ export default function NextJsCheatSheet() {
                     <a href="#routerMethods" style={anchorLinkStyle}>🔹 Навигация через useRouter</a>
                     <a href="#useClientDeep" style={anchorLinkStyle}>🔹 Под капотом use client</a>
                     <a href="#loadingFile" style={anchorLinkStyle}>🔹 loading.js</a>
+                    <a href="#useWithSuspense" style={anchorLinkStyle}>🔹 use() + Suspense</a>
                     <a href="#serverRenderPractice" style={anchorLinkStyle}>🔹 Как сделать SSR</a>
 
                 </nav>
@@ -919,9 +920,176 @@ export default function Loading() {
                     </div>
                 </section>
 
-                {/* БЛОК 15: КАК СДЕЛАТЬ СЕРВЕРНЫЙ РЕНДЕР */}
+                {/* БЛОК 15: USE И SUSPENSE */}
+                <section id="useWithSuspense" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>15. Хук use() и связка с Suspense</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p style={{ margin: 0, color: '#444' }}>
+                            <code style={codeInlineStyle}>use()</code> &mdash; это React API для чтения асинхронного значения прямо во время рендера. В Next.js он особенно важен, потому что <code style={codeInlineStyle}>params</code> и <code style={codeInlineStyle}>searchParams</code> в <code style={codeInlineStyle}>page.tsx</code> являются <b>Promise</b>. В серверной странице их обычно раскрывают через <code style={codeInlineStyle}>await</code>, а в клиентской странице можно раскрыть через <code style={codeInlineStyle}>use()</code>.
+                        </p>
+
+                        <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#237804' }}>🧠 Главная идея:</p>
+                            <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95em' }}>
+                                <li>Компонент вызывает <code style={codeInlineStyle}>use(promise)</code>.</li>
+                                <li>Если Promise уже выполнен, React сразу возвращает готовое значение.</li>
+                                <li>Если Promise ещё выполняется, React временно приостанавливает этот компонент.</li>
+                                <li>Ближайший родительский <code style={codeInlineStyle}>&lt;Suspense fallback=...&gt;</code> показывает запасной UI.</li>
+                                <li>Когда Promise завершается, React продолжает рендер и заменяет fallback настоящим содержимым.</li>
+                            </ol>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f0f5ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #2f54eb' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#1d39c4' }}>📌 Серверный вариант: async/await проще</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/blog/[slug]/page.tsx
+export default async function Page({
+    params,
+    searchParams,
+}: {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ page?: string }>;
+}) {
+    const { slug } = await params;
+    const { page = '1' } = await searchParams;
+
+    return <h1>Пост: {slug}, страница: {page}</h1>;
+}`}
+                            </pre>
+                            <p style={{ fontSize: '0.95em', margin: '10px 0 0 0', color: '#444' }}>
+                                В Server Component можно сделать компонент <code style={codeInlineStyle}>async</code> и спокойно использовать <code style={codeInlineStyle}>await</code>. Это самый прямой и читаемый путь для страниц без клиентской интерактивности.
+                            </p>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f9f0ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #722ed1' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#531dab' }}>💻 Клиентский вариант: use() читает Promise</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/shop/page.tsx
+"use client";
+
+import { use } from 'react';
+
+export default function Page({
+    searchParams,
+}: {
+    searchParams: Promise<{ query?: string; page?: string }>;
+}) {
+    const { query = '', page = '1' } = use(searchParams);
+
+    return (
+        <section>
+            <h1>Каталог</h1>
+            <p>Поиск: {query || 'без фильтра'}</p>
+            <p>Страница: {page}</p>
+        </section>
+    );
+}`}
+                            </pre>
+                            <p style={{ fontSize: '0.95em', margin: '10px 0 0 0', color: '#444' }}>
+                                Client Component нельзя объявлять как <code style={codeInlineStyle}>async function Page()</code>. Поэтому, если пропс уже пришёл как Promise, его раскрывают через <code style={codeInlineStyle}>use(searchParams)</code>.
+                            </p>
+                        </div>
+
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Связка с ручным Suspense:</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/users/page.tsx
+import { Suspense } from 'react';
+import UsersList from './UsersList';
+
+async function getUsers() {
+    const res = await fetch('https://api.com/users');
+    return res.json();
+}
+
+export default function Page() {
+    const usersPromise = getUsers();
+
+    return (
+        <Suspense fallback={<p>Загружаем пользователей...</p>}>
+            <UsersList usersPromise={usersPromise} />
+        </Suspense>
+    );
+}`}
+                            </pre>
+                            <pre style={{ ...codeSnippetStyle, marginTop: '10px' }}>
+{`// app/users/UsersList.tsx
+"use client";
+
+import { use } from 'react';
+
+type User = {
+    id: string;
+    name: string;
+};
+
+export default function UsersList({
+    usersPromise,
+}: {
+    usersPromise: Promise<User[]>;
+}) {
+    const users = use(usersPromise);
+
+    return (
+        <ul>
+            {users.map((user) => (
+                <li key={user.id}>{user.name}</li>
+            ))}
+        </ul>
+    );
+}`}
+                            </pre>
+                        </div>
+
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.92em', border: '1px solid #e1e4e8' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fafbfc', borderBottom: '2px solid #e1e4e8' }}>
+                                    <th style={tableHeaderStyle}>Инструмент</th>
+                                    <th style={tableHeaderStyle}>Что делает</th>
+                                    <th style={tableHeaderStyle}>Когда использовать</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, color: '#237804', fontWeight: '600' }}>await</td>
+                                    <td style={tableCellStyle}>Ждёт Promise внутри async Server Component.</td>
+                                    <td style={tableCellStyle}>Обычная серверная страница или серверный компонент.</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, color: '#531dab', fontWeight: '600' }}>use(promise)</td>
+                                    <td style={tableCellStyle}>Читает Promise во время рендера и может приостановить компонент.</td>
+                                    <td style={tableCellStyle}>Client Component, который получил Promise через props.</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ ...tableCellStyle, color: '#1d39c4', fontWeight: '600' }}>&lt;Suspense&gt;</td>
+                                    <td style={tableCellStyle}>Показывает fallback, пока вложенный компонент suspended.</td>
+                                    <td style={tableCellStyle}>Когда нужно контролировать, какая часть UI ждёт данные.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#856404' }}>⚠️ Частая ошибка:</p>
+                            <p style={{ fontSize: '0.95em', margin: 0, color: '#444' }}>
+                                Не создавай новый Promise прямо в теле клиентского компонента на каждом рендере и сразу не передавай его в <code style={codeInlineStyle}>use()</code>. Так можно получить бесконечные повторные ожидания. Promise должен быть стабильным: прийти из Server Component через props, быть созданным выше по дереву или управляться через подходящий кэш/фреймворк-механизм.
+                            </p>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f6f8fa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #24292f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#24292f' }}>Короткая формула:</p>
+                            <p style={{ fontSize: '0.95em', margin: 0, color: '#444' }}>
+                                <code style={codeInlineStyle}>use()</code> &mdash; это точка чтения Promise, а <code style={codeInlineStyle}>&lt;Suspense&gt;</code> &mdash; место, где пользователь видит fallback, пока Promise не готов. Без Suspense ожидание всё равно произойдёт, но ты потеряешь точный контроль над тем, какой loading UI показать.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* БЛОК 16: КАК СДЕЛАТЬ СЕРВЕРНЫЙ РЕНДЕР */}
                 <section id="serverRenderPractice" style={sectionCardStyle}>
-                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>15. Практика: Как сделать рендеринг на сервере?</h2>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>16. Практика: Как сделать рендеринг на сервере?</h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <p>В Next.js App Router все компоненты <b>по умолчанию являются серверными</b>. Тебе не нужно включать SSR вручную &mdash; достаточно просто не писать директиву <code style={codeInlineStyle}>&quot;use client&quot;;</code> вверху файла [INDEX].</p>
