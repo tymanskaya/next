@@ -87,6 +87,7 @@ export default function NextJsCheatSheet() {
                     <a href="#getParamsDetailed" style={anchorLinkStyle}>🔹 Извлечение параметров</a>
                     <a href="#routerMethods" style={anchorLinkStyle}>🔹 Навигация через useRouter</a>
                     <a href="#useClientDeep" style={anchorLinkStyle}>🔹 Под капотом use client</a>
+                    <a href="#loadingFile" style={anchorLinkStyle}>🔹 loading.js</a>
                     <a href="#serverRenderPractice" style={anchorLinkStyle}>🔹 Как сделать SSR</a>
 
                 </nav>
@@ -799,9 +800,128 @@ const isActive = (path: string) => pathname === path;`}
 
                 </section>
 
-                {/* БЛОК 14: КАК СДЕЛАТЬ СЕРВЕРНЫЙ РЕНДЕР */}
+                {/* БЛОК 14: LOADING.JS */}
+                <section id="loadingFile" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>14. Системный файл loading.js: экран загрузки для сегмента</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p style={{ margin: 0, color: '#444' }}>
+                            <code style={codeInlineStyle}>loading.js</code> или <code style={codeInlineStyle}>loading.tsx</code> &mdash; это специальный файл App Router, который показывает пользователю временный интерфейс, пока новая страница или вложенный сегмент маршрута ещё загружается. Внутри Next.js он автоматически создаёт границу <code style={codeInlineStyle}>&lt;Suspense&gt;</code> вокруг содержимого сегмента.
+                        </p>
+
+                        <div style={{ backgroundColor: '#f0f5ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #2f54eb' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#1d39c4' }}>📁 Куда класть loading.tsx:</p>
+                            <pre style={codeSnippetStyle}>
+{`app/
+  dashboard/
+    loading.tsx   // показывается, пока грузится /dashboard
+    page.tsx
+
+  profile/
+    [id]/
+      loading.tsx // показывается, пока грузится /profile/123
+      page.tsx`}
+                            </pre>
+                            <p style={{ fontSize: '0.95em', margin: '10px 0 0 0', color: '#444' }}>
+                                Файл работает только для своей папки и дочерних сегментов. Если положить его в <code style={codeInlineStyle}>app/dashboard/loading.tsx</code>, он станет fallback UI для <code style={codeInlineStyle}>dashboard/page.tsx</code> и маршрутов ниже.
+                            </p>
+                        </div>
+
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Минимальный пример:</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/dashboard/loading.tsx
+export default function Loading() {
+    return <p>Загрузка...</p>;
+}`}
+                            </pre>
+                        </div>
+
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Более полезный вариант со скелетоном:</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/dashboard/loading.tsx
+export default function Loading() {
+    return (
+        <main style={{ padding: '24px' }}>
+            <div style={{ width: '220px', height: '28px', background: '#e5e7eb', borderRadius: '6px' }} />
+            <div style={{ marginTop: '16px', display: 'grid', gap: '12px' }}>
+                <div style={{ height: '80px', background: '#f3f4f6', borderRadius: '8px' }} />
+                <div style={{ height: '80px', background: '#f3f4f6', borderRadius: '8px' }} />
+                <div style={{ height: '80px', background: '#f3f4f6', borderRadius: '8px' }} />
+            </div>
+        </main>
+    );
+}`}
+                            </pre>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#237804' }}>🔄 Что происходит при переходе:</p>
+                            <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95em' }}>
+                                <li>Пользователь кликает на ссылку или вызывает <code style={codeInlineStyle}>router.push()</code>.</li>
+                                <li>Next.js сразу показывает UI из ближайшего <code style={codeInlineStyle}>loading.tsx</code>, если основной сегмент ещё не готов.</li>
+                                <li>Сервер продолжает рендерить настоящую страницу и постепенно стримит результат в браузер.</li>
+                                <li>Когда данные и разметка готовы, fallback автоматически заменяется настоящим содержимым.</li>
+                            </ol>
+                        </div>
+
+                        <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#856404' }}>⚠️ Важная граница ответственности:</p>
+                            <p style={{ fontSize: '0.95em', margin: '0 0 10px 0', color: '#444' }}>
+                                <code style={codeInlineStyle}>loading.tsx</code> автоматически оборачивает <code style={codeInlineStyle}>page.tsx</code>, <code style={codeInlineStyle}>not-found.tsx</code> и вложенные сегменты ниже. Но он <b>не оборачивает</b> <code style={codeInlineStyle}>layout.tsx</code>, <code style={codeInlineStyle}>template.tsx</code> и <code style={codeInlineStyle}>error.tsx</code> в той же папке.
+                            </p>
+                            <p style={{ fontSize: '0.95em', margin: 0, color: '#444' }}>
+                                Поэтому если долгий запрос находится прямо в <code style={codeInlineStyle}>layout.tsx</code>, экран загрузки может не появиться вовремя: навигация будет ждать, пока layout закончит работу. Обычно долгие запросы лучше переносить в <code style={codeInlineStyle}>page.tsx</code> или оборачивать конкретную тяжёлую часть layout в ручной <code style={codeInlineStyle}>&lt;Suspense&gt;</code>.
+                            </p>
+                        </div>
+
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.92em', border: '1px solid #e1e4e8' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fafbfc', borderBottom: '2px solid #e1e4e8' }}>
+                                    <th style={tableHeaderStyle}>Ситуация</th>
+                                    <th style={tableHeaderStyle}>Что использовать</th>
+                                    <th style={tableHeaderStyle}>Почему</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={tableCellStyle}>Нужно показать общий экран загрузки для всей страницы</td>
+                                    <td style={{ ...tableCellStyle, color: '#1d39c4', fontWeight: '600' }}>loading.tsx</td>
+                                    <td style={tableCellStyle}>Next.js сам создаст Suspense boundary вокруг сегмента.</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={tableCellStyle}>Нужно загрузить несколько блоков страницы независимо</td>
+                                    <td style={{ ...tableCellStyle, color: '#722ed1', fontWeight: '600' }}>Ручной &lt;Suspense&gt;</td>
+                                    <td style={tableCellStyle}>Каждый блок получит свой fallback и сможет появляться по мере готовности.</td>
+                                </tr>
+                                <tr>
+                                    <td style={tableCellStyle}>Нужно обработать ошибку загрузки</td>
+                                    <td style={{ ...tableCellStyle, color: '#cf1322', fontWeight: '600' }}>error.tsx</td>
+                                    <td style={tableCellStyle}><code style={codeInlineStyle}>loading.tsx</code> отвечает только за ожидание, а не за ошибки.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f6f8fa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #24292f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#24292f' }}>🧠 Что важно запомнить:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '7px', fontSize: '0.95em', color: '#444' }}>
+                                <li><code style={codeInlineStyle}>loading.tsx</code> не принимает пропсы.</li>
+                                <li>По умолчанию это Server Component, но при необходимости можно добавить <code style={codeInlineStyle}>&quot;use client&quot;</code>.</li>
+                                <li>Лучший loading UI &mdash; не просто текст, а skeleton, который похож на будущую страницу.</li>
+                                <li>Общие layout остаются интерактивными, пока новый сегмент догружается.</li>
+                                <li>При streaming сервер может уже начать отдавать HTML, поэтому статус ответа обычно остаётся <code style={codeInlineStyle}>200</code>.</li>
+                                <li>Если нужна гарантированно мгновенная клиентская навигация, одного <code style={codeInlineStyle}>loading.tsx</code> может быть недостаточно: в Next 16 для этого отдельно используется настройка instant navigation.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                {/* БЛОК 15: КАК СДЕЛАТЬ СЕРВЕРНЫЙ РЕНДЕР */}
                 <section id="serverRenderPractice" style={sectionCardStyle}>
-                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>14. Практика: Как сделать рендеринг на сервере?</h2>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>15. Практика: Как сделать рендеринг на сервере?</h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <p>В Next.js App Router все компоненты <b>по умолчанию являются серверными</b>. Тебе не нужно включать SSR вручную &mdash; достаточно просто не писать директиву <code style={codeInlineStyle}>&quot;use client&quot;;</code> вверху файла [INDEX].</p>
@@ -1009,15 +1129,6 @@ export default async function MoviesPage() {
 }
 
 // НАБОР СТИЛЕЙ ДЛЯ КОРРЕКТНОЙ СБОРКИ (Вставить в самый конец файла)
-const sidebarTitleStyle = {
-    fontSize: '11px',
-    fontWeight: '700',
-    color: '#8c95a0',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    margin: '0 0 10px 10px'
-};
-
 const anchorLinkStyle: React.CSSProperties = {
     display: 'block',
     padding: '8px 15px',
@@ -1036,13 +1147,6 @@ const sectionCardStyle = {
     borderRadius: '12px',
     boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
     scrollMarginTop: '40px'
-};
-
-const tableHeaderStyle = {
-    padding: '12px',
-    textAlign: 'left',
-    fontWeight: '700',
-    color: '#1f2328'
 };
 
 const tableCellStyle = {
