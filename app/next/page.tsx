@@ -90,6 +90,7 @@ export default function NextJsCheatSheet() {
                     <a href="#loadingFile" style={anchorLinkStyle}>🔹 loading.js</a>
                     <a href="#notFoundPage" style={anchorLinkStyle}>🔹 Кастомная 404</a>
                     <a href="#useWithSuspense" style={anchorLinkStyle}>🔹 use() + Suspense</a>
+                    <a href="#nextCaching" style={anchorLinkStyle}>🔹 Кэширование</a>
                     <a href="#serverRenderPractice" style={anchorLinkStyle}>🔹 Как сделать SSR</a>
 
                 </nav>
@@ -1218,9 +1219,240 @@ export default function UsersList({
                     </div>
                 </section>
 
-                {/* БЛОК 17: КАК СДЕЛАТЬ СЕРВЕРНЫЙ РЕНДЕР */}
+                {/* БЛОК 17: КЭШИРОВАНИЕ */}
+                <section id="nextCaching" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>17. Кэширование Next.js: динамические, статические страницы и revalidate</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p style={{ margin: 0, color: '#444' }}>
+                            Кэширование в Next.js отвечает на главный вопрос: <b>страницу нужно собирать один раз и переиспользовать или пересобирать под каждый запрос?</b> От этого зависят скорость, нагрузка на сервер и актуальность данных. В Next 16 есть новая модель <code style={codeInlineStyle}>Cache Components</code>, но в этом проекте она пока не включена в <code style={codeInlineStyle}>next.config.ts</code>, поэтому базово используются настройки <code style={codeInlineStyle}>fetch</code>, route segment config и revalidation API.
+                        </p>
+
+                        <div style={{ backgroundColor: '#fff7e6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#856404' }}>1.1. 🔄 Разница между режимами разработки и продакшена</p>
+                            <p style={{ fontSize: '0.95em', margin: '0 0 10px 0', color: '#444' }}>
+                                Поведение страниц и <code style={codeInlineStyle}>fetch</code>-запросов отличается в зависимости от режима запуска приложения. Это важно понимать, чтобы не перепутать удобное поведение в разработке с реальным поведением после сборки и деплоя.
+                            </p>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.95em', color: '#333' }}>
+                                <div>
+                                    <b>🧪 Режим разработки (<code style={codeInlineStyle}>npm run dev</code>):</b> <br/>
+                                    страницы всегда рендерятся on-demand и не кэшируются. Поэтому данные выглядят так, будто страница всегда динамическая: при обновлении или переходе ты сразу видишь свежий результат.
+                                </div>
+
+                                <div>
+                                    <b>🚀 Режим продакшена (<code style={codeInlineStyle}>npm run build</code> + <code style={codeInlineStyle}>npm run start</code>):</b> <br/>
+                                    Next.js применяет реальные правила кэширования. Запросы с <code style={codeInlineStyle}>force-cache</code>, <code style={codeInlineStyle}>revalidate</code> или <code style={codeInlineStyle}>use cache</code> могут быть сохранены и переиспользованы, а route может стать статическим или ISR-страницей.
+                                </div>
+
+                                <div>
+                                    <b>👉 Почему так сделано:</b> <br/>
+                                    development-режим нужен для быстрой обратной связи разработчика, а production-режим &mdash; для максимальной производительности за счёт кэширования и предварительной генерации там, где это безопасно.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.92em', border: '1px solid #e1e4e8' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fafbfc', borderBottom: '2px solid #e1e4e8' }}>
+                                    <th style={tableHeaderStyle}>Тип страницы</th>
+                                    <th style={tableHeaderStyle}>Когда рендерится</th>
+                                    <th style={tableHeaderStyle}>Для чего подходит</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, color: '#237804', fontWeight: '600' }}>Статическая</td>
+                                    <td style={tableCellStyle}>Заранее и потом отдаётся из кэша.</td>
+                                    <td style={tableCellStyle}>Документация, лендинги, статьи, каталоги с редкими изменениями.</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, color: '#1d39c4', fontWeight: '600' }}>ISR / revalidate</td>
+                                    <td style={tableCellStyle}>Отдаёт старую кэш-версию, а новую пересобирает по расписанию или событию.</td>
+                                    <td style={tableCellStyle}>Блоги, товары, новости, где данные меняются, но не каждую секунду.</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ ...tableCellStyle, color: '#cf1322', fontWeight: '600' }}>Динамическая</td>
+                                    <td style={tableCellStyle}>На каждый запрос пользователя.</td>
+                                    <td style={tableCellStyle}>Личный кабинет, корзина, админка, данные из cookies/headers/session.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#237804' }}>🟢 Статическая страница: максимум скорости</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/about/page.tsx
+export default async function AboutPage() {
+    const res = await fetch('https://api.com/about', {
+        cache: 'force-cache',
+    });
+    const data = await res.json();
+
+    return <main>{data.text}</main>;
+}`}
+                            </pre>
+                            <p style={{ fontSize: '0.95em', margin: '10px 0 0 0', color: '#444' }}>
+                                <code style={codeInlineStyle}>cache: &apos;force-cache&apos;</code> говорит Next.js сохранить результат запроса и переиспользовать его. Это хорошо для данных, которые редко меняются.
+                            </p>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f0f5ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #2f54eb' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#1d39c4' }}>🔵 Revalidate по времени: обновлять кэш раз в N секунд</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/blog/page.tsx
+export const revalidate = 3600; // весь route обновляется не чаще раза в час
+
+export default async function BlogPage() {
+    const res = await fetch('https://api.com/posts', {
+        next: { revalidate: 3600 },
+    });
+    const posts = await res.json();
+
+    return (
+        <ul>
+            {posts.map((post) => (
+                <li key={post.id}>{post.title}</li>
+            ))}
+        </ul>
+    );
+}`}
+                            </pre>
+                            <p style={{ fontSize: '0.95em', margin: '10px 0 0 0', color: '#444' }}>
+                                После 3600 секунд следующий посетитель сначала получает старую быструю версию, а Next.js в фоне готовит свежую. Когда новая версия собрана успешно, следующие запросы получают уже её.
+                            </p>
+                        </div>
+
+                        <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#cf1322' }}>🔴 Динамическая страница: всегда свежие данные</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/dashboard/page.tsx
+export const dynamic = 'force-dynamic';
+
+export default async function DashboardPage() {
+    const res = await fetch('https://api.com/me', {
+        cache: 'no-store',
+    });
+    const profile = await res.json();
+
+    return <h1>Привет, {profile.name}</h1>;
+}`}
+                            </pre>
+                            <p style={{ fontSize: '0.95em', margin: '10px 0 0 0', color: '#444' }}>
+                                <code style={codeInlineStyle}>cache: &apos;no-store&apos;</code> и <code style={codeInlineStyle}>dynamic = &apos;force-dynamic&apos;</code> отключают переиспользование результата. Это нужно для персональных или критически свежих данных.
+                            </p>
+                        </div>
+
+                        <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#856404' }}>⚡ On-demand revalidation: обновить кэш после события</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/actions.ts
+'use server';
+
+import { revalidatePath, revalidateTag } from 'next/cache';
+
+export async function createPost() {
+    await db.post.create({ data: { title: 'Новый пост' } });
+
+    revalidatePath('/blog');        // обновить конкретную страницу
+    revalidateTag('posts', 'max');  // пометить все данные с tag posts как stale
+}`}
+                            </pre>
+                            <p style={{ fontSize: '0.95em', margin: '10px 0 0 0', color: '#444' }}>
+                                <code style={codeInlineStyle}>revalidatePath()</code> работает по URL/route path, а <code style={codeInlineStyle}>revalidateTag()</code> работает по тегам данных. В Next 16 для <code style={codeInlineStyle}>revalidateTag</code> рекомендована форма с вторым аргументом <code style={codeInlineStyle}>&apos;max&apos;</code>: она даёт stale-while-revalidate поведение.
+                            </p>
+                        </div>
+
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Как поставить tag на fetch-запрос:</p>
+                            <pre style={codeSnippetStyle}>
+{`export async function getPosts() {
+    const res = await fetch('https://api.com/posts', {
+        next: {
+            tags: ['posts'],
+            revalidate: 3600,
+        },
+    });
+
+    return res.json();
+}`}
+                            </pre>
+                        </div>
+
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.92em', border: '1px solid #e1e4e8' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fafbfc', borderBottom: '2px solid #e1e4e8' }}>
+                                    <th style={tableHeaderStyle}>Настройка</th>
+                                    <th style={tableHeaderStyle}>Эффект</th>
+                                    <th style={tableHeaderStyle}>Запомнить</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, fontFamily: 'monospace', color: '#237804' }}>cache: &apos;force-cache&apos;</td>
+                                    <td style={tableCellStyle}>Кэшировать fetch.</td>
+                                    <td style={tableCellStyle}>Для статичных или редко меняющихся данных.</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, fontFamily: 'monospace', color: '#cf1322' }}>cache: &apos;no-store&apos;</td>
+                                    <td style={tableCellStyle}>Не кэшировать fetch.</td>
+                                    <td style={tableCellStyle}>Для request-time данных.</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, fontFamily: 'monospace', color: '#1d39c4' }}>next: {'{ revalidate: 60 }'}</td>
+                                    <td style={tableCellStyle}>Обновлять кэш не чаще раза в 60 секунд.</td>
+                                    <td style={tableCellStyle}>Это основа ISR.</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, fontFamily: 'monospace', color: '#722ed1' }}>dynamic = &apos;force-dynamic&apos;</td>
+                                    <td style={tableCellStyle}>Рендерить route на каждый запрос.</td>
+                                    <td style={tableCellStyle}>Похоже на SSR без кэша.</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ ...tableCellStyle, fontFamily: 'monospace', color: '#856404' }}>revalidatePath / revalidateTag</td>
+                                    <td style={tableCellStyle}>Сбросить кэш после события.</td>
+                                    <td style={tableCellStyle}>Вызываются только на сервере: Server Actions или Route Handlers.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f6f8fa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #24292f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#24292f' }}>🧩 Новая модель Next 16: Cache Components</p>
+                            <p style={{ fontSize: '0.95em', margin: '0 0 10px 0', color: '#444' }}>
+                                Если включить <code style={codeInlineStyle}>cacheComponents: true</code> в <code style={codeInlineStyle}>next.config.ts</code>, можно кэшировать функции и компоненты директивой <code style={codeInlineStyle}>&quot;use cache&quot;</code>. Тогда часто используют <code style={codeInlineStyle}>cacheLife()</code> и <code style={codeInlineStyle}>cacheTag()</code>.
+                            </p>
+                            <pre style={codeSnippetStyle}>
+{`import { cacheLife, cacheTag } from 'next/cache';
+
+export async function getProducts() {
+    'use cache';
+    cacheLife('hours');
+    cacheTag('products');
+
+    return db.product.findMany();
+}`}
+                            </pre>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f9f0ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #722ed1' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#531dab' }}>Короткое правило выбора:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '7px', fontSize: '0.95em', color: '#444' }}>
+                                <li>Контент одинаковый для всех и редко меняется &rarr; статическая страница или <code style={codeInlineStyle}>force-cache</code>.</li>
+                                <li>Контент одинаковый для всех, но периодически обновляется &rarr; <code style={codeInlineStyle}>revalidate</code> / ISR.</li>
+                                <li>Контент зависит от пользователя, cookies, headers, session &rarr; динамическая страница и <code style={codeInlineStyle}>no-store</code>.</li>
+                                <li>Данные изменились после формы, админки или webhook &rarr; <code style={codeInlineStyle}>revalidatePath()</code> или <code style={codeInlineStyle}>revalidateTag()</code>.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                {/* БЛОК 18: КАК СДЕЛАТЬ СЕРВЕРНЫЙ РЕНДЕР */}
                 <section id="serverRenderPractice" style={sectionCardStyle}>
-                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>17. Практика: Как сделать рендеринг на сервере?</h2>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>18. Практика: Как сделать рендеринг на сервере?</h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <p>В Next.js App Router все компоненты <b>по умолчанию являются серверными</b>. Тебе не нужно включать SSR вручную &mdash; достаточно просто не писать директиву <code style={codeInlineStyle}>&quot;use client&quot;;</code> вверху файла [INDEX].</p>
