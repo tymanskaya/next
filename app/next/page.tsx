@@ -88,6 +88,7 @@ export default function NextJsCheatSheet() {
                     <a href="#routerMethods" style={anchorLinkStyle}>🔹 Навигация через useRouter</a>
                     <a href="#useClientDeep" style={anchorLinkStyle}>🔹 Под капотом use client</a>
                     <a href="#loadingFile" style={anchorLinkStyle}>🔹 loading.js</a>
+                    <a href="#notFoundPage" style={anchorLinkStyle}>🔹 Кастомная 404</a>
                     <a href="#useWithSuspense" style={anchorLinkStyle}>🔹 use() + Suspense</a>
                     <a href="#serverRenderPractice" style={anchorLinkStyle}>🔹 Как сделать SSR</a>
 
@@ -920,9 +921,139 @@ export default function Loading() {
                     </div>
                 </section>
 
-                {/* БЛОК 15: USE И SUSPENSE */}
+                {/* БЛОК 15: NOT-FOUND */}
+                <section id="notFoundPage" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>15. Создание кастомной страницы 404 (Not Found)</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p style={{ margin: 0, color: '#444' }}>
+                            В App Router кастомная страница 404 создаётся через специальный файл <code style={codeInlineStyle}>not-found.tsx</code> или <code style={codeInlineStyle}>not-found.js</code>. Он показывает понятный UI, когда пользователь попал на несуществующий ресурс или когда код страницы вручную вызвал функцию <code style={codeInlineStyle}>notFound()</code>.
+                        </p>
+
+                        <div style={{ backgroundColor: '#f0f5ff', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #2f54eb' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#1d39c4' }}>📁 Где создать файл:</p>
+                            <pre style={codeSnippetStyle}>
+{`app/
+  not-found.tsx        // общий 404 UI для приложения
+
+  blog/
+    not-found.tsx      // 404 UI только для сегмента /blog
+    [slug]/
+      page.tsx`}
+                            </pre>
+                            <p style={{ fontSize: '0.95em', margin: '10px 0 0 0', color: '#444' }}>
+                                Корневой <code style={codeInlineStyle}>app/not-found.tsx</code> используется как общая 404-страница. Сегментный файл, например <code style={codeInlineStyle}>app/blog/not-found.tsx</code>, позволяет сделать отдельный экран для конкретного раздела сайта.
+                            </p>
+                        </div>
+
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Минимальный пример кастомной 404:</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/not-found.tsx
+import Link from 'next/link';
+
+export default function NotFound() {
+    return (
+        <main>
+            <h1>404</h1>
+            <h2>Страница не найдена</h2>
+            <p>Такого адреса больше нет или он был введён с ошибкой.</p>
+            <Link href="/">Вернуться на главную</Link>
+        </main>
+    );
+}`}
+                            </pre>
+                        </div>
+
+                        <div style={{ backgroundColor: '#fffbe6', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #faad14' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#856404' }}>⚙️ Как вручную показать 404 из page.tsx:</p>
+                            <pre style={codeSnippetStyle}>
+{`// app/products/[id]/page.tsx
+import { notFound } from 'next/navigation';
+
+async function getProduct(id: string) {
+    const res = await fetch(\`https://api.com/products/\${id}\`);
+
+    if (!res.ok) {
+        return null;
+    }
+
+    return res.json();
+}
+
+export default async function ProductPage({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}) {
+    const { id } = await params;
+    const product = await getProduct(id);
+
+    if (!product) {
+        notFound();
+    }
+
+    return <h1>{product.title}</h1>;
+}`}
+                            </pre>
+                            <p style={{ fontSize: '0.95em', margin: '10px 0 0 0', color: '#444' }}>
+                                <code style={codeInlineStyle}>notFound()</code> прерывает рендер текущего route segment и заставляет Next.js отрисовать ближайший <code style={codeInlineStyle}>not-found.tsx</code>. Писать <code style={codeInlineStyle}>return notFound()</code> не нужно: функция типизирована как <code style={codeInlineStyle}>never</code>.
+                            </p>
+                        </div>
+
+                        <div style={{ overflowX: 'auto' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.92em', border: '1px solid #e1e4e8' }}>
+                                <thead>
+                                <tr style={{ backgroundColor: '#fafbfc', borderBottom: '2px solid #e1e4e8' }}>
+                                    <th style={tableHeaderStyle}>Файл или функция</th>
+                                    <th style={tableHeaderStyle}>Для чего нужна</th>
+                                    <th style={tableHeaderStyle}>Когда использовать</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, color: '#1d39c4', fontWeight: '600' }}>not-found.tsx</td>
+                                    <td style={tableCellStyle}>Описывает UI для 404 внутри сегмента.</td>
+                                    <td style={tableCellStyle}>Когда нужен красивый экран вместо стандартной страницы ошибки.</td>
+                                </tr>
+                                <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                    <td style={{ ...tableCellStyle, color: '#cf1322', fontWeight: '600' }}>notFound()</td>
+                                    <td style={tableCellStyle}>Программно вызывает 404 из компонента или серверной логики маршрута.</td>
+                                    <td style={tableCellStyle}>Когда данные не найдены: нет товара, профиля, статьи или slug.</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ ...tableCellStyle, color: '#722ed1', fontWeight: '600' }}>global-not-found.tsx</td>
+                                    <td style={tableCellStyle}>Экспериментальный глобальный 404 для unmatched routes без рендера layout.</td>
+                                    <td style={tableCellStyle}>Когда есть несколько root layout или root layout построен на динамическом сегменте.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f6ffed', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #52c41a' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#237804' }}>🔍 SEO и статус ответа:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '7px', fontSize: '0.95em', color: '#444' }}>
+                                <li>При вызове <code style={codeInlineStyle}>notFound()</code> Next.js добавляет для поисковиков <code style={codeInlineStyle}>&lt;meta name=&quot;robots&quot; content=&quot;noindex&quot; /&gt;</code>.</li>
+                                <li>Для non-streamed ответа сервер может вернуть HTTP <code style={codeInlineStyle}>404</code>.</li>
+                                <li>Если страница уже начала streaming, HTTP-статус может остаться <code style={codeInlineStyle}>200</code>, но HTML всё равно получает защиту от индексации через <code style={codeInlineStyle}>noindex</code>.</li>
+                            </ul>
+                        </div>
+
+                        <div style={{ backgroundColor: '#f6f8fa', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #24292f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 8px 0', color: '#24292f' }}>🧠 Что важно запомнить:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '7px', fontSize: '0.95em', color: '#444' }}>
+                                <li><code style={codeInlineStyle}>not-found.tsx</code> не принимает props.</li>
+                                <li>По умолчанию это Server Component, поэтому его можно сделать <code style={codeInlineStyle}>async</code> и загрузить данные на сервере.</li>
+                                <li>Если для 404 нужны хуки вроде <code style={codeInlineStyle}>usePathname()</code>, эту часть нужно вынести в Client Component.</li>
+                                <li>В иерархии сегмента <code style={codeInlineStyle}>not-found.tsx</code> находится рядом с <code style={codeInlineStyle}>page.tsx</code> и оборачивается тем же <code style={codeInlineStyle}>loading.tsx</code> Suspense boundary.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                {/* БЛОК 16: USE И SUSPENSE */}
                 <section id="useWithSuspense" style={sectionCardStyle}>
-                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>15. Хук use() и связка с Suspense</h2>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>16. Хук use() и связка с Suspense</h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <p style={{ margin: 0, color: '#444' }}>
@@ -1087,9 +1218,9 @@ export default function UsersList({
                     </div>
                 </section>
 
-                {/* БЛОК 16: КАК СДЕЛАТЬ СЕРВЕРНЫЙ РЕНДЕР */}
+                {/* БЛОК 17: КАК СДЕЛАТЬ СЕРВЕРНЫЙ РЕНДЕР */}
                 <section id="serverRenderPractice" style={sectionCardStyle}>
-                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>16. Практика: Как сделать рендеринг на сервере?</h2>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>17. Практика: Как сделать рендеринг на сервере?</h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <p>В Next.js App Router все компоненты <b>по умолчанию являются серверными</b>. Тебе не нужно включать SSR вручную &mdash; достаточно просто не писать директиву <code style={codeInlineStyle}>&quot;use client&quot;;</code> вверху файла [INDEX].</p>
