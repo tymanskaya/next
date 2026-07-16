@@ -92,6 +92,8 @@ export default function NextJsCheatSheet() {
                     <a href="#useWithSuspense" style={anchorLinkStyle}>🔹 use() + Suspense</a>
                     <a href="#nextCaching" style={anchorLinkStyle}>🔹 Кэширование</a>
                     <a href="#serverRenderPractice" style={anchorLinkStyle}>🔹 Как сделать SSR</a>
+                    <a href="#errorBoundaries" style={anchorLinkStyle}>🔹 Перехват ошибок (error.tsx)</a>
+
 
                 </nav>
 
@@ -1651,6 +1653,60 @@ export default async function MoviesPage() {
                         </div>
                     </div>
 
+                </section>
+                {/* БЛОК 18: СИСТЕМНЫЕ ФАЙЛЫ ОШИБОК */}
+                <section id="errorBoundaries" style={sectionCardStyle}>
+                    <h2 style={{ marginTop: 0, color: '#000', fontSize: '22px' }}>18. Обработка критических сбоев: error.tsx и global-error.tsx</h2>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <p>Next.js использует концепцию <b>Error Boundaries</b>. Если на сервере упадет асинхронный <code style={codeInlineStyle}>fetch</code> или сломается JavaScript-логика, приложение не покажет белый экран, а автоматически изолирует сбойную область и выведет компонент ошибки [INDEX].</p>
+
+                        {/* Сравнение error и global-error */}
+                        <div style={{ backgroundColor: '#fff1f0', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #ff4d4f' }}>
+                            <p style={{ fontWeight: 'bold', margin: '0 0 10px 0', color: '#cf1322' }}>Разница между типами ловушек:</p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.95em' }}>
+                                <li>
+                                    <b>error.tsx (Локальный):</b> <u>Обязан быть клиентским</u> (<code style={codeInlineStyle}>&quot;use client&quot;;</code>) [INDEX]. Автоматически перехватывает ошибки во всех вложенных страницах папки [INDEX]. Принимает функцию <code style={codeInlineStyle}>reset()</code>, которая позволяет пользователю попытаться перерендерить страницу без полной перезагрузки вкладки браузера [INDEX].
+                                </li>
+                                <li>
+                                    <b>global-error.tsx (Глобальный):</b> Кладется строго в корень приложения (<code style={codeInlineStyle}>src/app/global-error.tsx</code>) [INDEX]. Нужен только для перехвата сложнейших ошибок, если сломался сам корневой <code style={codeInlineStyle}>layout.tsx</code> [INDEX]. Так как при этом отключается базовая структура сайта, этот файл <b>обязан самостоятельно содержать теги &lt;html&gt; и &lt;body&gt;</b> [INDEX].
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Шаблон реализации */}
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Классическая структура файла error.tsx:</p>
+                            <pre style={{
+                                display: 'block',
+                                backgroundColor: '#f5f5f5',
+                                padding: '12px',
+                                borderRadius: '6px',
+                                fontFamily: 'monospace',
+                                fontSize: '0.88em',
+                                color: '#333',
+                                overflowX: 'auto',
+                                margin: 0,
+                                whiteSpace: 'pre-wrap',
+                                border: '1px solid #e1e4e8'
+                            }}>
+{`// src/app/error.tsx
+"use client"; // Ловушки ошибок работают только на клиенте!
+
+export default function Error({ error, reset }) {
+    return (
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+            <h2>Произошла ошибка при загрузке данных</h2>
+            <p style={{ color: '#ff4d4f' }}>{error.message}</p>
+            
+            {/* Кнопка дает компоненту второй шанс */}
+            <button onClick={() => reset()}>Попробовать снова</button>
+        </div>
+    );
+}`}
+            </pre>
+                        </div>
+                    </div>
                 </section>
 
             </div>
