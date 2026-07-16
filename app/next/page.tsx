@@ -1673,7 +1673,43 @@ export default async function MoviesPage() {
                                 </li>
                             </ul>
                         </div>
-
+                        {/* СВОДНАЯ СРАВНИТЕЛЬНАЯ ТАБЛИЦА */}
+                        <div>
+                            <p style={{ fontWeight: 'bold', margin: '10px 0 10px 0' }}>📋 Сравнение ловушек ошибок: error.tsx vs global-error.tsx</p>
+                            <div style={{ overflowX: 'auto' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95em', border: '1px solid #e1e4e8' }}>
+                                    <thead>
+                                    <tr style={{ backgroundColor: '#fafbfc', borderBottom: '2px solid #e1e4e8' }}>
+                                        <th style={tableHeaderStyle}>Критерий</th>
+                                        <th style={tableHeaderStyle}>error.tsx (Локальная ловушка)</th>
+                                        <th style={tableHeaderStyle}>global-error.tsx (Глобальный перехват)</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                        <td style={tableCellStyle}><b>Где размещается?</b></td>
+                                        <td style={tableCellStyle}>В любой папке маршрута (включая корень <code style={codeInlineStyle}>src/app</code>) [INDEX].</td>
+                                        <td style={{ ...tableCellStyle, fontWeight: '600', color: '#cf1322' }}>Строго в самом корне папки <code style={codeInlineStyle}>src/app</code> [INDEX].</td>
+                                    </tr>
+                                    <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                        <td style={tableCellStyle}><b>Что оборачивает?</b></td>
+                                        <td style={tableCellStyle}>Обозначает границы для вложенных файлов <code style={codeInlineStyle}>page.tsx</code> и макетов подпапок [INDEX].</td>
+                                        <td style={tableCellStyle}>Оборачивает <b>абсолютно всё приложение</b> целиком, включая самый верхний уровень [INDEX].</td>
+                                    </tr>
+                                    <tr style={{ borderBottom: '1px solid #e1e4e8' }}>
+                                        <td style={tableCellStyle}><b>Что перехватывает?</b></td>
+                                        <td style={tableCellStyle}>Ловит ошибки внутри страниц, но <b>не может</b> поймать ошибку своего же родительского макета [INDEX].</td>
+                                        <td style={tableCellStyle}>Ловит самые тяжелые сбои — например, если сломался сам корневой <code style={codeInlineStyle}>Root Layout</code> [INDEX].</td>
+                                    </tr>
+                                    <tr>
+                                        <td style={tableCellStyle}><b>Обязательные теги</b></td>
+                                        <td style={tableCellStyle}>Содержит обычную верстку (компоненты карточек, сообщений и кнопок) [INDEX].</td>
+                                        <td style={tableCellStyle}><b>Обязан самостоятельно содержать теги &lt;html&gt; и &lt;body&gt;</b>, так как Root Layout отключается [INDEX].</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         {/* Шаблон реализации */}
                         <div>
                             <p style={{ fontWeight: 'bold', margin: '5px 0 8px 0' }}>Классическая структура файла error.tsx:</p>
